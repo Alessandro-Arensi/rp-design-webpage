@@ -1,4 +1,4 @@
-# PIANA.DESIGN
+# PIANA
 
 Luxury architecture-studio website for Roberto Piana. Bilingual (IT primary / EN),
 built with Eleventy, edited via Decap CMS, hosted on Netlify.

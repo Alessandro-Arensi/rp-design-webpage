@@ -1,5 +1,5 @@
 # =====================================================================
-#  PIANA.DESIGN — build & tooling (Eleventy + Sveltia CMS, bilingual)
+#  PIANA — build & tooling (Eleventy + Sveltia CMS, bilingual)
 #  Reference : PROJECT_ANALYSIS.md, docs/superpowers/specs, .claude/plans
 #  Usage     : `make` or `make help` lists every target.
 # =====================================================================
