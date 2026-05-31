@@ -1,0 +1,5 @@
+{
+  "studio": { "label": "Studio", "url": "/en/studio/" },
+  "projects": { "label": "Projects", "url": "/en/projects/" },
+  "contact": { "label": "Contact", "url": "/en/contact/" }
+}

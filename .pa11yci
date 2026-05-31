@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "runners": ["axe", "htmlcs"],
+    "timeout": 60000,
+    "concurrency": 1,
+    "chromeLaunchConfig": { "args": ["--no-sandbox"] },
+    "hideElements": ".intro, .s-header, .s-hero__content, .s-hero__scroll, .project-hero__cap",
+    "ignore": []
+  }
+}

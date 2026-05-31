@@ -1,0 +1,24 @@
+{
+  "siteName": "PIANA.DESIGN",
+  "logo": "/assets/icons/logo.svg",
+  "introWordmark": "PIANA",
+  "tagline": "Space as silence.",
+  "homeStatement": "Architecture that keeps light, matter and time.",
+  "homeHero": "/assets/uploads/home/hero.jpg",
+  "social": [
+    { "label": "Instagram", "url": "https://instagram.com/" },
+    { "label": "LinkedIn", "url": "https://linkedin.com/" }
+  ],
+  "colors": {
+    "bg": "#f7f5f2",
+    "ink": "#1a1a18",
+    "inkSoft": "#6b6862",
+    "line": "#e2ddd6",
+    "accent": "#8a7d6b",
+    "dark": "#121110"
+  },
+  "fonts": {
+    "display": "\"PianaSerif\", Georgia, \"Times New Roman\", serif",
+    "body": "\"PianaSans\", system-ui, -apple-system, Arial, sans-serif"
+  }
+}

@@ -1,0 +1,17 @@
+{# Netlify Identity invite/recovery handler. Invite emails land on the site
+   root; this completes signup and forwards the editor to /admin/.
+   Loaded only on the landing pages, not site-wide. #}
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+<script>
+  window.addEventListener("load", function () {
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function (user) {
+        if (!user) {
+          window.netlifyIdentity.on("login", function () {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  });
+</script>

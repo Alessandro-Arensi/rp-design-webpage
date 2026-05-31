@@ -1,0 +1,14 @@
+---
+layout: layouts/base.njk
+permalink: /studio/
+pageKey: studio
+translationKey: studio
+title: Studio
+---
+<section class="section bleed page-top">
+  <p class="eyebrow" data-reveal>{{ studio[lang].eyebrow }}</p>
+  <h1 class="statement" data-reveal>{{ studio[lang].statement }}</h1>
+  <div class="measure" data-reveal>
+    {% for p in studio[lang].paragraphs %}<p>{{ p }}</p>{% endfor %}
+  </div>
+</section>

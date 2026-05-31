@@ -1,0 +1,15 @@
+# dependencies & build output
+node_modules/
+dist/
+reports/
+
+# vendored / generated assets (don't reformat)
+src/assets/js/vendor/
+src/assets/css/base.css
+src/assets/uploads/
+
+# CMS bootstrap (kept valid for html-validate; don't let Prettier reformat it)
+admin/
+
+# lockfile
+package-lock.json

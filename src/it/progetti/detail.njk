@@ -1,0 +1,41 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: collections.projects
+  size: 1
+  alias: project
+permalink: "/progetti/{{ project.data.slug }}/"
+pageKey: projects
+eleventyComputed:
+  title: "{{ project.data.title_it }}"
+  translationKey: "project:{{ project.data.slug }}"
+---
+{% set p = project.data %}
+<article>
+  <div class="project-hero" data-hero>
+    {% image p.heroImage, (p | field('title', lang)), "100vw", { eager: true } %}
+    <div class="s-hero__overlay"></div>
+    <div class="project-hero__cap">
+      <h1>{{ p | field('title', lang) }}</h1>
+      <p class="project-meta"><span>{{ p.location }}</span><span>{{ p.year }}</span></p>
+    </div>
+  </div>
+
+  <div class="section bleed measure" data-reveal>
+    <p>{{ p | field('description', lang) }}</p>
+  </div>
+
+  <div class="project-gallery bleed">
+    {% for g in p.gallery %}
+      <figure data-reveal>
+        {% image g.image, g['caption_' + lang], "100vw" %}
+        {% if g['caption_' + lang] %}<figcaption>{{ g['caption_' + lang] }}</figcaption>{% endif %}
+      </figure>
+    {% endfor %}
+  </div>
+
+  <nav class="project-nav bleed" aria-label="Navigazione progetti">
+    {% if pagination.href.previous %}<a href="{{ pagination.href.previous }}">← {{ ui[lang].prev }}</a>{% else %}<span></span>{% endif %}
+    {% if pagination.href.next %}<a href="{{ pagination.href.next }}">{{ ui[lang].next }} →</a>{% endif %}
+  </nav>
+</article>

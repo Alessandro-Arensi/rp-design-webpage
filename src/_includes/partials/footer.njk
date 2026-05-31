@@ -1,0 +1,23 @@
+<footer class="s-footer">
+  <div class="s-footer__inner row">
+    <div class="s-footer__brand column large-4 medium-full">
+      <p class="s-footer__logo">{{ settings[lang].siteName }}</p>
+      <p class="s-footer__tag">{{ settings[lang].tagline }}</p>
+    </div>
+    <div class="s-footer__col column large-3 medium-4 mob-full">
+      <p>{{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}<br>{{ contact[lang].address.country }}</p>
+    </div>
+    <div class="s-footer__col column large-3 medium-4 mob-full">
+      <a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a>
+      <a href="mailto:{{ contact[lang].emails.press }}">{{ contact[lang].emails.press }}</a>
+      <a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a>
+    </div>
+    <div class="s-footer__col column large-2 medium-4 mob-full">
+      {% for s in settings[lang].social %}<a href="{{ s.url }}" rel="noopener" target="_blank">{{ s.label }}</a>{% endfor %}
+    </div>
+  </div>
+  <div class="s-footer__bottom row">
+    <span>© {{ "" | year }} {{ settings[lang].siteName }}</span>
+    <a class="ss-go-top" href="#top">{{ ui[lang].backTop }}</a>
+  </div>
+</footer>

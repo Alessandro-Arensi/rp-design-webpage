@@ -1,0 +1,30 @@
+---
+layout: layouts/base.njk
+permalink: /contatti/
+pageKey: contact
+translationKey: contact
+title: Contatti
+---
+<section class="section bleed page-top">
+  <p class="eyebrow" data-reveal>{{ contact[lang].heading }}</p>
+  <h1 class="statement" data-reveal>{{ contact[lang].intro }}</h1>
+
+  <div class="contact-emails" data-reveal>
+    <div><p class="eyebrow">{{ ui[lang].general }}</p><a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a></div>
+    <div><p class="eyebrow">{{ ui[lang].press }}</p><a href="mailto:{{ contact[lang].emails.press }}">{{ contact[lang].emails.press }}</a></div>
+    <div><p class="eyebrow">{{ ui[lang].careers }}</p><a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a></div>
+  </div>
+
+  <address class="measure" data-reveal>
+    {{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}
+  </address>
+
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contatti/grazie/" class="measure" data-reveal>
+    <input type="hidden" name="form-name" value="contact">
+    <p hidden><label>Non compilare <input type="text" name="bot-field"></label></p>
+    <label>{{ ui[lang].name }}<input type="text" name="name" required></label>
+    <label>{{ ui[lang].email }}<input type="email" name="email" required></label>
+    <label>{{ ui[lang].message }}<textarea name="message" rows="5" required></textarea></label>
+    <button class="btn btn--stroke" type="submit">{{ ui[lang].send }}</button>
+  </form>
+</section>

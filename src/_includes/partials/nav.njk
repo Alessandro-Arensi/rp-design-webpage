@@ -1,0 +1,8 @@
+<nav class="s-header__nav" id="primary-nav" aria-label="Primary">
+  <ul class="header-nav">
+    <li><a href="{{ nav[lang].studio.url }}"{% if pageKey == 'studio' %} aria-current="page"{% endif %}>{{ nav[lang].studio.label }}</a></li>
+    <li><a href="{{ nav[lang].projects.url }}"{% if pageKey == 'projects' %} aria-current="page"{% endif %}>{{ nav[lang].projects.label }}</a></li>
+    <li><a href="{{ nav[lang].contact.url }}"{% if pageKey == 'contact' %} aria-current="page"{% endif %}>{{ nav[lang].contact.label }}</a></li>
+  </ul>
+  {% include "partials/lang-toggle.njk" %}
+</nav>

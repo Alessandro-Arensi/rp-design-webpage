@@ -1,0 +1,42 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
+
+<title>{% if title %}{{ title }} — {{ settings[lang].siteName }}{% else %}{{ settings[lang].siteName }}{% endif %}</title>
+<meta name="description" content="{{ description or settings[lang].tagline }}">
+
+{# hreflang alternates #}
+{%- set alts = collections.all | localeAlternates(translationKey) -%}
+{%- for a in alts %}
+<link rel="alternate" hreflang="{{ a.lang }}" href="{{ site.url }}{{ a.url }}">
+{%- endfor %}
+{%- if alts | length %}
+<link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ collections.all | localeHref(translationKey, 'it') }}">
+{%- endif %}
+
+{# favicons #}
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
+{# brand tokens — editable from the CMS via settings #}
+<style>
+  :root {
+    --c-bg: {{ settings[lang].colors.bg }};
+    --c-ink: {{ settings[lang].colors.ink }};
+    --c-ink-soft: {{ settings[lang].colors.inkSoft }};
+    --c-line: {{ settings[lang].colors.line }};
+    --c-accent: {{ settings[lang].colors.accent }};
+    --c-dark: {{ settings[lang].colors.dark }};
+    --ff-display: {{ settings[lang].fonts.display | safe }};
+    --ff-body: {{ settings[lang].fonts.body | safe }};
+  }
+</style>
+
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/app.css">
+{% if pageKey == 'home' %}
+{# Arm the intro curtain before first paint, first visit only (no flash on repeat/reduced-motion). #}
+<script>(function(){var d=document.documentElement;try{var r=matchMedia("(prefers-reduced-motion: reduce)").matches;var s=sessionStorage.getItem("piana_intro");if(!r&&!s){d.classList.add("intro-play");}}catch(e){}})();</script>
+{% endif %}

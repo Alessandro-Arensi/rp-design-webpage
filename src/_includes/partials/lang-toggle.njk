@@ -1,0 +1,5 @@
+<span class="s-header__lang" role="group" aria-label="{{ 'Lingua' if lang == 'it' else 'Language' }}">
+  <a href="{{ collections.all | localeHref(translationKey, 'it') }}"{% if lang == 'it' %} aria-current="true"{% endif %} hreflang="it" lang="it">IT</a>
+  <span aria-hidden="true">·</span>
+  <a href="{{ collections.all | localeHref(translationKey, 'en') }}"{% if lang == 'en' %} aria-current="true"{% endif %} hreflang="en" lang="en">EN</a>
+</span>

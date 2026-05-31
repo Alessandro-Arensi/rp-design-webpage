@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" class="no-js">
+<head>
+  {% include "partials/head.njk" %}
+</head>
+<body id="top" class="{{ bodyClass }}" data-page="{{ pageKey }}">
+  <a class="u-skip" href="#main">{{ ui[lang].skip }}</a>
+  {% include "partials/header.njk" %}
+  <main id="main">
+    {{ content | safe }}
+  </main>
+  {% include "partials/footer.njk" %}
+  <script defer src="/assets/js/vendor/lenis.min.js"></script>
+  {% if pageKey == 'home' %}<script defer src="/assets/js/vendor/gsap.min.js"></script>{% endif %}
+  <script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>

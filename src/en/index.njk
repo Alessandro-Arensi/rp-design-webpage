@@ -1,0 +1,39 @@
+---
+layout: layouts/base.njk
+permalink: /en/
+pageKey: home
+translationKey: home
+bodyClass: is-home
+---
+{% include "partials/intro.njk" %}
+
+<section class="s-hero" data-hero>
+  <div class="s-hero__media">
+    {% image settings[lang].homeHero, "", "100vw", { eager: true } %}
+  </div>
+  <div class="s-hero__overlay"></div>
+  <div class="s-hero__content">
+    <h1 class="s-hero__tagline"><span class="line"><span>{{ settings[lang].tagline }}</span></span></h1>
+  </div>
+  <a class="s-hero__scroll" href="#selected">{{ ui[lang].scroll }}</a>
+</section>
+
+<section id="selected" class="section bleed">
+  <h2 class="eyebrow" data-reveal>{{ ui[lang].selectedProjects }}</h2>
+  <div class="row block-large-1-2 block-tab-full projects-grid">
+    {% for project in collections.projects %}{% if project.data.featured %}
+      <div class="column" data-reveal>
+        <a class="project-card" href="{{ ('/progetti/' if lang == 'it' else '/en/projects/') + project.data.slug + '/' }}">
+          <div class="project-card__media">{% image project.data.heroImage, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}</div>
+          <div class="project-card__meta">
+            <h3 class="project-card__title">{{ project.data | field('title', lang) }}</h3>
+            <span class="project-card__year">{{ project.data.year }}</span>
+          </div>
+        </a>
+      </div>
+    {% endif %}{% endfor %}
+  </div>
+  <p class="statement section" data-reveal>{{ settings[lang].homeStatement }}</p>
+</section>
+
+{% include "partials/netlify-identity.njk" %}

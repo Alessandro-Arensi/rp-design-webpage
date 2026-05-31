@@ -1,0 +1,20 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-trailing-whitespace": "off",
+    "wcag/h30": "error",
+    "wcag/h32": "error",
+    "wcag/h36": "error",
+    "wcag/h37": "error",
+    "wcag/h63": "error",
+    "wcag/h67": "error",
+    "wcag/h71": "error",
+    "prefer-button": "error",
+    "unique-landmark": "error",
+    "no-implicit-input-type": "error",
+    "aria-label-misuse": "error",
+    "heading-level": "error",
+    "no-redundant-role": "error",
+    "require-sri": "off"
+  }
+}
