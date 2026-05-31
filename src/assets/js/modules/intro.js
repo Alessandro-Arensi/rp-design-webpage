@@ -27,6 +27,12 @@ export function initIntro() {
   if (lenis) lenis.stop();
 
   const cleanup = () => {
+    // Clear GSAP's lingering inline styles. A leftover transform on the header
+    // makes it a containing block for the fixed mobile overlay (which would trap
+    // the hamburger menu on first visit, while the intro has run).
+    gsap.set([header, heroImg, cue, ...taglines].filter(Boolean), {
+      clearProps: "transform,opacity,visibility",
+    });
     intro.remove();
     html.style.overflow = "";
     html.classList.remove("intro-play");
