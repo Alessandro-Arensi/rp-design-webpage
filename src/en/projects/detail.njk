@@ -28,14 +28,31 @@ eleventyComputed:
   <div class="project-gallery bleed">
     {% for g in p.gallery %}
       <figure data-reveal>
-        {% image g.image, g['caption_' + lang], "100vw" %}
+        <button class="g-trigger" type="button" aria-label="{{ ui[lang].enlarge }} {{ loop.index }}" data-caption="{{ g['caption_' + lang] }}">
+          {% image g.image, g['caption_' + lang], "100vw" %}
+        </button>
         {% if g['caption_' + lang] %}<figcaption>{{ g['caption_' + lang] }}</figcaption>{% endif %}
       </figure>
     {% endfor %}
   </div>
 
+  {% set base = '/en/projects/' %}
   <nav class="project-nav bleed" aria-label="Project navigation">
-    {% if pagination.href.previous %}<a href="{{ pagination.href.previous }}">← {{ ui[lang].prev }}</a>{% else %}<span></span>{% endif %}
-    {% if pagination.href.next %}<a href="{{ pagination.href.next }}">{{ ui[lang].next }} →</a>{% endif %}
+    {% if pagination.pageNumber > 0 %}
+      {% set prev = collections.projects[pagination.pageNumber - 1] %}
+      <a class="project-nav__item project-nav__prev" href="{{ base }}{{ prev.data.slug }}/">
+        <span class="eyebrow">{{ ui[lang].prev }}</span>
+        <span class="project-nav__title">{{ prev.data | field('title', lang) }}</span>
+      </a>
+    {% else %}<span></span>{% endif %}
+    {% if pagination.pageNumber < (collections.projects | length) - 1 %}
+      {% set next = collections.projects[pagination.pageNumber + 1] %}
+      <a class="project-nav__item project-nav__next" href="{{ base }}{{ next.data.slug }}/">
+        <span class="eyebrow">{{ ui[lang].next }}</span>
+        <span class="project-nav__title">{{ next.data | field('title', lang) }}</span>
+      </a>
+    {% endif %}
   </nav>
 </article>
+
+{% include "partials/lightbox.njk" %}

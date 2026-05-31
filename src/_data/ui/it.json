@@ -18,5 +18,8 @@
   "email": "Email",
   "message": "Messaggio",
   "send": "Invia",
-  "thanks": "Grazie. Ti risponderemo presto."
+  "thanks": "Grazie. Ti risponderemo presto.",
+  "gallery": "Galleria",
+  "enlarge": "Ingrandisci immagine",
+  "notFound": "Pagina non trovata"
 }

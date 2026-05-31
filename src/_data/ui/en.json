@@ -18,5 +18,8 @@
   "email": "Email",
   "message": "Message",
   "send": "Send",
-  "thanks": "Thank you. We will be in touch soon."
+  "thanks": "Thank you. We will be in touch soon.",
+  "gallery": "Gallery",
+  "enlarge": "Enlarge image",
+  "notFound": "Page not found"
 }
