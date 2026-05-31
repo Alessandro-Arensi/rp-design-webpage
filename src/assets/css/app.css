@@ -200,10 +200,20 @@ a {
   z-index: -1;
 }
 .s-header--solid {
-  background: color-mix(in srgb, var(--c-bg) 88%, transparent);
-  backdrop-filter: blur(10px);
+  /* No backdrop-filter: it makes the header a containing block for the fixed
+     full-screen mobile overlay, which caused the peek/confinement/close glitches.
+     Solid background keeps content from bleeding through. */
+  background: var(--c-bg);
   border-bottom: 1px solid var(--c-line);
   color: var(--c-ink);
+}
+/* While the mobile overlay is open: no backdrop-filter (so the fixed overlay
+   escapes the header's containing block) + white burger over the dark menu. */
+/* Menu open: the dark full-screen overlay covers the header, so only the
+   burger/X needs to stay light over it (scoped to the toggle so the logo keeps
+   its own colour while is-nav-open lingers through the close animation). */
+.s-header.is-nav-open .s-header__toggle {
+  color: #fff;
 }
 
 /* hamburger (reused mechanics) */
@@ -214,6 +224,7 @@ a {
   cursor: pointer;
   width: 3rem;
   height: 3rem;
+  color: inherit; /* buttons don't inherit color by default — make the burger track the header */
 }
 .s-header__toggle span,
 .s-header__toggle span::before,
@@ -668,10 +679,20 @@ address {
     background: var(--c-dark);
     color: #fff;
     transform: translateY(-100%);
-    transition: transform var(--dur) var(--ease-lux);
+    /* Hidden when closed so overflow can't peek below a contained (solid)
+       header, and the links leave the tab order. Hide is deferred until the
+       slide-up finishes. */
+    visibility: hidden;
+    transition:
+      transform var(--dur) var(--ease-lux),
+      visibility 0s var(--dur);
   }
   .s-header__nav.is-open {
     transform: translateY(0);
+    visibility: visible;
+    transition:
+      transform var(--dur) var(--ease-lux),
+      visibility 0s;
   }
   .header-nav {
     flex-direction: column;
