@@ -6,17 +6,8 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Language-aware 404: EN 404 under /en/*, IT 404 elsewhere. Existing files take
-# precedence (these only fire for unmatched paths). Specific rule must come first.
-[[redirects]]
-  from = "/en/*"
-  to = "/en/404.html"
-  status = 404
-
-[[redirects]]
-  from = "/*"
-  to = "/404.html"
-  status = 404
+# Redirects live in src/redirects.njk -> dist/_redirects (read directly by
+# Netlify's edge; more reliable than netlify.toml for status=404 fallbacks).
 
 # Long-cache fingerprinted assets (Eleventy Image filenames are content-hashed).
 [[headers]]
