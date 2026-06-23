@@ -15,25 +15,24 @@ bodyClass: is-home
   <div class="s-hero__content">
     <h1 class="s-hero__tagline"><span class="line"><span>{{ settings[lang].tagline }}</span></span></h1>
   </div>
-  <a class="s-hero__scroll" href="#selected">{{ ui[lang].scroll }}</a>
+  <a class="s-hero__scroll" href="#intro" aria-label="{{ ui[lang].scroll }}"><span class="s-hero__scroll-line" aria-hidden="true"></span></a>
 </section>
 
-<section id="selected" class="section bleed">
-  <h2 class="eyebrow" data-reveal>{{ ui[lang].selectedProjects }}</h2>
-  <div class="row block-large-1-2 block-tab-full projects-grid">
-    {% for project in collections.projects %}{% if project.data.featured %}
-      <div class="column" data-reveal>
-        <a class="project-card" href="{{ ('/progetti/' if lang == 'it' else '/en/projects/') + project.data.slug + '/' }}">
-          <div class="project-card__media">{% image project.data.heroImage, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}</div>
-          <div class="project-card__meta">
-            <h3 class="project-card__title">{{ project.data | field('title', lang) }}</h3>
-            <span class="project-card__year">{{ project.data.year }}</span>
-          </div>
-        </a>
+<section id="intro" class="section bleed home-intro">
+  <p class="lead" data-reveal>{{ home[lang].subtitle }}</p>
+  {% for block in home[lang].blocks %}
+    <div class="home-block row row-y-center" data-reveal>
+      <div class="column large-half medium-full home-block__media">
+        {% image block.image, block.alt, "(max-width:800px) 100vw, 50vw" %}
       </div>
-    {% endif %}{% endfor %}
-  </div>
-  <p class="statement section" data-reveal>{{ settings[lang].homeStatement }}</p>
+      <div class="column large-half medium-full">
+        <p>{{ block.text }}</p>
+      </div>
+    </div>
+  {% endfor %}
+  <p class="home-intro__cta" data-reveal>
+    <a class="btn btn--stroke" href="{{ nav[lang].studio.url }}">{{ nav[lang].studio.label }}</a>
+  </p>
 </section>
 
 {% include "partials/netlify-identity.njk" %}

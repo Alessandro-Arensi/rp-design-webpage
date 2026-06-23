@@ -80,6 +80,30 @@ collections:
   - name: pages
     label: "Pagine"
     files:
+      - name: home_it
+        label: "Home (IT)"
+        file: "src/_data/home/it.json"
+        fields:
+          - { name: subtitle, label: "Sottotitolo", widget: text }
+          - name: blocks
+            label: "Blocchi narrativi"
+            widget: list
+            fields:
+              - { name: image, label: "Immagine", widget: image }
+              - { name: alt, label: "Testo alternativo (alt)", widget: string }
+              - { name: text, label: "Testo", widget: text }
+      - name: home_en
+        label: "Home (EN)"
+        file: "src/_data/home/en.json"
+        fields:
+          - { name: subtitle, label: "Subtitle", widget: text }
+          - name: blocks
+            label: "Narrative blocks"
+            widget: list
+            fields:
+              - { name: image, label: "Image", widget: image }
+              - { name: alt, label: "Alt text", widget: string }
+              - { name: text, label: "Text", widget: text }
       - name: studio_it
         label: "Studio (IT)"
         file: "src/_data/studio/it.json"
