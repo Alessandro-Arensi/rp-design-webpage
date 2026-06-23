@@ -21,16 +21,18 @@ bodyClass: is-home
     <h1 class="home-headline">{{ settings[lang].tagline }}</h1>
     <p class="lead">{{ home[lang].subtitle }}</p>
   </div>
-  {% for block in home[lang].blocks %}
-    <div class="home-block row row-y-center" data-reveal>
-      <div class="column large-half medium-full home-block__media">
-        {% image block.image, block.alt, "(max-width:800px) 100vw, 50vw" %}
-      </div>
-      <div class="column large-half medium-full">
-        <p>{{ block.text }}</p>
-      </div>
-    </div>
-  {% endfor %}
+  <div class="home-intro__copy" data-reveal>
+    {% for block in home[lang].blocks %}
+      <p>{{ block.text }}</p>
+    {% endfor %}
+  </div>
+  <div class="home-gallery" data-reveal>
+    {% for block in home[lang].blocks %}
+      <figure class="home-gallery__item">
+        {% image block.image, block.alt, "(max-width:600px) 100vw, 50vw" %}
+      </figure>
+    {% endfor %}
+  </div>
   <p class="home-intro__cta" data-reveal>
     <a class="btn btn--stroke" href="{{ nav[lang].studio.url }}">{{ nav[lang].studio.label }}</a>
   </p>

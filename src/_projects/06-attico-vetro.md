@@ -1,30 +1,30 @@
 ---
-slug: villa-soave
-order: 1
+slug: attico-vetro
+order: 6
 year: 2024
-location: "Como, IT"
+location: "Roma, IT"
 featured: true
 draft: false
-title_it: "Villa Soave"
-title_en: "Villa Soave"
-heroImage: /assets/uploads/proj-01/hero.jpg
+title_it: "Attico Vetro"
+title_en: "Glass Penthouse"
+heroImage: /assets/uploads/proj-02/hero.jpg
 gallery:
   - {
-      image: /assets/uploads/proj-01/01.jpg,
-      caption_it: "Soggiorno verso il lago",
-      caption_en: "Living room toward the lake",
-      span: "half",
-    }
-  - {
       image: /assets/uploads/proj-01/02.jpg,
-      caption_it: "Dettaglio in pietra",
-      caption_en: "Stone detail",
+      caption_it: "La terrazza sui tetti",
+      caption_en: "The rooftop terrace",
       span: "half",
     }
   - {
-      image: /assets/uploads/proj-01/hero.jpg,
-      caption_it: "Vista d'insieme sul lago",
-      caption_en: "Overall view toward the lake",
+      image: /assets/uploads/home/block-2.jpg,
+      caption_it: "Living a doppia altezza",
+      caption_en: "Double-height living",
+      span: "half",
+    }
+  - {
+      image: /assets/uploads/proj-02/hero.jpg,
+      caption_it: "Vetrata sul panorama",
+      caption_en: "Glass wall over the skyline",
       span: "full",
     }
   - {
@@ -32,15 +32,15 @@ gallery:
       text_en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien id suscipit efficitur, augue odio bibendum quam, sed accumsan quam lorem eu libero.",
     }
   - {
-      image: /assets/uploads/home/block-1.jpg,
-      caption_it: "Camera padronale",
-      caption_en: "Master bedroom",
+      image: /assets/uploads/proj-02/01.jpg,
+      caption_it: "Cucina su misura",
+      caption_en: "Bespoke kitchen",
       span: "half",
     }
   - {
-      image: /assets/uploads/home/block-2.jpg,
-      caption_it: "Dettaglio tessile",
-      caption_en: "Textile detail",
+      image: /assets/uploads/home/block-1.jpg,
+      caption_it: "Zona notte",
+      caption_en: "Sleeping area",
       span: "half",
     }
 description_it: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate, sapien id suscipit efficitur, augue odio bibendum quam, sed accumsan quam lorem eu libero."

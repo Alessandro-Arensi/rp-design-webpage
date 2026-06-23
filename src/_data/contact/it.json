@@ -2,14 +2,12 @@
   "heading": "Contatti",
   "intro": "Per appuntamenti, stampa e candidature.",
   "emails": {
-    "general": "studio@piana.design",
-    "press": "press@piana.design",
-    "careers": "careers@piana.design"
+    "general": "info@rpinteriordesign.it"
   },
   "address": {
-    "street": "Via Esempio 00",
-    "city": "Torino",
-    "zip": "10100",
+    "street": "Via Paolo Giovio 3",
+    "city": "Milano",
+    "zip": "20144",
     "country": "Italia"
   },
   "mapsUrl": "https://maps.google.com/",

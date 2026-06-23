@@ -60,7 +60,7 @@ collections:
         widget: list
         summary: "{{fields.caption_it}}"
         fields:
-          - { name: image, label: "Immagine", widget: image }
+          - { name: image, label: "Immagine", widget: image, required: false }
           - {
               name: caption_it,
               label: "Didascalia (IT)",
@@ -71,6 +71,26 @@ collections:
               name: caption_en,
               label: "Caption (EN)",
               widget: string,
+              required: false,
+            }
+          - {
+              name: span,
+              label: "Larghezza (half = 2 per riga, full = intera 16:9)",
+              widget: select,
+              options: ["half", "full"],
+              default: "half",
+              required: false,
+            }
+          - {
+              name: text_it,
+              label: "Blocco di testo (IT) — lascia vuota l'immagine",
+              widget: text,
+              required: false,
+            }
+          - {
+              name: text_en,
+              label: "Text block (EN) — leave the image empty",
+              widget: text,
               required: false,
             }
       - { name: description_it, label: "Descrizione (IT)", widget: text }

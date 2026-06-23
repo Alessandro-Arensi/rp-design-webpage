@@ -179,7 +179,13 @@ a {
 .bleed {
   padding-inline: var(--gutter);
 }
+/* Inner content pages (no hero): clear the fixed header AND sit in the same
+   centred 108rem band as the project detail page — text stays left-aligned
+   within, so the whole site shares one content column. Home is excluded (it
+   keeps its own full-bleed centred layout). */
 .page-top {
+  max-width: 108rem;
+  margin-inline: auto;
   padding-top: calc(var(--header-h) + var(--section-y));
 }
 
@@ -482,7 +488,7 @@ html.lenis body {
 }
 .s-hero__tagline {
   font-size: var(--fs-display);
-  max-width: 16ch;
+  max-width: 26ch;
 }
 .s-hero__tagline .line {
   display: block;
@@ -540,33 +546,60 @@ html.lenis body {
 }
 
 /* ----- home narrative -------------------------------------------- */
+/* Home narrative shares the same centred 108rem band + left-aligned text as
+   the project detail / inner pages (the hero above stays full-bleed). */
 .home-intro {
   display: grid;
   gap: var(--sp-7);
+  max-width: 108rem;
+  margin-inline: auto;
 }
 .home-intro__head {
   display: grid;
   gap: var(--sp-3);
 }
 .home-headline {
-  max-width: 18ch;
+  max-width: 34ch;
 }
 .lead {
   font-family: var(--ff-display);
   font-size: var(--fs-lead);
   line-height: 1.4;
-  max-width: 28ch;
+  max-width: 50ch;
 }
-.home-block {
-  row-gap: var(--sp-3);
+/* narrative copy under the lead (was the per-image block text) */
+.home-intro__copy {
+  max-width: var(--maxw-text);
 }
-.home-block__media img {
+.home-intro__copy p:last-child {
+  margin-bottom: 0;
+}
+/* two photos side by side, portrait 3:4, filling the band */
+.home-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gutter);
+  width: 100%;
+}
+.home-gallery__item {
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+.home-gallery__item picture,
+.home-gallery__item img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
 }
 .home-intro__cta {
   margin: 0;
+}
+@media screen and (max-width: 600px) {
+  .home-gallery {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ----- projects overview ----------------------------------------- */
@@ -640,13 +673,45 @@ html.lenis body {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
-.project-gallery figure {
-  margin: 0 0 var(--sp-5);
+/* centred content band — eyebrow, text + image grids share one inset column;
+   top padding clears the fixed header (this page has no hero) */
+.project-body {
+  max-width: 108rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-top: calc(var(--header-h) + var(--sp-6));
+  padding-bottom: var(--sp-8);
 }
-.project-gallery img {
-  width: 100%;
-  height: auto;
-  display: block;
+.project-head {
+  margin-bottom: var(--sp-6);
+}
+.project-head .project-meta {
+  margin-top: var(--sp-1);
+}
+/* body copy: left-aligned, narrow measure at the left of the band (per kit) */
+.project-text {
+  max-width: var(--maxw-text);
+  margin-block: var(--sp-6);
+}
+.project-text p:last-child {
+  margin-bottom: 0;
+}
+/* a text block placed inside the image grid spans the whole row */
+.project-gallery .project-text {
+  grid-column: 1 / -1;
+  margin-block: var(--sp-3);
+}
+/* image grid: 2-up by default; a figure.is-full spans the whole row (16:9) */
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gutter);
+}
+.project-gallery figure {
+  margin: 0;
+}
+.project-gallery figure.is-full {
+  grid-column: 1 / -1;
 }
 .project-gallery figcaption {
   margin-top: var(--sp-1);
@@ -659,7 +724,7 @@ html.lenis body {
   justify-content: space-between;
   border-top: 1px solid var(--c-line);
   padding-top: var(--sp-4);
-  margin-top: var(--sp-6);
+  margin-top: var(--sp-7);
 }
 .project-nav a {
   font-family: var(--ff-display);
@@ -672,6 +737,7 @@ html.lenis body {
 .project-nav__next {
   text-align: right;
 }
+/* gallery image button: fixed-ratio crop (3:4 half, 16:9 full) */
 .g-trigger {
   display: block;
   width: 100%;
@@ -680,13 +746,30 @@ html.lenis body {
   background: none;
   color: inherit;
   cursor: zoom-in;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+.project-gallery figure.is-full .g-trigger {
+  aspect-ratio: 16 / 9;
+}
+.g-trigger picture,
+.g-trigger img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media screen and (max-width: 600px) {
+  .project-gallery {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ----- studio / contact ------------------------------------------ */
 .statement {
   font-family: var(--ff-display);
   font-size: var(--fs-h2);
-  max-width: 24ch;
+  max-width: 42ch;
   line-height: 1.2;
 }
 .error-page {
