@@ -8,20 +8,21 @@ Piana**, built with **Eleventy**, edited by a non-technical client through **Dec
 "Roberto Piana" **signature intro** (GSAP) and smooth scroll (Lenis). It descends from a
 StyleShout template but only the flexbox grid in `base.css` remains (see [§10](#10-caveats--gotchas)).
 
-| Attribute | Value |
-|---|---|
-| Generator | Eleventy v3 (`src/` → `dist/`) |
-| Languages | Italian at `/`, English under `/en/` |
-| CMS | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account) |
-| Hosting | Netlify (primary); `gh-pages` is a fallback target |
-| Fonts | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2 |
-| Animation | GSAP (signature intro) + Lenis (smooth scroll), self-hosted/vendored |
-| Images | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG) |
-| Accessibility | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16 |
-| Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects` |
-| Status | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain |
+| Attribute       | Value                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| Generator       | Eleventy v3 (`src/` → `dist/`)                                                           |
+| Languages       | Italian at `/`, English under `/en/`                                                     |
+| CMS             | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account)             |
+| Hosting         | Netlify (primary); `gh-pages` is a fallback target                                       |
+| Fonts           | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2 |
+| Animation       | GSAP (signature intro) + Lenis (smooth scroll), self-hosted/vendored                     |
+| Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG)                           |
+| Accessibility   | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16                                  |
+| Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects`            |
+| Status          | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain              |
 
 **I want to… →**
+
 - run/edit locally → [Quick start](#quick-start)
 - understand how a page is built → [§1 Mental model](#1-mental-model--how-a-page-is-built)
 - find where content lives / edit copy → [§3 Content model & CMS](#3-content-model--cms)
@@ -105,6 +106,7 @@ src/
 admin/{index.html, config.yml}   # Decap CMS
 eleventy.config.js  Makefile  netlify.toml  package.json
 ```
+
 Root favicons (`favicon.ico`, PNGs, `site.webmanifest`) + `admin/` are passthrough-copied.
 The raw client delivery bundle (`assets/` at repo root) and `docs/` are **gitignored**.
 
@@ -117,14 +119,14 @@ Everything a non-technical editor changes is a data/markdown file, edited via **
 login, edits commit to the repo, Netlify rebuilds. Local editing without Netlify: `make cms`
 (decap-server) + `make dev` (`local_backend: true`, localhost only).
 
-| Content | File(s) | CMS collection | Notes |
-|---|---|---|---|
-| Projects | `src/_projects/NN-slug.md` | **Progetti** (folder, "New") | Bilingual fields in one file; `featured`, `draft`, `order`; gallery list |
-| Home | `src/_data/home/{it,en}.json` | pages → Home IT/EN | subtitle + narrative `blocks[]` (image/alt/text) |
-| Studio | `src/_data/studio/{it,en}.json` | pages → Studio | eyebrow, statement (headline), paragraphs[] |
-| Contact | `src/_data/contact/{it,en}.json` | pages → Contatti | emails (general/press/careers), address, maps |
-| Brand | `src/_data/settings/{it,en}.json` | **Impostazioni** | siteName, tagline, homeHero, social, **colours**, **fonts** |
-| Nav / UI strings | `src/_data/nav,ui/*` | — (dev-managed) | not in CMS |
+| Content          | File(s)                           | CMS collection               | Notes                                                                    |
+| ---------------- | --------------------------------- | ---------------------------- | ------------------------------------------------------------------------ |
+| Projects         | `src/_projects/NN-slug.md`        | **Progetti** (folder, "New") | Bilingual fields in one file; `featured`, `draft`, `order`; gallery list |
+| Home             | `src/_data/home/{it,en}.json`     | pages → Home IT/EN           | subtitle + narrative `blocks[]` (image/alt/text)                         |
+| Studio           | `src/_data/studio/{it,en}.json`   | pages → Studio               | eyebrow, statement (headline), paragraphs[]                              |
+| Contact          | `src/_data/contact/{it,en}.json`  | pages → Contatti             | emails (general/press/careers), address, maps                            |
+| Brand            | `src/_data/settings/{it,en}.json` | **Impostazioni**             | siteName, tagline, homeHero, social, **colours**, **fonts**              |
+| Nav / UI strings | `src/_data/nav,ui/*`              | — (dev-managed)              | not in CMS                                                               |
 
 `media_folder: src/assets/uploads` (`public_folder: /assets/uploads`); `publish_mode:
 editorial_workflow`. Project **detail pages** are generated by paginating the `projects`
@@ -156,14 +158,14 @@ hero, intro, projects, lightbox, scroll-reveal, responsive).
 **Palette** (WEB KIT) — injected into `:root` from `settings[lang].colors` in `head.njk`, so the
 client can re-theme from the CMS:
 
-| Token | Hex | Role |
-|---|---|---|
-| `--c-bg` | `#f9f7f2` | background (cream) |
-| `--c-ink` | `#1a1a18` | text |
-| `--c-ink-soft` | `#6b6862` | muted text / captions |
-| `--c-line` | `#ddd7c9` | hairlines; footer links |
-| `--c-accent` | `#a27b5a` | accent / hover |
-| `--c-dark` | `#272a32` | footer + intro curtain |
+| Token          | Hex       | Role                    |
+| -------------- | --------- | ----------------------- |
+| `--c-bg`       | `#f9f7f2` | background (cream)      |
+| `--c-ink`      | `#1a1a18` | text                    |
+| `--c-ink-soft` | `#6b6862` | muted text / captions   |
+| `--c-line`     | `#ddd7c9` | hairlines; footer links |
+| `--c-accent`   | `#a27b5a` | accent / hover          |
+| `--c-dark`     | `#272a32` | footer + intro curtain  |
 
 **Type:** ABC Arizona Flare Light → headings **and** body (`--ff-display`/`--ff-body`, from
 settings); **DM Sans** → labels, nav, buttons, tags, captions (`--ff-sans`). All self-hosted
@@ -179,14 +181,14 @@ light over a hero, ink when the header is solid). SVG favicon = `favicon-rp.svg`
 enhancement: the site is fully usable with **no JS**, and every motion module respects
 `prefers-reduced-motion`. GSAP + Lenis are vendored under `assets/js/vendor/`.
 
-| Module | Role |
-|---|---|
-| `lenis.js` | Smooth scroll (disabled under reduced-motion) |
-| `intro.js` | Home curtain: draws the signature then lifts into the hero |
-| `nav.js` | Mobile full-screen overlay menu |
-| `header.js` | Header colour state (transparent over hero → solid on scroll) |
-| `reveal.js` | Scroll reveals via IntersectionObserver |
-| `gallery.js` | Project-image lightbox (focus-trap, Esc, ← →) |
+| Module         | Role                                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| `lenis.js`     | Smooth scroll (disabled under reduced-motion)                                                     |
+| `intro.js`     | Home curtain: draws the signature then lifts into the hero                                        |
+| `nav.js`       | Mobile full-screen overlay menu                                                                   |
+| `header.js`    | Header colour state (transparent over hero → solid on scroll)                                     |
+| `reveal.js`    | Scroll reveals via IntersectionObserver                                                           |
+| `gallery.js`   | Project-image lightbox (focus-trap, Esc, ← →)                                                     |
 | `logo-draw.js` | `setupSignature()` — hand-draws "Roberto Piana" stroke-by-stroke (clip-rect + masked centerlines) |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); GSAP timeline draws
@@ -258,6 +260,7 @@ assess text over images) — a scrim gradient guarantees legibility; verify visu
 ## 11. Status & launch checklist
 
 Launchpad v1, live on a Netlify subdomain. To go to production:
+
 1. Replace placeholder photos (home blocks, project galleries, studio/portrait).
 2. Add real **projects** + **Contact** copy; review the EN translation.
 3. Regenerate `apple-touch`/`favicon.ico`/PWA PNGs from the RP mark.

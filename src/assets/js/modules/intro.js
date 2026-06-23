@@ -59,13 +59,14 @@ export function initIntro() {
   sign.addTo(tl, drawStart); // hand-writes "Roberto Piana"
   const lift = drawStart + sign.duration - 0.15; // lift just as the ink lands
 
-  tl.to(intro, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, lift)
+  // Crossfade the curtain (it shares the hero's signature position/size, so the
+  // drawn "Roberto Piana" settles seamlessly into the static hero signature).
+  tl.to(intro, { autoAlpha: 0, duration: 1.1, ease: "power2.inOut" }, lift)
     .from(
       heroImg,
       { scale: 1.12, duration: 1.6, ease: "power2.out" },
       lift + 0.6,
     )
-    .from(taglines, { yPercent: 120, duration: 1.0, stagger: 0.14 }, lift + 0.8)
     .from(
       header,
       { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },

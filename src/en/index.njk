@@ -12,14 +12,15 @@ bodyClass: is-home
     {% image settings[lang].homeHero, "", "100vw", { eager: true } %}
   </div>
   <div class="s-hero__overlay"></div>
-  <div class="s-hero__content">
-    <h1 class="s-hero__tagline"><span class="line"><span>{{ settings[lang].tagline }}</span></span></h1>
-  </div>
+  <div class="s-hero__sign" aria-hidden="true"></div>
   <a class="s-hero__scroll" href="#intro" aria-label="{{ ui[lang].scroll }}"><span class="s-hero__scroll-line" aria-hidden="true"></span></a>
 </section>
 
 <section id="intro" class="section bleed home-intro">
-  <p class="lead" data-reveal>{{ home[lang].subtitle }}</p>
+  <div class="home-intro__head" data-reveal>
+    <h1 class="home-headline">{{ settings[lang].tagline }}</h1>
+    <p class="lead">{{ home[lang].subtitle }}</p>
+  </div>
   {% for block in home[lang].blocks %}
     <div class="home-block row row-y-center" data-reveal>
       <div class="column large-half medium-full home-block__media">

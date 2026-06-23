@@ -95,6 +95,15 @@ body {
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
 }
+/* Hide the scrollbar (page still scrolls via Lenis/wheel/keys). Also removes the
+   layout shift when the intro unlocks overflow — no scrollbar gutter to appear. */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
+}
 ::selection {
   background: var(--c-accent);
   color: #fff;
@@ -203,8 +212,8 @@ a {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 5.6rem;
-  height: 5.6rem;
+  width: calc(var(--header-h));
+  height: calc(var(--header-h));
   background-color: currentColor;
   -webkit-mask: url("/assets/icons/rp-icona.svg") center / contain no-repeat;
   mask: url("/assets/icons/rp-icona.svg") center / contain no-repeat;
@@ -428,7 +437,19 @@ html.lenis body {
   height: 100svh;
   min-height: 56rem;
   display: grid;
+  place-items: center;
   overflow: hidden;
+}
+/* White "Roberto Piana" signature centered on the hero — same size/centering as
+   the animated intro logo (clamp 16/62vw/46rem). Mask keeps it crisp + white. */
+.s-hero__sign {
+  position: relative;
+  width: clamp(16rem, 62vw, 46rem);
+  aspect-ratio: 460.86 / 113.15;
+  background-color: #fff;
+  -webkit-mask: url("/assets/icons/logo-signature.svg") center / contain
+    no-repeat;
+  mask: url("/assets/icons/logo-signature.svg") center / contain no-repeat;
 }
 .s-hero__media,
 .s-hero__media img,
@@ -487,17 +508,33 @@ html.lenis body {
   animation: scroll-line 2.4s var(--ease-out) infinite;
 }
 @keyframes scroll-line {
-  0%, 100% { transform: scaleY(0.3); opacity: 0.5; }
-  50% { transform: scaleY(1); opacity: 1; }
+  0%,
+  100% {
+    transform: scaleY(0.3);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .s-hero__scroll-line { animation: none; }
+  .s-hero__scroll-line {
+    animation: none;
+  }
 }
 
 /* ----- home narrative -------------------------------------------- */
 .home-intro {
   display: grid;
   gap: var(--sp-7);
+}
+.home-intro__head {
+  display: grid;
+  gap: var(--sp-3);
+}
+.home-headline {
+  max-width: 18ch;
 }
 .lead {
   font-family: var(--ff-display);
