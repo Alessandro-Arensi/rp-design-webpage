@@ -225,23 +225,35 @@ a {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: inherit; /* full contrast: ink when solid, white over a hero image */
-  transition: opacity var(--dur-fast) var(--ease-out);
 }
-.header-nav a[aria-current="page"],
-.s-header__lang a[aria-current="true"] {
+/* Animatable underline: the line is always present but transparent, so its
+   colour can fade in (text-decoration can't transition; text-decoration-color
+   can). Hover + selected/aria-current both fade it to currentColor — same
+   underline across every text link (per WEB KIT — Menu, project name, email,
+   footer). Footer's accent colour rides the same transition. Fade duration
+   collapses to ~0 under prefers-reduced-motion via --dur-fast. */
+.header-nav a,
+.s-header__lang a,
+.s-footer__col a,
+.contact-emails a,
+.project-nav a,
+.project-card__title {
   text-decoration: underline;
+  text-decoration-color: transparent;
   text-underline-offset: 0.35em;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
 }
-/* Hover mirrors the selected/aria-current state: the same underline across
-   every text link (per WEB KIT buttons — Menu, project name, email, footer). */
 .header-nav a:hover,
 .s-header__lang a:hover,
 .s-footer__col a:hover,
 .contact-emails a:hover,
 .project-nav a:hover,
-.project-card:hover .project-card__title {
-  text-decoration: underline;
-  text-underline-offset: 0.35em;
+.project-card:hover .project-card__title,
+.header-nav a[aria-current="page"],
+.s-header__lang a[aria-current="true"] {
+  text-decoration-color: currentColor;
 }
 
 /* header colour states (set by JS) */
@@ -342,7 +354,6 @@ a {
   display: block;
   color: var(--c-line);
   line-height: 2;
-  transition: color var(--dur-fast) var(--ease-out);
 }
 .s-footer__col a:hover {
   color: var(--c-accent);
