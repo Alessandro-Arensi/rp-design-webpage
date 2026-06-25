@@ -362,20 +362,32 @@ a {
   background: var(--c-dark);
   color: var(--c-line);
   font-family: var(--ff-sans);
-  padding-block: var(--sp-6) var(--sp-4);
+  padding-block: var(--sp-5) var(--sp-4);
+  padding-inline: var(--gutter);
 }
-.s-footer__inner {
+.s-footer__top {
+  display: flex;
   align-items: center;
-  gap: var(--sp-4) 0;
+  justify-content: center;
+  gap: 20rem; /* fixed: distance logo<->links stays constant across widths */
+  flex-wrap: wrap;
 }
+/* big white brand lockup on the left (mask follows the bg colour -> white). */
 .s-footer__logo-img {
-  width: clamp(22rem, 42vw, 36rem);
+  flex: 0 0 auto;
+  width: clamp(40rem, 54vw, 68rem);
   aspect-ratio: 3601 / 1601;
   display: block;
-  margin-inline: auto;
-  background-color: var(--c-line);
+  background-color: #fff;
   -webkit-mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
   mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
+}
+.s-footer__cols {
+  display: flex;
+  gap: var(--sp-6);
+}
+.s-footer__col p {
+  margin: 0 0 0.4rem;
 }
 .s-footer__col a {
   display: block;
@@ -385,39 +397,48 @@ a {
 .s-footer__col a:hover {
   color: var(--c-accent);
 }
+/* bottom bar: © left, legal links right */
+.s-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-small);
+  color: var(--c-line);
+  opacity: 0.7;
+}
+.s-footer__legal {
+  display: flex;
+  gap: var(--sp-3);
+}
+.s-footer__legal a {
+  color: inherit;
+}
+.s-footer__legal a:hover {
+  color: var(--c-accent);
+  opacity: 1;
+}
 @media screen and (max-width: 600px) {
   .s-footer {
     padding-block: var(--sp-5) var(--sp-3);
   }
-  .s-footer__inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "logo logo"
-      "addr mail"
-      "addr social";
-    align-items: start;
-    gap: var(--sp-2) var(--sp-4);
-  }
-  .s-footer__inner > .column {
-    width: auto;
-    margin: 0;
-  }
-  .s-footer__inner > :nth-child(1) {
-    grid-area: logo;
-  }
-  .s-footer__inner > :nth-child(2) {
-    grid-area: addr;
-  }
-  .s-footer__inner > :nth-child(3) {
-    grid-area: mail;
-  }
-  .s-footer__inner > :nth-child(4) {
-    grid-area: social;
+  .s-footer__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-4);
   }
   .s-footer__logo-img {
-    width: clamp(26rem, 64vw, 34rem);
-    margin-block-end: var(--sp-3);
+    width: clamp(26rem, 72vw, 40rem);
+  }
+  .s-footer__cols {
+    gap: var(--sp-5);
+  }
+  .s-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+    margin-top: var(--sp-5);
   }
 }
 /* ----- intro (curtain) — only on first visit (html.intro-play) ---- */
