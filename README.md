@@ -5,8 +5,7 @@
 A **bilingual (IT-primary / EN) static site** for the architecture studio of **Roberto
 Piana**, built with **Eleventy**, edited by a non-technical client through **Decap CMS**
 (git-based), hosted on **Netlify**. Minimalist, photography-led, with a hand-drawn
-"Roberto Piana" **signature intro** (GSAP) and smooth scroll (Lenis). It descends from a
-StyleShout template but only the flexbox grid in `base.css` remains (see [§10](#10-caveats--gotchas)).
+"Roberto Piana" **signature intro** (GSAP) and smooth scroll (Lenis).
 
 | Attribute       | Value                                                                                    |
 | --------------- | ---------------------------------------------------------------------------------------- |
@@ -252,8 +251,6 @@ assess text over images) — a scrim gradient guarantees legibility; verify visu
 - **Raster icons are still generic:** the SVG browser favicon is the RP mark, but
   `apple-touch-icon.png`, `favicon.ico`, and the `android-chrome` PWA icons need regenerating from
   the RP monogram.
-- **StyleShout lineage:** only `base.css` (the grid) derives from the original template; the
-  attribution-removal fee was paid, so no footer credit is required.
 - Local dev (and `netlify dev`) do **not** apply the 404 `_redirects` — language-404 only works on
   a real Netlify deploy.
 
