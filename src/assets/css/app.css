@@ -48,9 +48,7 @@
   --lh-body: 1.65;
   --track-label: 0.26rem;
 
-  /* DM Sans for tags / project names / labels / nav / buttons.
-     --ff-display + --ff-body (ABC Arizona Flare) are injected from CMS settings. */
-  --ff-sans: "DM Sans", system-ui, -apple-system, Arial, sans-serif;
+  --ff-sans: "ABC Arizona Flare", Georgia, "Times New Roman", serif;
 
   --sp-1: 0.8rem;
   --sp-2: 1.6rem;
@@ -72,7 +70,7 @@
   --dur: 0.8s;
   --dur-slow: 1.2s;
 
-  --header-h: 8.5rem;
+  --header-h: 7.5rem;
   --z-header: 100;
   --z-nav: 200;
   --z-lightbox: 900;
@@ -229,6 +227,10 @@ a {
   align-items: center;
   gap: var(--sp-5);
 }
+/* logo only appears inside the mobile menu overlay (see responsive block) */
+.s-header__nav-logo {
+  display: none;
+}
 .header-nav {
   display: flex;
   gap: var(--sp-4);
@@ -236,10 +238,15 @@ a {
 .header-nav a,
 .s-header__lang a {
   font-family: var(--ff-sans);
-  font-size: var(--fs-label);
+  font-size: var(--fs-small);
+  color: inherit; /* full contrast: ink when solid, white over a hero image */
+}
+.s-header__lang a {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: inherit; /* full contrast: ink when solid, white over a hero image */
+}
+.header-nav a {
+  letter-spacing: 0.04em;
 }
 /* Animatable underline: the line is always present but transparent, so its
    colour can fade in (text-decoration can't transition; text-decoration-color
@@ -295,7 +302,9 @@ a {
      full-screen mobile overlay, which caused the peek/confinement/close glitches.
      Solid background keeps content from bleeding through. */
   background: var(--c-bg);
-  border-bottom: 1px solid var(--c-line);
+  /* Per art direction: a touch darker than --c-line (#ddd7c9) so the separator
+     reads against the near-white solid header. */
+  border-bottom: 1px solid #c2bdb1;
   color: var(--c-ink);
 }
 /* While the mobile overlay is open: no backdrop-filter (so the fixed overlay
@@ -353,17 +362,20 @@ a {
   background: var(--c-dark);
   color: var(--c-line);
   font-family: var(--ff-sans);
-  padding-block: var(--sp-8) var(--sp-4);
+  padding-block: var(--sp-6) var(--sp-4);
 }
 .s-footer__inner {
-  align-items: flex-start;
+  align-items: center;
   gap: var(--sp-4) 0;
 }
-.s-footer__logo {
-  font-family: var(--ff-display);
-  font-size: 2.2rem;
-  color: var(--c-bg);
-  margin-bottom: 0.6rem;
+.s-footer__logo-img {
+  width: clamp(22rem, 42vw, 36rem);
+  aspect-ratio: 3601 / 1601;
+  display: block;
+  margin-inline: auto;
+  background-color: var(--c-line);
+  -webkit-mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
+  mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
 }
 .s-footer__col a {
   display: block;
@@ -373,18 +385,41 @@ a {
 .s-footer__col a:hover {
   color: var(--c-accent);
 }
-.s-footer__bottom {
-  margin-top: var(--sp-6);
-  padding-top: var(--sp-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--fs-small);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  opacity: 0.6;
+@media screen and (max-width: 600px) {
+  .s-footer {
+    padding-block: var(--sp-5) var(--sp-3);
+  }
+  .s-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "logo logo"
+      "addr mail"
+      "addr social";
+    align-items: start;
+    gap: var(--sp-2) var(--sp-4);
+  }
+  .s-footer__inner > .column {
+    width: auto;
+    margin: 0;
+  }
+  .s-footer__inner > :nth-child(1) {
+    grid-area: logo;
+  }
+  .s-footer__inner > :nth-child(2) {
+    grid-area: addr;
+  }
+  .s-footer__inner > :nth-child(3) {
+    grid-area: mail;
+  }
+  .s-footer__inner > :nth-child(4) {
+    grid-area: social;
+  }
+  .s-footer__logo-img {
+    width: clamp(26rem, 64vw, 34rem);
+    margin-block-end: var(--sp-3);
+  }
 }
-
 /* ----- intro (curtain) — only on first visit (html.intro-play) ---- */
 .intro {
   position: fixed;
@@ -399,19 +434,18 @@ html.intro-play .intro {
   display: grid;
 }
 .intro__sign {
-  width: clamp(16rem, 62vw, 46rem);
-  color: #fff;
+  width: clamp(21.5rem, 81vw, 62rem);
+  max-width: 90%;
 }
-.intro__sign .logo-sign {
+.intro__sign img {
   display: block;
   width: 100%;
   height: auto;
-  /* Hidden until logo-draw.js has installed the clips/masks, so the full
-     signature never flashes before it starts drawing. */
+  /* logo art is black ink on transparent — force it white for the dark curtain */
+  filter: brightness(0) invert(1);
+  /* hidden until intro.js fades it in, so it never flashes before the tween */
+  opacity: 0;
   visibility: hidden;
-}
-.intro__sign .logo-sign path {
-  fill: currentColor;
 }
 @media (prefers-reduced-motion: reduce) {
   html.intro-play .intro {
@@ -447,15 +481,14 @@ html.lenis body {
   overflow: hidden;
 }
 /* White "Roberto Piana" signature centered on the hero — same size/centering as
-   the animated intro logo (clamp 16/62vw/46rem). Mask keeps it crisp + white. */
+   the animated intro logo (clamp 21.5rem / 81vw / 62rem). Mask keeps it crisp. */
 .s-hero__sign {
   position: relative;
-  width: clamp(16rem, 62vw, 46rem);
-  aspect-ratio: 460.86 / 113.15;
-  background-color: #fff;
-  -webkit-mask: url("/assets/icons/logo-signature.svg") center / contain
-    no-repeat;
-  mask: url("/assets/icons/logo-signature.svg") center / contain no-repeat;
+  /* matches the intro curtain sign so it settles seamlessly when the curtain lifts */
+  width: clamp(21.5rem, 81vw, 62rem);
+  max-width: 90%;
+  /* logo art is black ink on transparent — force it white for the dark hero */
+  filter: brightness(0) invert(1);
 }
 .s-hero__media,
 .s-hero__media img,
@@ -469,15 +502,8 @@ html.lenis body {
 .s-hero__overlay {
   position: absolute;
   inset: 0;
-  /* WEB KIT — gradiente foto landing: #FFFFFF → #241A0F at 65%.
-     65% alpha baked into both stops so the whole overlay sits at 65%
-     opacity (white wash at top, warm-dark scrim at the bottom where the
-     hero tagline + scroll cue sit). #241A0F = rgb(36, 26, 15). */
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.65),
-    rgba(36, 26, 15, 0.65)
-  );
+  background: linear-gradient(to bottom, #241a0f 0%, #ffffff 100%);
+  opacity: 0.65;
 }
 .s-hero__content {
   position: relative;
@@ -497,53 +523,6 @@ html.lenis body {
 .s-hero__tagline .line > span {
   display: block;
 }
-.s-hero__scroll {
-  position: absolute;
-  bottom: var(--sp-4);
-  right: var(--gutter);
-  color: #fff;
-}
-/* double chevron pointing down, bobbing gently (no text, per the brief) */
-.s-hero__chevrons {
-  display: block;
-  position: relative;
-  width: 2rem;
-  height: 2.4rem;
-  margin-left: auto;
-  animation: scroll-bob 1.8s ease-in-out infinite;
-}
-.s-hero__chevrons::before,
-.s-hero__chevrons::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  width: 1.4rem;
-  height: 1.4rem;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateX(-50%) rotate(45deg);
-}
-.s-hero__chevrons::before {
-  top: 0;
-}
-.s-hero__chevrons::after {
-  top: 0.8rem;
-  opacity: 0.55;
-}
-@keyframes scroll-bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(0.5rem);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .s-hero__chevrons {
-    animation: none;
-  }
-}
 
 /* ----- home narrative -------------------------------------------- */
 /* Home narrative shares the same centred 108rem band + left-aligned text as
@@ -557,6 +536,9 @@ html.lenis body {
 .home-intro__head {
   display: grid;
   gap: var(--sp-3);
+  /* tagline + lead centred above the narrative */
+  justify-items: center;
+  text-align: center;
 }
 .home-headline {
   max-width: 34ch;
@@ -567,9 +549,11 @@ html.lenis body {
   line-height: 1.4;
   max-width: 50ch;
 }
-/* narrative copy under the lead (was the per-image block text) */
+/* narrative copy under the lead — left aligned, full band width to match the
+   two photos below (was the per-image block text) */
 .home-intro__copy {
-  max-width: var(--maxw-text);
+  max-width: 100%;
+  text-align: left;
 }
 .home-intro__copy p:last-child {
   margin-bottom: 0;
@@ -578,7 +562,7 @@ html.lenis body {
 .home-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--gutter);
+  gap: var(--sp-2);
   width: 100%;
 }
 .home-gallery__item {
@@ -958,6 +942,14 @@ address {
     transition:
       transform var(--dur) var(--ease-lux),
       visibility 0s;
+  }
+  /* vertical logo, white, centered above the menu items */
+  .s-header__nav-logo {
+    display: block;
+    width: min(58vw, 22rem);
+    height: auto;
+    margin: 0 auto var(--sp-5);
+    filter: brightness(0) invert(1);
   }
   .header-nav {
     flex-direction: column;

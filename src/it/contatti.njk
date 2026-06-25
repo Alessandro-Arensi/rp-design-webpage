@@ -10,9 +10,9 @@ title: Contatti
   <h1 class="statement" data-reveal>{{ contact[lang].intro }}</h1>
 
   <div class="contact-emails" data-reveal>
-    <div><p class="eyebrow">{{ ui[lang].general }}</p><a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a></div>
-    <div><p class="eyebrow">{{ ui[lang].press }}</p><a href="mailto:{{ contact[lang].emails.press }}">{{ contact[lang].emails.press }}</a></div>
-    <div><p class="eyebrow">{{ ui[lang].careers }}</p><a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a></div>
+    {% if contact[lang].emails.general %}<div><p class="eyebrow">{{ ui[lang].general }}</p><a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a></div>{% endif %}
+    {% if contact[lang].emails.press %}<div><p class="eyebrow">{{ ui[lang].press }}</p><a href="mailto:{{ contact[lang].emails.press }}">{{ contact[lang].emails.press }}</a></div>{% endif %}
+    {% if contact[lang].emails.careers %}<div><p class="eyebrow">{{ ui[lang].careers }}</p><a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a></div>{% endif %}
   </div>
 
   <address class="measure" data-reveal>

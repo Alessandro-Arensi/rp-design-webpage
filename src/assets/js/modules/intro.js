@@ -1,8 +1,8 @@
-// Homepage intro: GSAP curtain on first visit. The "Roberto Piana" signature
-// draws itself stroke by stroke, then the curtain lifts into the hero.
+// Homepage intro: GSAP curtain on first visit. The "Roberto Piana" logo fades in,
+// then the curtain lifts into the hero (whose static logo matches its position/size,
+// so the mark settles seamlessly).
 // First visit is armed in <head> (html.intro-play). Repeat visits, reduced-motion
 // and no-JS all skip it and show the page immediately (content is visible by default).
-import { setupSignature } from "./logo-draw.js";
 
 export function initIntro() {
   const intro = document.querySelector("[data-intro]");
@@ -10,10 +10,10 @@ export function initIntro() {
 
   const gsap = window.gsap;
   const playing = document.documentElement.classList.contains("intro-play");
-  const svg = intro.querySelector("[data-logo-sign]");
+  const logo = intro.querySelector(".intro__sign img");
 
-  // Repeat visit / reduced-motion / GSAP unavailable / no signature: drop the curtain.
-  if (!playing || !gsap || !svg) {
+  // Repeat visit / reduced-motion / GSAP unavailable / no logo: drop the curtain.
+  if (!playing || !gsap || !logo) {
     intro.remove();
     return;
   }
@@ -47,20 +47,17 @@ export function initIntro() {
     }
   };
 
-  // Build the signature's clip-paths/masks + hidden initial state (no flash).
-  const sign = setupSignature(svg, gsap);
-
   const tl = gsap.timeline({
     defaults: { ease: "power3.inOut" },
     onComplete: cleanup,
   });
 
-  const drawStart = 0.3;
-  sign.addTo(tl, drawStart); // hand-writes "Roberto Piana"
-  const lift = drawStart + sign.duration - 0.15; // lift just as the ink lands
+  // Slight fade-in of the logo (starts hidden via CSS, so no flash), then hold.
+  tl.to(logo, { autoAlpha: 1, duration: 1.4, ease: "power2.out" }, 0.3);
+  const lift = 2.1; // lift the curtain after the logo has settled
 
-  // Crossfade the curtain (it shares the hero's signature position/size, so the
-  // drawn "Roberto Piana" settles seamlessly into the static hero signature).
+  // Crossfade the curtain (it shares the hero's logo position/size, so the
+  // "Roberto Piana" mark settles seamlessly into the static hero signature).
   tl.to(intro, { autoAlpha: 0, duration: 1.1, ease: "power2.inOut" }, lift)
     .from(
       heroImg,
