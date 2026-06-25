@@ -12,7 +12,10 @@ title: Projects
     {% for project in collections.projects %}
       <div class="column" data-reveal>
         <a class="project-card" href="{{ ('/progetti/' if lang == 'it' else '/en/projects/') + project.data.slug + '/' }}">
-          <div class="project-card__media">{% image project.data.heroImage, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}</div>
+          <div class="project-card__media">
+            {% set cov = project.data.gallery | cover %}
+            {% if cov %}{% image cov, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}{% endif %}
+          </div>
           <div class="project-card__meta">
             <h2 class="project-card__title">{{ project.data | field('title', lang) }}</h2>
             <span class="project-card__year">{{ project.data.location }} · {{ project.data.year }}</span>

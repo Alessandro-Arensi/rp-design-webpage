@@ -52,6 +52,12 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("field", (obj, name, lang) =>
     obj ? obj[`${name}_${lang}`] : undefined,
   );
+  // a project's cover = the first gallery item that has an image (gallery items
+  // can be text-only). Returns undefined for an empty/image-less gallery.
+  eleventyConfig.addFilter(
+    "cover",
+    (gallery) => (gallery || []).find((g) => g && g.image)?.image,
+  );
 
   // --- Eleventy Image: responsive <picture> (AVIF/WebP/JPEG) ---
   async function imagePicture(src, alt = "", sizes = "100vw", attrs = {}) {

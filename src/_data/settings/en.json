@@ -5,6 +5,12 @@
   "tagline": "Every place tells a story.",
   "homeStatement": "Architecture that keeps light, matter and time.",
   "homeHero": "/assets/uploads/home/hero.jpg",
+  "homeSlides": [
+    { "image": "/assets/uploads/home/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-01/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-02/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-03/hero.jpg", "alt": "" }
+  ],
   "social": [
     { "label": "Instagram", "url": "https://instagram.com/" },
     { "label": "LinkedIn", "url": "https://linkedin.com/" }

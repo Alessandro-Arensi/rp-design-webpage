@@ -7,7 +7,6 @@ featured: false
 draft: false
 title_it: "Cascina Lumen"
 title_en: "Lumen Farmhouse"
-heroImage: /assets/uploads/proj-01/hero.jpg
 gallery:
   - {
       image: /assets/uploads/home/block-1.jpg,

@@ -7,7 +7,6 @@ featured: false
 draft: false
 title_it: "Casa di Pietra"
 title_en: "House of Stone"
-heroImage: /assets/uploads/proj-03/hero.jpg
 gallery:
   - {
       image: /assets/uploads/proj-03/01.jpg,

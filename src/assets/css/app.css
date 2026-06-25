@@ -499,6 +499,31 @@ html.lenis body {
   height: 100%;
   object-fit: cover;
 }
+/* Hero slideshow: each slide is a <picture> from the image shortcode. Collapse
+   the wrapper so the inner <img> stacks absolutely (like the single hero did),
+   then crossfade slides on opacity. JS toggles .is-active; only the first slide
+   is server-rendered active, so no-JS shows a correct static hero. */
+.s-hero__media picture {
+  display: contents;
+}
+.s-hero__slide {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+.s-hero__slide.is-active {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-hero__slide {
+    transition: none;
+  }
+  .s-hero__slide:not(.is-active) {
+    opacity: 0;
+  }
+  .s-hero__slide.is-active {
+    opacity: 1;
+  }
+}
 .s-hero__overlay {
   position: absolute;
   inset: 0;

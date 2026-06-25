@@ -7,7 +7,6 @@ featured: true
 draft: false
 title_it: "Palazzo Aurora"
 title_en: "Aurora Palace"
-heroImage: /assets/uploads/home/hero.jpg
 gallery:
   - {
       image: /assets/uploads/proj-01/01.jpg,

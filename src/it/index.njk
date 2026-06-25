@@ -8,8 +8,15 @@ bodyClass: is-home
 {% include "partials/intro.njk" %}
 
 <section class="s-hero" data-hero>
-  <div class="s-hero__media">
-    {% image settings[lang].homeHero, "", "100vw", { eager: true } %}
+  <div class="s-hero__media" data-hero-slides data-hero-interval="6000">
+    {% set slides = settings[lang].homeSlides %}
+    {% if slides and slides.length %}
+      {% for slide in slides %}
+        {% image slide.image, slide.alt or "", "100vw", { eager: loop.first, class: "s-hero__slide" + (" is-active" if loop.first else "") } %}
+      {% endfor %}
+    {% else %}
+      {% image settings[lang].homeHero, "", "100vw", { eager: true, class: "s-hero__slide is-active" } %}
+    {% endif %}
   </div>
   <div class="s-hero__overlay"></div>
   <img class="s-hero__sign" src="/assets/icons/rp-firma-payoff.png" alt="" aria-hidden="true">

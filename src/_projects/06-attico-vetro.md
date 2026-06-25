@@ -7,7 +7,6 @@ featured: true
 draft: false
 title_it: "Attico Vetro"
 title_en: "Glass Penthouse"
-heroImage: /assets/uploads/proj-02/hero.jpg
 gallery:
   - {
       image: /assets/uploads/proj-01/02.jpg,

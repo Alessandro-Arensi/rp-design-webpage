@@ -7,7 +7,6 @@ featured: true
 draft: false
 title_it: "Villa Soave"
 title_en: "Villa Soave"
-heroImage: /assets/uploads/proj-01/hero.jpg
 gallery:
   - {
       image: /assets/uploads/proj-01/01.jpg,

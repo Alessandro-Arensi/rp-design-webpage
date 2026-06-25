@@ -7,7 +7,6 @@ featured: true
 draft: false
 title_it: "Corte Silente"
 title_en: "Silent Court"
-heroImage: /assets/uploads/proj-02/hero.jpg
 gallery:
   - {
       image: /assets/uploads/proj-02/01.jpg,
