@@ -1,8 +1,13 @@
 {
   "heading": "Contatti",
-  "intro": "Per appuntamenti, stampa e candidature.",
+  "intro": "Ogni progetto nasce da un incontro.",
+  "formTitle": "Contattaci per dare forma al tuo modo di abitare.",
   "emails": {
     "general": "info@rpinteriordesign.it"
+  },
+  "showroom": {
+    "heading": "Vieni in showroom",
+    "text": "Dove un'intuizione diventa schizzo, lo schizzo diventa materia, e la tua casa comincia a rivelarsi."
   },
   "address": {
     "street": "Via Paolo Giovio 3",

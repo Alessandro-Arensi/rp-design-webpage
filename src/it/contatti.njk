@@ -15,10 +15,15 @@ title: Contatti
     {% if contact[lang].emails.careers %}<div><p class="eyebrow">{{ ui[lang].careers }}</p><a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a></div>{% endif %}
   </div>
 
-  <address class="measure" data-reveal>
-    {{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}
-  </address>
+  <div class="contact-showroom" data-reveal>
+    {% if contact[lang].showroom.heading %}<p class="eyebrow">{{ contact[lang].showroom.heading }}</p>{% endif %}
+    <address>
+      {{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}
+    </address>
+    {% if contact[lang].showroom.text %}<p class="measure">{{ contact[lang].showroom.text }}</p>{% endif %}
+  </div>
 
+  {% if contact[lang].formTitle %}<h2 class="lead measure" data-reveal>{{ contact[lang].formTitle }}</h2>{% endif %}
   <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contatti/grazie/" class="measure" data-reveal>
     <input type="hidden" name="form-name" value="contact">
     <p hidden><label>Non compilare <input type="text" name="bot-field"></label></p>

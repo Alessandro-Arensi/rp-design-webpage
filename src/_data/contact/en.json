@@ -1,8 +1,13 @@
 {
   "heading": "Contact",
-  "intro": "For appointments, press and applications.",
+  "intro": "Every project begins with an encounter.",
+  "formTitle": "Get in touch to shape your unique way of living.",
   "emails": {
     "general": "info@rpinteriordesign.it"
+  },
+  "showroom": {
+    "heading": "Visit the Showroom",
+    "text": "Where an intuition becomes a sketch, a sketch becomes material, and your home begins to reveal itself."
   },
   "address": {
     "street": "Via Paolo Giovio 3",
