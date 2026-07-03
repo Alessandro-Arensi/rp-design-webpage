@@ -16,34 +16,89 @@
          Local editing: `make cms` (decap-server) + `make dev`, then open /admin/. -->
     <script src="https://unpkg.com/decap-cms@^3.6.3/dist/decap-cms.js"></script>
 
-    <!-- Custom preview for Projects: renders blocks in the SAME order as the site
-         (text + images interleaved), text full-width, images cropped to their
-         ratio, and resolves thumbnails via getAsset so they aren't broken. -->
+    <!-- Custom preview for Projects: renders the SAME DOM + classes as the site
+         detail page and loads the real site CSS into the preview iframe, so the
+         typography, text sizes and gaps match the rendered page 1:1. Images
+         resolve via getAsset. -->
     <script>
       (function () {
         if (!window.CMS || !window.h || !window.createClass) return;
         var h = window.h;
+        var CMS = window.CMS;
 
-        // ratio token -> CSS aspect-ratio; also recover YAML sexagesimal (3:4 -> 184)
-        var RATIO = {
-          "3:4": "3 / 4", "9:16": "9 / 16", "4:3": "4 / 3", "16:9": "16 / 9",
-          184: "3 / 4", 556: "9 / 16", 243: "4 / 3", 969: "16 / 9",
-        };
-        var WIDE = { "4:3": 1, "16:9": 1, 243: 1, 969: 1 };
+        // Real stylesheets into the preview iframe…
+        CMS.registerPreviewStyle("/assets/css/base.css");
+        CMS.registerPreviewStyle("/assets/css/app.css");
+        // …plus the brand tokens the site injects inline per page (colours +
+        // display/body font), which the iframe would otherwise be missing.
+        CMS.registerPreviewStyle(
+          ":root{" +
+            "--c-bg:#f9f7f2;--c-ink:#1a1a18;--c-ink-soft:#6b6862;" +
+            "--c-line:#ddd7c9;--c-accent:#a27b5a;--c-dark:#272a32;" +
+            '--ff-display:"ABC Arizona Flare",Georgia,"Times New Roman",serif;' +
+            '--ff-body:"ABC Arizona Flare",Georgia,"Times New Roman",serif' +
+            "}body{background:var(--c-bg);color:var(--c-ink)}" +
+            // The site hides the scrollbar because Lenis drives scrolling; the
+            // preview has no Lenis, so restore native scroll + a real scrollbar
+            // (otherwise the pane can't be scrolled after a SplitPane resize).
+            "html{scrollbar-width:auto!important;-ms-overflow-style:auto!important;overflow-y:auto!important}" +
+            "html::-webkit-scrollbar{display:block!important;width:12px!important;height:12px!important}" +
+            "html::-webkit-scrollbar-thumb{background:#c9c3b5!important;border-radius:6px}",
+          { raw: true }
+        );
 
-        var S = {
-          body: { maxWidth: "108rem", margin: "0 auto", padding: "5rem 3rem 8rem", boxSizing: "border-box", background: "#f9f7f2", color: "#1a1a18", fontFamily: "Georgia, 'Times New Roman', serif" },
-          eyebrow: { fontFamily: "system-ui, -apple-system, sans-serif", textTransform: "uppercase", letterSpacing: "0.18em", fontSize: "0.8rem", color: "#6b6862", margin: "0 0 3.5rem" },
-          grid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.6rem", alignItems: "start" },
-          text: { gridColumn: "1 / -1", fontSize: "1.35rem", lineHeight: "1.55", margin: "1.5rem 0" },
-          figHalf: { gridColumn: "span 1", margin: 0, overflow: "hidden" },
-          figFull: { gridColumn: "1 / -1", margin: 0, overflow: "hidden" },
-          img: { width: "100%", height: "100%", objectFit: "cover", display: "block" },
-          empty: { gridColumn: "1 / -1", color: "#a9a49a", fontStyle: "italic" },
+        // Editors pick only an orientation; snap to the closest allowed ratio
+        // using the loaded image's real dimensions (matches the site build).
+        var CANDS = {
+          orizzontale: [["4:3", 4 / 3], ["16:9", 16 / 9]],
+          verticale: [["3:4", 3 / 4], ["9:16", 9 / 16]],
         };
+        function snapRatio(orient, aspect) {
+          var c = CANDS[orient] || CANDS.verticale;
+          if (!aspect) return c[0][0];
+          var best = c[0][0], bd = Infinity;
+          for (var k = 0; k < c.length; k++) {
+            var d = Math.abs(aspect - c[k][1]);
+            if (d < bd) { bd = d; best = c[k][0]; }
+          }
+          return best;
+        }
+        function orientationOf(g) {
+          var o = g.get("orientation");
+          if (o) return o;
+          var r = g.get("ratio"); // legacy fallback
+          if (r === "16:9" || r === "4:3" || r === 969 || r === 243) return "orizzontale";
+          return "verticale";
+        }
 
         var ProjectPreview = window.createClass({
+          // Chromium leaves an iframe's wheel/trackpad scroll dead after the
+          // parent resizes it (stale compositor hit-test) until a main-thread
+          // scroll — e.g. dragging the scrollbar. The iframe fires `resize`
+          // when the SplitPane moves; nudging overflow then rebuilds the scroll
+          // node so the wheel keeps working without touching the scrollbar.
+          componentDidMount: function () {
+            var el = this.root;
+            if (!el || !el.ownerDocument) return;
+            var win = el.ownerDocument.defaultView;
+            var de = el.ownerDocument.documentElement;
+            if (!win || !de) return;
+            this._nudge = function () {
+              de.style.setProperty("overflow-y", "hidden", "important");
+              win.requestAnimationFrame(function () {
+                de.style.removeProperty("overflow-y");
+              });
+            };
+            win.addEventListener("resize", this._nudge);
+          },
+          componentWillUnmount: function () {
+            var el = this.root;
+            if (this._nudge && el && el.ownerDocument && el.ownerDocument.defaultView) {
+              el.ownerDocument.defaultView.removeEventListener("resize", this._nudge);
+            }
+          },
           render: function () {
+            var self = this;
             var entry = this.props.entry;
             var getAsset = this.props.getAsset;
             var data = entry.get("data");
@@ -55,31 +110,50 @@
               var image = g.get("image");
               var text = g.get("text_it") || g.get("text_en");
               if (image) {
-                var r = g.get("ratio");
-                if (r == null) r = "3:4";
-                var ar = RATIO[r] || "3 / 4";
+                var orient = orientationOf(g);
+                var horiz = orient === "orizzontale";
+                // sensible default box; corrected to the snapped ratio on load
+                var initCls = horiz ? "is-full is-r-16-9" : "is-r-3-4";
                 return h(
                   "figure",
-                  { key: i, style: WIDE[r] ? S.figFull : S.figHalf },
-                  h("img", { src: getAsset(image), style: Object.assign({ aspectRatio: ar }, S.img) })
+                  { key: i, className: initCls },
+                  h(
+                    "button",
+                    { className: "g-trigger", type: "button" },
+                    h("img", {
+                      src: getAsset(image),
+                      alt: "",
+                      onLoad: function (e) {
+                        var im = e.target;
+                        var a = im.naturalWidth && im.naturalHeight ? im.naturalWidth / im.naturalHeight : null;
+                        var tok = snapRatio(orient, a);
+                        var fig = im.closest && im.closest("figure");
+                        if (fig) fig.className = (horiz ? "is-full " : "") + "is-r-" + tok.replace(":", "-");
+                      },
+                    })
+                  )
                 );
               }
-              if (text) return h("p", { key: i, style: S.text }, text);
+              if (text) {
+                return h("div", { key: i, className: "project-text" }, h("p", {}, text));
+              }
               return null;
             });
 
-            if (!blocks.length) blocks = [h("p", { key: "e", style: S.empty }, "Aggiungi immagini e testi…")];
-
             return h(
-              "div",
-              { style: S.body },
-              h("p", { style: S.eyebrow }, title),
-              h("div", { style: S.grid }, blocks)
+              "article",
+              { className: "project-detail", ref: function (n) { self.root = n; } },
+              h(
+                "div",
+                { className: "project-body" },
+                h("header", { className: "project-head" }, h("h1", { className: "eyebrow" }, title)),
+                h("div", { className: "project-gallery" }, blocks)
+              )
             );
           },
         });
 
-        window.CMS.registerPreviewTemplate("projects", ProjectPreview);
+        CMS.registerPreviewTemplate("projects", ProjectPreview);
       })();
     </script>
   </body>

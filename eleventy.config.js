@@ -1,4 +1,5 @@
 import Image from "@11ty/eleventy-img";
+import sharp from "sharp";
 import path from "node:path";
 
 // Resolve a public asset path (/assets/uploads/x.jpg) or a src-relative path
@@ -15,6 +16,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/js": "assets/js" });
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "assets/fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/icons": "assets/icons" });
+  eleventyConfig.addPassthroughCopy({ "src/assets/uploads": "assets/uploads" });
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("favicon.ico");
   eleventyConfig.addPassthroughCopy("favicon-16x16.png");
@@ -27,21 +29,61 @@ export default function (eleventyConfig) {
   eleventyConfig.addWatchTarget("src/assets/");
 
   // --- projects collection (lang-neutral entries; detail pages paginate per lang) ---
-  eleventyConfig.addCollection("projects", (api) => {
+  // Editors pick only an ORIENTATION per image (verticale / orizzontale). We read
+  // the photo's real dimensions and snap it to the closest allowed ratio —
+  //   verticale   → 3:4 or 9:16   (half a row; MUST come two-per-row)
+  //   orizzontale → 4:3 or 16:9   (whole row; sits alone)
+  // then tag each image (_wide + _rclass) and fail the build on a lone vertical.
+  eleventyConfig.addCollection("projects", async (api) => {
     const projects = api
       .getFilteredByGlob("src/_projects/*.md")
       .filter((p) => !p.data.draft)
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
-    // Gallery layout is driven by each image's aspect ratio:
-    //   vertical (3:4, 9:16) → half a row  → MUST come two-per-row
-    //   horizontal (4:3, 16:9) → whole row → sits alone
-    // We tag each image once (_wide + _rclass) and enforce the pairing rule:
-    // a lone vertical fails the build. YAML 1.1 can fold "3:4" → 184
-    // (sexagesimal), so we recover the canonical token defensively.
+    const CANDS = {
+      orizzontale: [["4:3", 4 / 3], ["16:9", 16 / 9]],
+      verticale: [["3:4", 3 / 4], ["9:16", 9 / 16]],
+    };
     const SEX = { 184: "3:4", 556: "9:16", 243: "4:3", 969: "16:9" };
-    const HORIZ = new Set(["4:3", "16:9"]);
-    const VERT = new Set(["3:4", "9:16"]);
+
+    // real width/height ratio of an upload, memoised per file
+    const dims = new Map();
+    const aspectOf = async (img) => {
+      const disk = toDiskPath(img);
+      if (dims.has(disk)) return dims.get(disk);
+      let a = null;
+      try {
+        const m = await sharp(disk).metadata();
+        if (m.width && m.height) a = m.width / m.height;
+      } catch {
+        a = null;
+      }
+      dims.set(disk, a);
+      return a;
+    };
+    // orientation from the new field, with a fallback for legacy ratio/span data
+    const orientationOf = (g) => {
+      if (g.orientation) return g.orientation;
+      const r = typeof g.ratio === "number" ? SEX[g.ratio] : g.ratio;
+      if (r === "16:9" || r === "4:3") return "orizzontale";
+      if (r === "3:4" || r === "9:16") return "verticale";
+      return g.span === "full" ? "orizzontale" : "verticale";
+    };
+    // closest allowed ratio token within the chosen orientation
+    const snap = (orient, aspect) => {
+      const cands = CANDS[orient] || CANDS.verticale;
+      if (aspect == null) return cands[0][0];
+      let best = cands[0][0];
+      let bestD = Infinity;
+      for (const [tok, a] of cands) {
+        const d = Math.abs(aspect - a);
+        if (d < bestD) {
+          bestD = d;
+          best = tok;
+        }
+      }
+      return best;
+    };
 
     for (const p of projects) {
       const gallery = p.data.gallery || [];
@@ -53,26 +95,29 @@ export default function (eleventyConfig) {
           throw new Error(
             `Gallery layout error in ${p.inputPath}: vertical image ` +
               `"${g.image}" (item ${lastVertIdx + 1} of "${p.data.slug}") has ` +
-              `no pair. Vertical images (3:4, 9:16) must sit two-per-row — add ` +
-              `a second vertical beside it, or make one horizontal (4:3, 16:9).`,
+              `no pair. Verticale images sit two-per-row — add a second ` +
+              `verticale beside it, or set one to Orizzontale.`,
           );
         }
         run = 0;
       };
-      gallery.forEach((g, i) => {
-        if (!g || !g.image) return closeRun(); // text block / empty → breaker
-        let r = g.ratio;
-        if (r == null) r = g.span === "full" ? "16:9" : "3:4"; // legacy span
-        if (typeof r === "number") r = SEX[r] || String(r);
-        g._wide = HORIZ.has(r);
-        g._rclass = "is-r-" + String(r).replace(":", "-");
-        if (VERT.has(r)) {
+      for (let i = 0; i < gallery.length; i++) {
+        const g = gallery[i];
+        if (!g || !g.image) {
+          closeRun(); // text block / empty → full-width breaker
+          continue;
+        }
+        const orient = orientationOf(g);
+        const horiz = orient === "orizzontale";
+        const token = snap(orient, await aspectOf(g.image));
+        g._wide = horiz;
+        g._rclass = "is-r-" + token.replace(":", "-");
+        if (horiz) closeRun();
+        else {
           run += 1;
           lastVertIdx = i;
-        } else {
-          closeRun(); // horizontal (or unknown) → full-width breaker
         }
-      });
+      }
       closeRun();
     }
 
