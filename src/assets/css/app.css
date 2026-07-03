@@ -1,8 +1,38 @@
 /* ===================================================================
- *  PIANA.DESIGN — app.css (luxury design system, v1 launchpad)
+ *  PIANA — app.css (luxury design system, v1 launchpad)
  *  base.css provides normalize + grid + helpers (html font-size: 62.5%).
  *  Color + font tokens are injected from CMS settings in <head>.
  * =================================================================== */
+
+/* ----- fonts (self-hosted) --------------------------------------- */
+@font-face {
+  font-family: "ABC Arizona Flare";
+  src: url("/assets/fonts/ABCArizonaFlare-Light.woff2") format("woff2");
+  font-weight: 300 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "ABC Arizona Flare";
+  src: url("/assets/fonts/ABCArizonaFlare-LightItalic.woff2") format("woff2");
+  font-weight: 300 500;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/dm-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/dm-sans-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ----- tokens (non-brand: scale, space, motion) ------------------- */
 :root {
@@ -17,6 +47,8 @@
   --lh-tight: 1.07;
   --lh-body: 1.65;
   --track-label: 0.26rem;
+
+  --ff-sans: "ABC Arizona Flare", Georgia, "Times New Roman", serif;
 
   --sp-1: 0.8rem;
   --sp-2: 1.6rem;
@@ -38,7 +70,7 @@
   --dur: 0.8s;
   --dur-slow: 1.2s;
 
-  --header-h: 8rem;
+  --header-h: 7.5rem;
   --z-header: 100;
   --z-nav: 200;
   --z-lightbox: 900;
@@ -60,6 +92,15 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
+}
+/* Hide the scrollbar (page still scrolls via Lenis/wheel/keys). Also removes the
+   layout shift when the intro unlocks overflow — no scrollbar gutter to appear. */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
 }
 ::selection {
   background: var(--c-accent);
@@ -104,13 +145,24 @@ a {
   left: 1rem;
   top: 1rem;
 }
+.u-vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 :focus-visible {
   outline: 2px solid var(--c-accent);
   outline-offset: 3px;
 }
 
 .eyebrow {
-  font-family: var(--ff-body);
+  font-family: var(--ff-sans);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
@@ -125,7 +177,13 @@ a {
 .bleed {
   padding-inline: var(--gutter);
 }
+/* Inner content pages (no hero): clear the fixed header AND sit in the same
+   centred 108rem band as the project detail page — text stays left-aligned
+   within, so the whole site shares one content column. Home is excluded (it
+   keeps its own full-bleed centred layout). */
 .page-top {
+  max-width: 108rem;
+  margin-inline: auto;
   padding-top: calc(var(--header-h) + var(--section-y));
 }
 
@@ -141,7 +199,9 @@ a {
     background var(--dur-fast) var(--ease-out),
     color var(--dur-fast) var(--ease-out);
 }
+/* Centered, stacked: RP monogram on top, nav below. */
 .s-header__bar {
+  position: relative;
   width: 100%;
   max-width: none;
   display: flex;
@@ -149,15 +209,27 @@ a {
   justify-content: space-between;
   padding-inline: var(--gutter);
 }
+/* RP monogram rendered via mask so it follows the header colour
+   (white over a hero, ink when solid). Accessible name via sr-only text. */
 .s-header__logo {
-  font-family: var(--ff-display);
-  font-size: 1.9rem;
-  letter-spacing: 0.04em;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--header-h));
+  height: calc(var(--header-h));
+  background-color: currentColor;
+  -webkit-mask: url("/assets/icons/rp-icona.svg") center / contain no-repeat;
+  mask: url("/assets/icons/rp-icona.svg") center / contain no-repeat;
 }
 .s-header__nav {
   display: flex;
   align-items: center;
   gap: var(--sp-5);
+}
+/* logo only appears inside the mobile menu overlay (see responsive block) */
+.s-header__nav-logo {
+  display: none;
 }
 .header-nav {
   display: flex;
@@ -165,19 +237,45 @@ a {
 }
 .header-nav a,
 .s-header__lang a {
-  font-size: var(--fs-label);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-small);
+  color: inherit; /* full contrast: ink when solid, white over a hero image */
+}
+.s-header__lang a {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: inherit; /* full contrast: ink when solid, white over a hero image */
-  transition: opacity var(--dur-fast) var(--ease-out);
 }
-.header-nav a:hover {
-  opacity: 0.6; /* transient hover only — default state stays AA-compliant */
+.header-nav a {
+  letter-spacing: 0.04em;
 }
+/* Animatable underline: the line is always present but transparent, so its
+   colour can fade in (text-decoration can't transition; text-decoration-color
+   can). Hover + selected/aria-current both fade it to currentColor — same
+   underline across every text link (per WEB KIT — Menu, project name, email,
+   footer). Footer's accent colour rides the same transition. Fade duration
+   collapses to ~0 under prefers-reduced-motion via --dur-fast. */
+.header-nav a,
+.s-header__lang a,
+.s-footer__col a,
+.contact-emails a,
+.project-nav a,
+.project-card__title {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.35em;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    text-decoration-color var(--dur-fast) var(--ease-out);
+}
+.header-nav a:hover,
+.s-header__lang a:hover,
+.s-footer__col a:hover,
+.contact-emails a:hover,
+.project-nav a:hover,
+.project-card:hover .project-card__title,
 .header-nav a[aria-current="page"],
 .s-header__lang a[aria-current="true"] {
-  text-decoration: underline;
-  text-underline-offset: 0.35em;
+  text-decoration-color: currentColor;
 }
 
 /* header colour states (set by JS) */
@@ -200,10 +298,22 @@ a {
   z-index: -1;
 }
 .s-header--solid {
-  background: color-mix(in srgb, var(--c-bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--c-line);
+  /* No backdrop-filter: it makes the header a containing block for the fixed
+     full-screen mobile overlay, which caused the peek/confinement/close glitches.
+     Solid background keeps content from bleeding through. */
+  background: var(--c-bg);
+  /* Per art direction: a touch darker than --c-line (#ddd7c9) so the separator
+     reads against the near-white solid header. */
+  border-bottom: 1px solid #c2bdb1;
   color: var(--c-ink);
+}
+/* While the mobile overlay is open: no backdrop-filter (so the fixed overlay
+   escapes the header's containing block) + white burger over the dark menu. */
+/* Menu open: the dark full-screen overlay covers the header, so only the
+   burger/X needs to stay light over it (scoped to the toggle so the logo keeps
+   its own colour while is-nav-open lingers through the close animation). */
+.s-header.is-nav-open .s-header__toggle {
+  color: #fff;
 }
 
 /* hamburger (reused mechanics) */
@@ -214,6 +324,7 @@ a {
   cursor: pointer;
   width: 3rem;
   height: 3rem;
+  color: inherit; /* buttons don't inherit color by default — make the burger track the header */
 }
 .s-header__toggle span,
 .s-header__toggle span::before,
@@ -249,39 +360,87 @@ a {
 /* ----- footer ----------------------------------------------------- */
 .s-footer {
   background: var(--c-dark);
-  color: rgba(255, 255, 255, 0.82);
-  padding-block: var(--sp-8) var(--sp-4);
+  color: var(--c-line);
+  font-family: var(--ff-sans);
+  padding-block: var(--sp-5) var(--sp-4);
+  padding-inline: var(--gutter);
 }
-.s-footer__inner {
-  align-items: flex-start;
-  gap: var(--sp-4) 0;
+.s-footer__top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rem; /* fixed: distance logo<->links stays constant across widths */
+  flex-wrap: wrap;
 }
-.s-footer__logo {
-  font-family: var(--ff-display);
-  font-size: 2.2rem;
-  color: #fff;
-  margin-bottom: 0.6rem;
+/* big white brand lockup on the left (mask follows the bg colour -> white). */
+.s-footer__logo-img {
+  flex: 0 0 auto;
+  width: clamp(40rem, 54vw, 68rem);
+  aspect-ratio: 3601 / 1601;
+  display: block;
+  background-color: #fff;
+  -webkit-mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
+  mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
+}
+.s-footer__cols {
+  display: flex;
+  gap: var(--sp-6);
+}
+.s-footer__col p {
+  margin: 0 0 0.4rem;
 }
 .s-footer__col a {
   display: block;
-  opacity: 0.7;
+  color: var(--c-line);
   line-height: 2;
 }
 .s-footer__col a:hover {
+  color: var(--c-accent);
+}
+/* bottom bar: © left, legal links right */
+.s-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+  font-size: var(--fs-small);
+  color: var(--c-line);
+  opacity: 0.7;
+}
+.s-footer__legal {
+  display: flex;
+  gap: var(--sp-3);
+}
+.s-footer__legal a {
+  color: inherit;
+}
+.s-footer__legal a:hover {
+  color: var(--c-accent);
   opacity: 1;
 }
-.s-footer__bottom {
-  margin-top: var(--sp-6);
-  padding-top: var(--sp-3);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--fs-small);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  opacity: 0.6;
+@media screen and (max-width: 600px) {
+  .s-footer {
+    padding-block: var(--sp-5) var(--sp-3);
+  }
+  .s-footer__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-4);
+  }
+  .s-footer__logo-img {
+    width: clamp(26rem, 72vw, 40rem);
+  }
+  .s-footer__cols {
+    gap: var(--sp-5);
+  }
+  .s-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+    margin-top: var(--sp-5);
+  }
 }
-
 /* ----- intro (curtain) — only on first visit (html.intro-play) ---- */
 .intro {
   position: fixed;
@@ -295,19 +454,19 @@ a {
 html.intro-play .intro {
   display: grid;
 }
-.intro__wordmark {
-  font-family: var(--ff-display);
-  color: #fff;
-  margin: 0;
-  font-size: clamp(3rem, 7vw, 7rem);
-  letter-spacing: 0.06em;
+.intro__sign {
+  width: clamp(21.5rem, 81vw, 62rem);
+  max-width: 90%;
 }
-.intro__wordmark .line {
+.intro__sign img {
   display: block;
-  overflow: hidden;
-}
-.intro__wordmark .line > span {
-  display: block;
+  width: 100%;
+  height: auto;
+  /* logo art is black ink on transparent — force it white for the dark curtain */
+  filter: brightness(0) invert(1);
+  /* hidden until intro.js fades it in, so it never flashes before the tween */
+  opacity: 0;
+  visibility: hidden;
 }
 @media (prefers-reduced-motion: reduce) {
   html.intro-play .intro {
@@ -339,7 +498,18 @@ html.lenis body {
   height: 100svh;
   min-height: 56rem;
   display: grid;
+  place-items: center;
   overflow: hidden;
+}
+/* White "Roberto Piana" signature centered on the hero — same size/centering as
+   the animated intro logo (clamp 21.5rem / 81vw / 62rem). Mask keeps it crisp. */
+.s-hero__sign {
+  position: relative;
+  /* matches the intro curtain sign so it settles seamlessly when the curtain lifts */
+  width: clamp(21.5rem, 81vw, 62rem);
+  max-width: 90%;
+  /* logo art is black ink on transparent — force it white for the dark hero */
+  filter: brightness(0) invert(1);
 }
 .s-hero__media,
 .s-hero__media img,
@@ -350,10 +520,36 @@ html.lenis body {
   height: 100%;
   object-fit: cover;
 }
+/* Hero slideshow: each slide is a <picture> from the image shortcode. Collapse
+   the wrapper so the inner <img> stacks absolutely (like the single hero did),
+   then crossfade slides on opacity. JS toggles .is-active; only the first slide
+   is server-rendered active, so no-JS shows a correct static hero. */
+.s-hero__media picture {
+  display: contents;
+}
+.s-hero__slide {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+.s-hero__slide.is-active {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-hero__slide {
+    transition: none;
+  }
+  .s-hero__slide:not(.is-active) {
+    opacity: 0;
+  }
+  .s-hero__slide.is-active {
+    opacity: 1;
+  }
+}
 .s-hero__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10, 10, 9, 0.32);
+  background: linear-gradient(to bottom, #241a0f 0%, #ffffff 100%);
+  opacity: 0.65;
 }
 .s-hero__content {
   position: relative;
@@ -364,7 +560,7 @@ html.lenis body {
 }
 .s-hero__tagline {
   font-size: var(--fs-display);
-  max-width: 16ch;
+  max-width: 26ch;
 }
 .s-hero__tagline .line {
   display: block;
@@ -373,18 +569,72 @@ html.lenis body {
 .s-hero__tagline .line > span {
   display: block;
 }
-.s-hero__scroll {
-  position: absolute;
-  bottom: var(--sp-4);
-  right: var(--gutter);
-  color: #fff;
-  font-size: var(--fs-label);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
+
+/* ----- home narrative -------------------------------------------- */
+/* Home narrative shares the same centred 108rem band + left-aligned text as
+   the project detail / inner pages (the hero above stays full-bleed). */
+.home-intro {
+  display: grid;
+  gap: var(--sp-7);
+  max-width: 108rem;
+  margin-inline: auto;
+}
+.home-intro__head {
+  display: grid;
+  gap: var(--sp-3);
+  /* tagline + lead centred above the narrative */
+  justify-items: center;
+  text-align: center;
+}
+.home-headline {
+  max-width: 34ch;
+}
+.lead {
+  font-family: var(--ff-display);
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  max-width: 50ch;
+}
+/* narrative copy under the lead — left aligned, full band width to match the
+   two photos below (was the per-image block text) */
+.home-intro__copy {
+  max-width: 100%;
+  text-align: left;
+}
+.home-intro__copy p:last-child {
+  margin-bottom: 0;
+}
+/* two photos side by side, portrait 3:4, filling the band */
+.home-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-2);
+  width: 100%;
+}
+.home-gallery__item {
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+.home-gallery__item picture,
+.home-gallery__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.home-intro__cta {
+  margin: 0;
+}
+@media screen and (max-width: 600px) {
+  .home-gallery {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ----- projects overview ----------------------------------------- */
 .projects-grid {
+  margin-top: var(--sp-4);
   gap: var(--sp-6) 0;
 }
 .project-card {
@@ -412,10 +662,12 @@ html.lenis body {
   margin-top: var(--sp-2);
 }
 .project-card__title {
-  font-family: var(--ff-display);
+  font-family: var(--ff-sans);
   font-size: var(--fs-h3);
+  letter-spacing: 0.01em;
 }
 .project-card__year {
+  font-family: var(--ff-sans);
   color: var(--c-ink-soft);
   font-size: var(--fs-small);
   letter-spacing: var(--track-label);
@@ -443,6 +695,7 @@ html.lenis body {
 }
 .project-meta {
   display: flex;
+  font-family: var(--ff-sans);
   gap: var(--sp-5);
   flex-wrap: wrap;
   color: var(--c-ink-soft);
@@ -450,16 +703,50 @@ html.lenis body {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
-.project-gallery figure {
-  margin: 0 0 var(--sp-5);
+/* centred content band — eyebrow, text + image grids share one inset column;
+   top padding clears the fixed header (this page has no hero) */
+.project-body {
+  max-width: 108rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-top: calc(var(--header-h) + var(--sp-6));
+  padding-bottom: var(--sp-8);
 }
-.project-gallery img {
-  width: 100%;
-  height: auto;
-  display: block;
+.project-head {
+  margin-bottom: var(--sp-6);
+}
+.project-head .project-meta {
+  margin-top: var(--sp-1);
+}
+/* body copy: full width of the content band, matching the image box */
+.project-text {
+  margin-block: var(--sp-6);
+}
+.project-text p:last-child {
+  margin-bottom: 0;
+}
+/* a text block placed inside the image grid spans the whole row */
+.project-gallery .project-text {
+  grid-column: 1 / -1;
+  margin-block: var(--sp-3);
+}
+/* image grid: narrow (portrait) images sit 2-up; a wide (landscape) image
+   spans the whole row. Orientation + crop ratio are driven per image by the
+   figure's ratio class (.is-r-*). Tight gaps, both axes. */
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(0.4rem, 0.8vw, 0.8rem);
+}
+.project-gallery figure {
+  margin: 0;
+}
+.project-gallery figure.is-full {
+  grid-column: 1 / -1;
 }
 .project-gallery figcaption {
   margin-top: var(--sp-1);
+  font-family: var(--ff-sans);
   color: var(--c-ink-soft);
   font-size: var(--fs-small);
 }
@@ -468,19 +755,72 @@ html.lenis body {
   justify-content: space-between;
   border-top: 1px solid var(--c-line);
   padding-top: var(--sp-4);
-  margin-top: var(--sp-6);
+  margin-top: var(--sp-7);
 }
 .project-nav a {
   font-family: var(--ff-display);
   font-size: var(--fs-h3);
+}
+.project-nav__item {
+  display: grid;
+  gap: 0.4rem;
+}
+.project-nav__next {
+  text-align: right;
+}
+/* gallery image button: fixed-ratio crop. The chosen ratio sets BOTH the crop
+   box and the layout role — portrait (3:4 / 9:16) = half, landscape
+   (4:3 / 16:9) = full row. Source is cropped to the box via object-fit. */
+.g-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: zoom-in;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+.project-gallery figure.is-r-3-4 .g-trigger {
+  aspect-ratio: 3 / 4;
+}
+.project-gallery figure.is-r-9-16 .g-trigger {
+  aspect-ratio: 9 / 16;
+}
+.project-gallery figure.is-r-4-3 .g-trigger {
+  aspect-ratio: 4 / 3;
+}
+.project-gallery figure.is-r-16-9 .g-trigger {
+  aspect-ratio: 16 / 9;
+}
+.g-trigger picture,
+.g-trigger img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media screen and (max-width: 600px) {
+  .project-gallery {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ----- studio / contact ------------------------------------------ */
 .statement {
   font-family: var(--ff-display);
   font-size: var(--fs-h2);
-  max-width: 24ch;
+  max-width: 42ch;
   line-height: 1.2;
+}
+.error-page {
+  min-height: 100svh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: var(--sp-3);
 }
 .contact-emails {
   display: grid;
@@ -498,16 +838,63 @@ html.lenis body {
   inset: 0;
   z-index: var(--z-lightbox);
   background: rgba(10, 10, 9, 0.94);
-  display: none;
+  display: grid;
   place-items: center;
 }
-.lightbox[aria-hidden="false"] {
-  display: grid;
+.lightbox[hidden] {
+  display: none;
 }
 .lightbox img {
   max-width: 92vw;
-  max-height: 86vh;
+  max-height: 84vh;
   object-fit: contain;
+}
+.lightbox__figure {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+}
+.lightbox__cap {
+  font-family: var(--ff-sans);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--fs-small);
+  text-align: center;
+}
+.lightbox__close,
+.lightbox__nav {
+  position: absolute;
+  background: none;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.7;
+  width: 6rem;
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.lightbox__close:hover,
+.lightbox__nav:hover {
+  opacity: 1;
+}
+.lightbox__close {
+  top: 1rem;
+  right: 1rem;
+  font-size: 3.2rem;
+}
+.lightbox__nav {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 4.4rem;
+}
+.lightbox__prev {
+  left: 0.5rem;
+}
+.lightbox__next {
+  right: 0.5rem;
 }
 
 /* ----- scroll reveal --------------------------------------------- */
@@ -536,6 +923,7 @@ html.no-js [data-reveal] {
 /* ----- buttons + forms ------------------------------------------- */
 .btn {
   display: inline-block;
+  font-family: var(--ff-sans);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
@@ -598,10 +986,28 @@ address {
     background: var(--c-dark);
     color: #fff;
     transform: translateY(-100%);
-    transition: transform var(--dur) var(--ease-lux);
+    /* Hidden when closed so overflow can't peek below a contained (solid)
+       header, and the links leave the tab order. Hide is deferred until the
+       slide-up finishes. */
+    visibility: hidden;
+    transition:
+      transform var(--dur) var(--ease-lux),
+      visibility 0s var(--dur);
   }
   .s-header__nav.is-open {
     transform: translateY(0);
+    visibility: visible;
+    transition:
+      transform var(--dur) var(--ease-lux),
+      visibility 0s;
+  }
+  /* vertical logo, white, centered above the menu items */
+  .s-header__nav-logo {
+    display: block;
+    width: min(58vw, 22rem);
+    height: auto;
+    margin: 0 auto var(--sp-5);
+    filter: brightness(0) invert(1);
   }
   .header-nav {
     flex-direction: column;

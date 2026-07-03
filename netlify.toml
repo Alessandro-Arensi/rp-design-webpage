@@ -6,6 +6,9 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Redirects live in src/redirects.njk -> dist/_redirects (read directly by
+# Netlify's edge; more reliable than netlify.toml for status=404 fallbacks).
+
 # Long-cache fingerprinted assets (Eleventy Image filenames are content-hashed).
 [[headers]]
   for = "/assets/img/*"

@@ -1,0 +1,13 @@
+---
+permalink: /_redirects
+eleventyExcludeFromCollections: true
+---
+# The CMS lives only at /admin. Send the language-prefixed guess there.
+# Forced (!) so it wins over the physical fallback page + the /en 404 below.
+/en/admin/*  /admin/  301!
+/en/admin    /admin/  301!
+
+# Language-aware 404. Existing files take precedence, so these only fire for
+# unmatched paths. Specific rule first.
+/en/*  /en/404.html  404
+/*     /404.html      404

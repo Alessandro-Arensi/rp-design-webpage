@@ -27,12 +27,57 @@ export default function (eleventyConfig) {
   eleventyConfig.addWatchTarget("src/assets/");
 
   // --- projects collection (lang-neutral entries; detail pages paginate per lang) ---
-  eleventyConfig.addCollection("projects", (api) =>
-    api
+  eleventyConfig.addCollection("projects", (api) => {
+    const projects = api
       .getFilteredByGlob("src/_projects/*.md")
       .filter((p) => !p.data.draft)
-      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0)),
-  );
+      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+    // Gallery layout is driven by each image's aspect ratio:
+    //   vertical (3:4, 9:16) → half a row  → MUST come two-per-row
+    //   horizontal (4:3, 16:9) → whole row → sits alone
+    // We tag each image once (_wide + _rclass) and enforce the pairing rule:
+    // a lone vertical fails the build. YAML 1.1 can fold "3:4" → 184
+    // (sexagesimal), so we recover the canonical token defensively.
+    const SEX = { 184: "3:4", 556: "9:16", 243: "4:3", 969: "16:9" };
+    const HORIZ = new Set(["4:3", "16:9"]);
+    const VERT = new Set(["3:4", "9:16"]);
+
+    for (const p of projects) {
+      const gallery = p.data.gallery || [];
+      let run = 0; // length of the current unbroken vertical run
+      let lastVertIdx = -1;
+      const closeRun = () => {
+        if (run % 2 !== 0) {
+          const g = gallery[lastVertIdx];
+          throw new Error(
+            `Gallery layout error in ${p.inputPath}: vertical image ` +
+              `"${g.image}" (item ${lastVertIdx + 1} of "${p.data.slug}") has ` +
+              `no pair. Vertical images (3:4, 9:16) must sit two-per-row — add ` +
+              `a second vertical beside it, or make one horizontal (4:3, 16:9).`,
+          );
+        }
+        run = 0;
+      };
+      gallery.forEach((g, i) => {
+        if (!g || !g.image) return closeRun(); // text block / empty → breaker
+        let r = g.ratio;
+        if (r == null) r = g.span === "full" ? "16:9" : "3:4"; // legacy span
+        if (typeof r === "number") r = SEX[r] || String(r);
+        g._wide = HORIZ.has(r);
+        g._rclass = "is-r-" + String(r).replace(":", "-");
+        if (VERT.has(r)) {
+          run += 1;
+          lastVertIdx = i;
+        } else {
+          closeRun(); // horizontal (or unknown) → full-width breaker
+        }
+      });
+      closeRun();
+    }
+
+    return projects;
+  });
 
   // --- i18n helpers (IT primary at /, EN under /en/) ---
   // counterpart URL of the current page in the other language
@@ -51,6 +96,12 @@ export default function (eleventyConfig) {
   // pick a per-language field: project.title_it / project.title_en via field("title", lang)
   eleventyConfig.addFilter("field", (obj, name, lang) =>
     obj ? obj[`${name}_${lang}`] : undefined,
+  );
+  // a project's cover = the first gallery item that has an image (gallery items
+  // can be text-only). Returns undefined for an empty/image-less gallery.
+  eleventyConfig.addFilter(
+    "cover",
+    (gallery) => (gallery || []).find((g) => g && g.image)?.image,
   );
 
   // --- Eleventy Image: responsive <picture> (AVIF/WebP/JPEG) ---

@@ -1,24 +1,30 @@
 {
-  "siteName": "PIANA.DESIGN",
+  "siteName": "Roberto Piana",
   "logo": "/assets/icons/logo.svg",
   "introWordmark": "PIANA",
-  "tagline": "Lo spazio come silenzio.",
+  "tagline": "Ogni casa racconta una storia.",
   "homeStatement": "Architettura che custodisce la luce, la materia e il tempo.",
   "homeHero": "/assets/uploads/home/hero.jpg",
+  "homeSlides": [
+    { "image": "/assets/uploads/home/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-01/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-02/hero.jpg", "alt": "" },
+    { "image": "/assets/uploads/proj-03/hero.jpg", "alt": "" }
+  ],
   "social": [
     { "label": "Instagram", "url": "https://instagram.com/" },
     { "label": "LinkedIn", "url": "https://linkedin.com/" }
   ],
   "colors": {
-    "bg": "#f7f5f2",
+    "bg": "#f9f7f2",
     "ink": "#1a1a18",
     "inkSoft": "#6b6862",
-    "line": "#e2ddd6",
-    "accent": "#8a7d6b",
-    "dark": "#121110"
+    "line": "#ddd7c9",
+    "accent": "#a27b5a",
+    "dark": "#272a32"
   },
   "fonts": {
-    "display": "\"PianaSerif\", Georgia, \"Times New Roman\", serif",
-    "body": "\"PianaSans\", system-ui, -apple-system, Arial, sans-serif"
+    "display": "\"ABC Arizona Flare\", Georgia, \"Times New Roman\", serif",
+    "body": "\"ABC Arizona Flare\", Georgia, \"Times New Roman\", serif"
   }
 }

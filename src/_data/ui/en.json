@@ -9,6 +9,9 @@
   "next": "Next",
   "prev": "Previous",
   "backTop": "Back to top",
+  "privacy": "Privacy",
+  "cookie": "Cookie",
+  "credits": "Credits",
   "year": "Year",
   "location": "Location",
   "general": "General",
@@ -18,5 +21,10 @@
   "email": "Email",
   "message": "Message",
   "send": "Send",
-  "thanks": "Thank you. We will be in touch soon."
+  "thanks": "Thank you. We will be in touch soon.",
+  "gallery": "Gallery",
+  "enlarge": "Enlarge image",
+  "notFound": "Page not found",
+  "archiveHeadline": "From intuition to execution",
+  "archiveStatement": "Translating a feeling, a desire, a sensation into space."
 }

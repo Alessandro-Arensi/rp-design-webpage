@@ -1,0 +1,15 @@
+{
+  "subtitle": "La nostra inizia ascoltando e capendo la tua.",
+  "blocks": [
+    {
+      "image": "/assets/uploads/home/block-1.jpg",
+      "alt": "Mani che disegnano",
+      "text": "Certe cose si imparano solo abitandole. Roberto Piana è cresciuto dentro un mestiere e dentro una città, Milano, che suo padre Giancarlo ha vissuto e trasformato in un modo preciso di fare architettura, a partire dal 1998."
+    },
+    {
+      "image": "/assets/uploads/home/block-2.jpg",
+      "alt": "Roberto Piana e suo padre Giancarlo",
+      "text": "Oggi Roberto guida lo studio con la stessa misura con cui entra in una casa: in ascolto, con prospettiva e visione, sapendo già cosa cercare. In ogni spazio c'è qualcosa che ancora non si vede, e in ogni persona un modo unico di abitarlo."
+    }
+  ]
+}

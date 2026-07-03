@@ -1,6 +1,9 @@
 <header class="s-header" data-header>
-  <div class="s-header__bar row">
-    <a class="s-header__logo" href="{{ '/' if lang == 'it' else '/en/' }}">{{ settings[lang].siteName }}</a>
+  <div class="s-header__bar">
+    {% include "partials/lang-toggle.njk" %}
+    <a class="s-header__logo" href="{{ '/' if lang == 'it' else '/en/' }}">
+      <span class="u-vh">{{ settings[lang].siteName }}</span>
+    </a>
     {% include "partials/nav.njk" %}
     <button class="s-header__toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="{{ ui[lang].menu }}">
       <span></span>

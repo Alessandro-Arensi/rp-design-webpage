@@ -13,6 +13,8 @@ media_folder: "src/assets/uploads"
 public_folder: "/assets/uploads"
 locale: "it"
 
+# The CMS edits ONLY projects. Everything else (brand, home, studio, contact)
+# is developer-managed in the repo and is intentionally not exposed here.
 collections:
   # ---- Selected projects (one file per project; client clicks "New") -------
   - name: projects
@@ -22,14 +24,14 @@ collections:
     create: true
     identifier_field: slug
     slug: "{{fields.slug}}"
-    summary: "{{order}} · {{title_it}} ({{year}})"
-    sortable_fields: [order, year]
+    summary: "{{order}} · {{title_it}}"
+    sortable_fields: [order]
     fields:
       - {
           name: slug,
           label: "Slug (URL)",
           widget: string,
-          hint: "Minuscolo, senza spazi. Es: villa-soave",
+          hint: "Minuscolo, senza spazi. Es: cucina-elevata",
         }
       - {
           name: order,
@@ -50,192 +52,38 @@ collections:
           widget: boolean,
           default: false,
         }
-      - { name: year, label: "Anno", widget: number, value_type: int }
-      - { name: location, label: "Luogo", widget: string }
       - { name: title_it, label: "Titolo (IT)", widget: string }
       - { name: title_en, label: "Title (EN)", widget: string }
-      - { name: heroImage, label: "Immagine hero (16:9)", widget: image }
       - name: gallery
-        label: "Galleria (4–8 immagini)"
+        label: "Contenuto del progetto"
+        label_singular: "blocco"
         widget: list
-        summary: "{{fields.caption_it}}"
-        fields:
-          - { name: image, label: "Immagine", widget: image }
-          - {
-              name: caption_it,
-              label: "Didascalia (IT)",
-              widget: string,
-              required: false,
-            }
-          - {
-              name: caption_en,
-              label: "Caption (EN)",
-              widget: string,
-              required: false,
-            }
-      - { name: description_it, label: "Descrizione (IT)", widget: text }
-      - { name: description_en, label: "Description (EN)", widget: text }
-
-  # ---- Editable page content ----------------------------------------------
-  - name: pages
-    label: "Pagine"
-    files:
-      - name: studio_it
-        label: "Studio (IT)"
-        file: "src/_data/studio/it.json"
-        fields:
-          - { name: eyebrow, label: "Etichetta", widget: string }
-          - { name: statement, label: "Frase principale", widget: text }
-          - {
-              name: paragraphs,
-              label: "Paragrafi",
-              widget: list,
-              field: { name: text, label: "Paragrafo", widget: text },
-            }
-      - name: studio_en
-        label: "Studio (EN)"
-        file: "src/_data/studio/en.json"
-        fields:
-          - { name: eyebrow, label: "Label", widget: string }
-          - { name: statement, label: "Statement", widget: text }
-          - {
-              name: paragraphs,
-              label: "Paragraphs",
-              widget: list,
-              field: { name: text, label: "Paragraph", widget: text },
-            }
-      - name: contact_it
-        label: "Contatti (IT)"
-        file: "src/_data/contact/it.json"
-        fields:
-          - { name: heading, label: "Titolo", widget: string }
-          - { name: intro, label: "Introduzione", widget: text }
-          - name: emails
-            label: "Email"
+        hint: "Aggiungi blocchi «Immagine» o «Testo» col pulsante in basso, poi trascinali per ordinarli. Immagini verticali a coppie (2 per riga), orizzontali da sole. Il testo occupa tutta la larghezza. La prima immagine è la copertina."
+        types:
+          - name: image
+            label: "Immagine"
             widget: object
+            summary: "Immagine — {{fields.ratio}}"
             fields:
-              - { name: general, label: "Generale", widget: string }
-              - { name: press, label: "Stampa", widget: string }
-              - { name: careers, label: "Candidature", widget: string }
-          - name: address
-            label: "Indirizzo"
+              - { name: image, label: "Immagine", widget: image }
+              - {
+                  name: ratio,
+                  label: "Proporzione",
+                  widget: select,
+                  options:
+                    [
+                      { label: "Verticale 3:4 (metà riga)", value: "3:4" },
+                      { label: "Verticale 9:16 (metà riga)", value: "9:16" },
+                      { label: "Orizzontale 4:3 (riga intera)", value: "4:3" },
+                      { label: "Orizzontale 16:9 (riga intera)", value: "16:9" },
+                    ],
+                  default: "3:4",
+                  hint: "Verticale = 2 affiancate per riga (mettine due). Orizzontale = da sola su tutta la riga.",
+                }
+          - name: text
+            label: "Testo"
             widget: object
+            summary: "Testo — {{fields.text_it}}"
             fields:
-              - { name: street, label: "Via", widget: string }
-              - { name: zip, label: "CAP", widget: string }
-              - { name: city, label: "Città", widget: string }
-              - { name: country, label: "Paese", widget: string }
-          - {
-              name: mapsUrl,
-              label: "Link mappa",
-              widget: string,
-              required: false,
-            }
-          - { name: phone, label: "Telefono", widget: string, required: false }
-      - name: contact_en
-        label: "Contact (EN)"
-        file: "src/_data/contact/en.json"
-        fields:
-          - { name: heading, label: "Heading", widget: string }
-          - { name: intro, label: "Intro", widget: text }
-          - name: emails
-            label: "Emails"
-            widget: object
-            fields:
-              - { name: general, label: "General", widget: string }
-              - { name: press, label: "Press", widget: string }
-              - { name: careers, label: "Careers", widget: string }
-          - name: address
-            label: "Address"
-            widget: object
-            fields:
-              - { name: street, label: "Street", widget: string }
-              - { name: zip, label: "ZIP", widget: string }
-              - { name: city, label: "City", widget: string }
-              - { name: country, label: "Country", widget: string }
-          - {
-              name: mapsUrl,
-              label: "Map link",
-              widget: string,
-              required: false,
-            }
-          - { name: phone, label: "Phone", widget: string, required: false }
-
-  # ---- Global brand settings (logo, tagline, social, colours, fonts) ------
-  - name: settings
-    label: "Impostazioni"
-    files:
-      - name: settings_it
-        label: "Brand (IT)"
-        file: "src/_data/settings/it.json"
-        fields:
-          - { name: siteName, label: "Nome studio", widget: string }
-          - { name: logo, label: "Logo (SVG)", widget: image, required: false }
-          - { name: introWordmark, label: "Testo intro", widget: string }
-          - { name: tagline, label: "Tagline (hero)", widget: string }
-          - { name: homeStatement, label: "Frase home", widget: text }
-          - {
-              name: homeHero,
-              label: "Immagine hero home",
-              widget: image,
-              required: false,
-            }
-          - name: social
-            label: "Social"
-            widget: list
-            fields:
-              - { name: label, label: "Nome", widget: string }
-              - { name: url, label: "URL", widget: string }
-          - name: colors
-            label: "Colori"
-            widget: object
-            fields:
-              - { name: bg, label: "Sfondo", widget: color }
-              - { name: ink, label: "Testo", widget: color }
-              - { name: inkSoft, label: "Testo tenue", widget: color }
-              - { name: line, label: "Linee", widget: color }
-              - { name: accent, label: "Accento", widget: color }
-              - { name: dark, label: "Scuro", widget: color }
-          - name: fonts
-            label: "Font"
-            widget: object
-            fields:
-              - { name: display, label: "Titoli", widget: string }
-              - { name: body, label: "Testo", widget: string }
-      - name: settings_en
-        label: "Brand (EN)"
-        file: "src/_data/settings/en.json"
-        fields:
-          - { name: siteName, label: "Studio name", widget: string }
-          - { name: logo, label: "Logo (SVG)", widget: image, required: false }
-          - { name: introWordmark, label: "Intro wordmark", widget: string }
-          - { name: tagline, label: "Tagline (hero)", widget: string }
-          - { name: homeStatement, label: "Home statement", widget: text }
-          - {
-              name: homeHero,
-              label: "Home hero image",
-              widget: image,
-              required: false,
-            }
-          - name: social
-            label: "Social"
-            widget: list
-            fields:
-              - { name: label, label: "Name", widget: string }
-              - { name: url, label: "URL", widget: string }
-          - name: colors
-            label: "Colours"
-            widget: object
-            fields:
-              - { name: bg, label: "Background", widget: color }
-              - { name: ink, label: "Text", widget: color }
-              - { name: inkSoft, label: "Muted text", widget: color }
-              - { name: line, label: "Lines", widget: color }
-              - { name: accent, label: "Accent", widget: color }
-              - { name: dark, label: "Dark", widget: color }
-          - name: fonts
-            label: "Fonts"
-            widget: object
-            fields:
-              - { name: display, label: "Headings", widget: string }
-              - { name: body, label: "Body", widget: string }
+              - { name: text_it, label: "Testo (IT)", widget: text }
+              - { name: text_en, label: "Text (EN)", widget: text, required: false }

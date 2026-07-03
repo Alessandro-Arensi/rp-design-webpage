@@ -11,31 +11,46 @@ eleventyComputed:
   translationKey: "project:{{ project.data.slug }}"
 ---
 {% set p = project.data %}
-<article>
-  <div class="project-hero" data-hero>
-    {% image p.heroImage, (p | field('title', lang)), "100vw", { eager: true } %}
-    <div class="s-hero__overlay"></div>
-    <div class="project-hero__cap">
-      <h1>{{ p | field('title', lang) }}</h1>
-      <p class="project-meta"><span>{{ p.location }}</span><span>{{ p.year }}</span></p>
+<article class="project-detail">
+  <div class="project-body">
+    <header class="project-head" data-reveal>
+      <h1 class="eyebrow">{{ p | field('title', lang) }}</h1>
+    </header>
+
+    <div class="project-gallery">
+      {% for g in p.gallery %}
+        {% if g['text_' + lang] %}
+          <div class="project-text" data-reveal>
+            <p>{{ g['text_' + lang] }}</p>
+          </div>
+        {% else %}
+          <figure data-reveal class="{{ 'is-full ' if g._wide else '' }}{{ g._rclass }}">
+            <button class="g-trigger" type="button" aria-label="{{ ui[lang].enlarge }} {{ loop.index }}">
+              {% image g.image, "", ('100vw' if g._wide else '(max-width:600px) 100vw, 50vw') %}
+            </button>
+          </figure>
+        {% endif %}
+      {% endfor %}
     </div>
-  </div>
 
-  <div class="section bleed measure" data-reveal>
-    <p>{{ p | field('description', lang) }}</p>
+    {% set base = '/progetti/' %}
+    <nav class="project-nav" aria-label="Navigazione progetti">
+      {% if pagination.pageNumber > 0 %}
+        {% set prev = collections.projects[pagination.pageNumber - 1] %}
+        <a class="project-nav__item project-nav__prev" href="{{ base }}{{ prev.data.slug }}/">
+          <span class="eyebrow">{{ ui[lang].prev }}</span>
+          <span class="project-nav__title">{{ prev.data | field('title', lang) }}</span>
+        </a>
+      {% else %}<span></span>{% endif %}
+      {% if pagination.pageNumber < (collections.projects | length) - 1 %}
+        {% set next = collections.projects[pagination.pageNumber + 1] %}
+        <a class="project-nav__item project-nav__next" href="{{ base }}{{ next.data.slug }}/">
+          <span class="eyebrow">{{ ui[lang].next }}</span>
+          <span class="project-nav__title">{{ next.data | field('title', lang) }}</span>
+        </a>
+      {% endif %}
+    </nav>
   </div>
-
-  <div class="project-gallery bleed">
-    {% for g in p.gallery %}
-      <figure data-reveal>
-        {% image g.image, g['caption_' + lang], "100vw" %}
-        {% if g['caption_' + lang] %}<figcaption>{{ g['caption_' + lang] }}</figcaption>{% endif %}
-      </figure>
-    {% endfor %}
-  </div>
-
-  <nav class="project-nav bleed" aria-label="Navigazione progetti">
-    {% if pagination.href.previous %}<a href="{{ pagination.href.previous }}">← {{ ui[lang].prev }}</a>{% else %}<span></span>{% endif %}
-    {% if pagination.href.next %}<a href="{{ pagination.href.next }}">{{ ui[lang].next }} →</a>{% endif %}
-  </nav>
 </article>
+
+{% include "partials/lightbox.njk" %}

@@ -9,6 +9,9 @@
   "next": "Successivo",
   "prev": "Precedente",
   "backTop": "Torna su",
+  "privacy": "Privacy",
+  "cookie": "Cookie",
+  "credits": "Credits",
   "year": "Anno",
   "location": "Luogo",
   "general": "Generale",
@@ -18,5 +21,10 @@
   "email": "Email",
   "message": "Messaggio",
   "send": "Invia",
-  "thanks": "Grazie. Ti risponderemo presto."
+  "thanks": "Grazie. Ti risponderemo presto.",
+  "gallery": "Galleria",
+  "enlarge": "Ingrandisci immagine",
+  "notFound": "Pagina non trovata",
+  "archiveHeadline": "Dall'interpretazione all'esecuzione",
+  "archiveStatement": "Tradurre in spazio ciò che è ancora un'intuizione, una sensazione, un desiderio difficile da nominare."
 }

@@ -1,22 +1,25 @@
-// Homepage intro: GSAP curtain reveal on first visit only.
+// Homepage intro: GSAP curtain on first visit. The "Roberto Piana" logo fades in,
+// then the curtain lifts into the hero (whose static logo matches its position/size,
+// so the mark settles seamlessly).
 // First visit is armed in <head> (html.intro-play). Repeat visits, reduced-motion
 // and no-JS all skip it and show the page immediately (content is visible by default).
+
 export function initIntro() {
   const intro = document.querySelector("[data-intro]");
   if (!intro) return; // not the home page
 
   const gsap = window.gsap;
   const playing = document.documentElement.classList.contains("intro-play");
+  const logo = intro.querySelector(".intro__sign img");
 
-  // Repeat visit / reduced-motion / GSAP unavailable: drop the curtain, page as-is.
-  if (!playing || !gsap) {
+  // Repeat visit / reduced-motion / GSAP unavailable / no logo: drop the curtain.
+  if (!playing || !gsap || !logo) {
     intro.remove();
     return;
   }
 
   const html = document.documentElement;
   const lenis = window.__lenis;
-  const wordmark = intro.querySelectorAll(".intro__wordmark .line > span");
   const heroImg = document.querySelector(".s-hero__media img");
   const taglines = document.querySelectorAll(".s-hero__tagline .line > span");
   const header = document.querySelector(".s-header");
@@ -27,6 +30,12 @@ export function initIntro() {
   if (lenis) lenis.stop();
 
   const cleanup = () => {
+    // Clear GSAP's lingering inline styles. A leftover transform on the header
+    // makes it a containing block for the fixed mobile overlay (which would trap
+    // the hamburger menu on first visit, while the intro has run).
+    gsap.set([header, heroImg, cue, ...taglines].filter(Boolean), {
+      clearProps: "transform,opacity,visibility",
+    });
     intro.remove();
     html.style.overflow = "";
     html.classList.remove("intro-play");
@@ -43,25 +52,27 @@ export function initIntro() {
     onComplete: cleanup,
   });
 
-  tl.from(wordmark, { yPercent: 110, duration: 1.0, stagger: 0.12 }, 0.2)
-    .to(
-      intro.querySelector(".intro__wordmark"),
-      { letterSpacing: "0.22em", duration: 0.6 },
-      1.4,
+  // Slight fade-in of the logo (starts hidden via CSS, so no flash), then hold.
+  tl.to(logo, { autoAlpha: 1, duration: 1.4, ease: "power2.out" }, 0.3);
+  const lift = 2.1; // lift the curtain after the logo has settled
+
+  // Crossfade the curtain (it shares the hero's logo position/size, so the
+  // "Roberto Piana" mark settles seamlessly into the static hero signature).
+  tl.to(intro, { autoAlpha: 0, duration: 1.1, ease: "power2.inOut" }, lift)
+    .from(
+      heroImg,
+      { scale: 1.12, duration: 1.6, ease: "power2.out" },
+      lift + 0.6,
     )
-    .to(wordmark, { yPercent: -110, duration: 0.7, stagger: 0.06 }, 2.0)
-    .to(intro, { yPercent: -100, duration: 1.1, ease: "expo.inOut" }, 2.3) // curtain lift
-    .from(heroImg, { scale: 1.12, duration: 1.6, ease: "power2.out" }, 2.9)
-    .from(taglines, { yPercent: 120, duration: 1.0, stagger: 0.14 }, 3.1)
     .from(
       header,
       { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
-      3.1,
+      lift + 0.8,
     )
-    .from(cue, { autoAlpha: 0, y: 16, duration: 0.6 }, 3.9);
+    .from(cue, { autoAlpha: 0, y: 16, duration: 0.6 }, lift + 1.6);
 
   // Safety: if anything stalls, never trap the user behind the curtain.
   window.setTimeout(() => {
     if (document.body.contains(intro)) cleanup();
-  }, 8000);
+  }, 9000);
 }
