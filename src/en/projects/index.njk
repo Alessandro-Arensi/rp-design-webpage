@@ -17,9 +17,6 @@ title: Projects
             {% set cov = project.data.gallery | cover %}
             {% if cov %}{% image cov, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}{% endif %}
           </div>
-          <div class="project-card__meta">
-            <h2 class="project-card__title">{{ project.data | field('title', lang) }}</h2>
-          </div>
         </a>
       </div>
     {% endfor %}

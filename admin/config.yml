@@ -24,14 +24,14 @@ collections:
     create: true
     identifier_field: slug
     slug: "{{fields.slug}}"
-    summary: "{{order}} · {{title_it}} ({{year}})"
-    sortable_fields: [order, year]
+    summary: "{{order}} · {{title_it}}"
+    sortable_fields: [order]
     fields:
       - {
           name: slug,
           label: "Slug (URL)",
           widget: string,
-          hint: "Minuscolo, senza spazi. Es: villa-soave",
+          hint: "Minuscolo, senza spazi. Es: cucina-elevata",
         }
       - {
           name: order,
@@ -52,48 +52,38 @@ collections:
           widget: boolean,
           default: false,
         }
-      - { name: year, label: "Anno", widget: number, value_type: int }
-      - { name: location, label: "Luogo", widget: string }
       - { name: title_it, label: "Titolo (IT)", widget: string }
       - { name: title_en, label: "Title (EN)", widget: string }
       - name: gallery
-        label: "Galleria (4–8 immagini)"
+        label: "Contenuto del progetto"
+        label_singular: "blocco"
         widget: list
-        summary: "{{fields.caption_it}}"
-        hint: "La prima immagine della galleria è la copertina del progetto (e la prima mostrata nella pagina del progetto)."
-        fields:
-          - { name: image, label: "Immagine", widget: image, required: false }
-          - {
-              name: caption_it,
-              label: "Didascalia (IT)",
-              widget: string,
-              required: false,
-            }
-          - {
-              name: caption_en,
-              label: "Caption (EN)",
-              widget: string,
-              required: false,
-            }
-          - {
-              name: span,
-              label: "Larghezza (half = 2 per riga, full = intera 16:9)",
-              widget: select,
-              options: ["half", "full"],
-              default: "half",
-              required: false,
-            }
-          - {
-              name: text_it,
-              label: "Blocco di testo (IT) — lascia vuota l'immagine",
-              widget: text,
-              required: false,
-            }
-          - {
-              name: text_en,
-              label: "Text block (EN) — leave the image empty",
-              widget: text,
-              required: false,
-            }
-      - { name: description_it, label: "Descrizione (IT)", widget: text }
-      - { name: description_en, label: "Description (EN)", widget: text }
+        hint: "Aggiungi blocchi «Immagine» o «Testo» col pulsante in basso, poi trascinali per ordinarli. Immagini verticali a coppie (2 per riga), orizzontali da sole. Il testo occupa tutta la larghezza. La prima immagine è la copertina."
+        types:
+          - name: image
+            label: "Immagine"
+            widget: object
+            summary: "Immagine — {{fields.ratio}}"
+            fields:
+              - { name: image, label: "Immagine", widget: image }
+              - {
+                  name: ratio,
+                  label: "Proporzione",
+                  widget: select,
+                  options:
+                    [
+                      { label: "Verticale 3:4 (metà riga)", value: "3:4" },
+                      { label: "Verticale 9:16 (metà riga)", value: "9:16" },
+                      { label: "Orizzontale 4:3 (riga intera)", value: "4:3" },
+                      { label: "Orizzontale 16:9 (riga intera)", value: "16:9" },
+                    ],
+                  default: "3:4",
+                  hint: "Verticale = 2 affiancate per riga (mettine due). Orizzontale = da sola su tutta la riga.",
+                }
+          - name: text
+            label: "Testo"
+            widget: object
+            summary: "Testo — {{fields.text_it}}"
+            fields:
+              - { name: text_it, label: "Testo (IT)", widget: text }
+              - { name: text_en, label: "Text (EN)", widget: text, required: false }

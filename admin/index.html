@@ -5,11 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
     <title>PIANA — Content</title>
+    <!-- match the site favicon (Decap otherwise shows its own) -->
+    <link rel="icon" href="/assets/icons/favicon-rp.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   </head>
   <body>
     <!-- Decap CMS — reads /admin/config.yml.
          Production auth: Netlify Identity + Git Gateway (enable both in Netlify UI).
          Local editing: `make cms` (decap-server) + `make dev`, then open /admin/. -->
     <script src="https://unpkg.com/decap-cms@^3.6.3/dist/decap-cms.js"></script>
+
+    <!-- Custom preview for Projects: renders blocks in the SAME order as the site
+         (text + images interleaved), text full-width, images cropped to their
+         ratio, and resolves thumbnails via getAsset so they aren't broken. -->
+    <script>
+      (function () {
+        if (!window.CMS || !window.h || !window.createClass) return;
+        var h = window.h;
+
+        // ratio token -> CSS aspect-ratio; also recover YAML sexagesimal (3:4 -> 184)
+        var RATIO = {
+          "3:4": "3 / 4", "9:16": "9 / 16", "4:3": "4 / 3", "16:9": "16 / 9",
+          184: "3 / 4", 556: "9 / 16", 243: "4 / 3", 969: "16 / 9",
+        };
+        var WIDE = { "4:3": 1, "16:9": 1, 243: 1, 969: 1 };
+
+        var S = {
+          body: { maxWidth: "108rem", margin: "0 auto", padding: "5rem 3rem 8rem", boxSizing: "border-box", background: "#f9f7f2", color: "#1a1a18", fontFamily: "Georgia, 'Times New Roman', serif" },
+          eyebrow: { fontFamily: "system-ui, -apple-system, sans-serif", textTransform: "uppercase", letterSpacing: "0.18em", fontSize: "0.8rem", color: "#6b6862", margin: "0 0 3.5rem" },
+          grid: { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "0.6rem", alignItems: "start" },
+          text: { gridColumn: "1 / -1", fontSize: "1.35rem", lineHeight: "1.55", margin: "1.5rem 0" },
+          figHalf: { gridColumn: "span 1", margin: 0, overflow: "hidden" },
+          figFull: { gridColumn: "1 / -1", margin: 0, overflow: "hidden" },
+          img: { width: "100%", height: "100%", objectFit: "cover", display: "block" },
+          empty: { gridColumn: "1 / -1", color: "#a9a49a", fontStyle: "italic" },
+        };
+
+        var ProjectPreview = window.createClass({
+          render: function () {
+            var entry = this.props.entry;
+            var getAsset = this.props.getAsset;
+            var data = entry.get("data");
+            var title = data.get("title_it") || data.get("title_en") || "Progetto";
+            var gallery = data.get("gallery");
+            var items = gallery && gallery.toArray ? gallery.toArray() : [];
+
+            var blocks = items.map(function (g, i) {
+              var image = g.get("image");
+              var text = g.get("text_it") || g.get("text_en");
+              if (image) {
+                var r = g.get("ratio");
+                if (r == null) r = "3:4";
+                var ar = RATIO[r] || "3 / 4";
+                return h(
+                  "figure",
+                  { key: i, style: WIDE[r] ? S.figFull : S.figHalf },
+                  h("img", { src: getAsset(image), style: Object.assign({ aspectRatio: ar }, S.img) })
+                );
+              }
+              if (text) return h("p", { key: i, style: S.text }, text);
+              return null;
+            });
+
+            if (!blocks.length) blocks = [h("p", { key: "e", style: S.empty }, "Aggiungi immagini e testi…")];
+
+            return h(
+              "div",
+              { style: S.body },
+              h("p", { style: S.eyebrow }, title),
+              h("div", { style: S.grid }, blocks)
+            );
+          },
+        });
+
+        window.CMS.registerPreviewTemplate("projects", ProjectPreview);
+      })();
+    </script>
   </body>
 </html>

@@ -718,9 +718,8 @@ html.lenis body {
 .project-head .project-meta {
   margin-top: var(--sp-1);
 }
-/* body copy: left-aligned, narrow measure at the left of the band (per kit) */
+/* body copy: full width of the content band, matching the image box */
 .project-text {
-  max-width: var(--maxw-text);
   margin-block: var(--sp-6);
 }
 .project-text p:last-child {
@@ -731,11 +730,13 @@ html.lenis body {
   grid-column: 1 / -1;
   margin-block: var(--sp-3);
 }
-/* image grid: 2-up by default; a figure.is-full spans the whole row (16:9) */
+/* image grid: narrow (portrait) images sit 2-up; a wide (landscape) image
+   spans the whole row. Orientation + crop ratio are driven per image by the
+   figure's ratio class (.is-r-*). Tight gaps, both axes. */
 .project-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--gutter);
+  gap: clamp(0.4rem, 0.8vw, 0.8rem);
 }
 .project-gallery figure {
   margin: 0;
@@ -767,7 +768,9 @@ html.lenis body {
 .project-nav__next {
   text-align: right;
 }
-/* gallery image button: fixed-ratio crop (3:4 half, 16:9 full) */
+/* gallery image button: fixed-ratio crop. The chosen ratio sets BOTH the crop
+   box and the layout role — portrait (3:4 / 9:16) = half, landscape
+   (4:3 / 16:9) = full row. Source is cropped to the box via object-fit. */
 .g-trigger {
   display: block;
   width: 100%;
@@ -779,7 +782,16 @@ html.lenis body {
   overflow: hidden;
   aspect-ratio: 3 / 4;
 }
-.project-gallery figure.is-full .g-trigger {
+.project-gallery figure.is-r-3-4 .g-trigger {
+  aspect-ratio: 3 / 4;
+}
+.project-gallery figure.is-r-9-16 .g-trigger {
+  aspect-ratio: 9 / 16;
+}
+.project-gallery figure.is-r-4-3 .g-trigger {
+  aspect-ratio: 4 / 3;
+}
+.project-gallery figure.is-r-16-9 .g-trigger {
   aspect-ratio: 16 / 9;
 }
 .g-trigger picture,
