@@ -181,9 +181,6 @@ export default function (eleventyConfig) {
   }
   eleventyConfig.addAsyncShortcode("image", imagePicture);
 
-  // build year for footer
-  eleventyConfig.addFilter("year", () => new Date().getFullYear());
-
   return {
     dir: {
       input: "src",

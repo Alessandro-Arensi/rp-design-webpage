@@ -5,9 +5,10 @@ pageKey: projects
 translationKey: projects
 title: Progetti
 ---
-<section class="section bleed page-top">
+<section class="section bleed page-top archive-top">
   <p class="eyebrow" data-reveal>{{ nav[lang].projects.label }}</p>
-  <h1 class="statement" data-reveal>{{ ui[lang].archiveStatement }}</h1>
+  <h1 class="statement" data-reveal>{{ ui[lang].archiveHeadline }}</h1>
+  <p class="lead measure" data-reveal>{{ ui[lang].archiveStatement }}</p>
   <div class="row block-large-1-2 block-tab-full projects-grid">
     {% for project in collections.projects %}
       <div class="column" data-reveal>

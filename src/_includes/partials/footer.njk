@@ -6,14 +6,14 @@
         {% for s in settings[lang].social %}<a href="{{ s.url }}" rel="noopener" target="_blank">{{ s.label }}</a>{% endfor %}
       </nav>
       <div class="s-footer__col">
-        <p>{{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}</p>
+        <p>{{ contact[lang].address.street }}, {{ contact[lang].address.city }}</p>
         {% if contact[lang].emails.general %}<a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a>{% endif %}
         {% if contact[lang].phone %}<a href="tel:{{ contact[lang].phone }}">{{ contact[lang].phone }}</a>{% endif %}
       </div>
     </div>
   </div>
   <div class="s-footer__bottom">
-    <span class="s-footer__copy">© {{ "" | year }} {{ settings[lang].siteName }}</span>
+    <span class="s-footer__copy">© {{ settings[lang].siteName }}</span>
     <nav class="s-footer__legal" aria-label="{{ 'Note legali' if lang == 'it' else 'Legal' }}">
       {# TODO: point these at real pages once they exist #}
       <a href="#">{{ ui[lang].privacy }}</a>

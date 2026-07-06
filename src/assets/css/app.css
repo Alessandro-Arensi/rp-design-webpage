@@ -371,20 +371,23 @@ a {
   background: var(--c-dark);
   color: var(--c-line);
   font-family: var(--ff-sans);
-  padding-block: var(--sp-5) var(--sp-4);
+  padding-block: var(--sp-4);
   padding-inline: var(--gutter);
 }
+/* per contatti mockup: lockup left at the content inset, link columns right */
 .s-footer__top {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 20rem; /* fixed: distance logo<->links stays constant across widths */
+  justify-content: space-between;
+  gap: var(--sp-6);
   flex-wrap: wrap;
 }
-/* big white brand lockup on the left (mask follows the bg colour -> white). */
+/* white brand lockup (mask follows the bg colour -> white). The PNG canvas
+   carries generous transparent margins, so the box is wider than the visible
+   art (~88% of it). */
 .s-footer__logo-img {
   flex: 0 0 auto;
-  width: clamp(40rem, 54vw, 68rem);
+  width: clamp(32rem, 38vw, 52rem);
   aspect-ratio: 3601 / 1601;
   display: block;
   background-color: #fff;
@@ -394,7 +397,7 @@ a {
 }
 .s-footer__cols {
   display: flex;
-  gap: var(--sp-6);
+  gap: var(--sp-7);
 }
 .s-footer__col p {
   margin: 0 0 0.4rem;
@@ -407,13 +410,13 @@ a {
 .s-footer__col a:hover {
   color: var(--c-accent);
 }
-/* bottom bar: © left, legal links right */
+/* bottom bar: © left, legal links right — well separated from the lockup */
 .s-footer__bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-3);
-  margin-top: var(--sp-5);
+  margin-top: var(--sp-7);
   font-size: var(--fs-small);
   color: var(--c-line);
   opacity: 0.7;
@@ -631,9 +634,27 @@ html.lenis body {
 }
 
 /* ----- projects overview ----------------------------------------- */
+/* the grid spans the full content band (the base .row is 89%/1340px-capped);
+   negative side margins swallow the outer column padding so the covers sit
+   flush with the text above — wider pictures, aligned edges */
 .projects-grid {
+  width: calc(100% + 40px);
+  max-width: none;
+  margin-inline: -20px;
   margin-top: var(--sp-4);
   gap: var(--sp-6) 0;
+}
+/* base.css shrinks column padding to 16px under 1200px — track it */
+@media screen and (max-width: 1200px) {
+  .projects-grid {
+    width: calc(100% + 32px);
+    margin-inline: -16px;
+  }
+}
+/* headline + subtitle share the same width as the gallery */
+.archive-top .statement,
+.archive-top .lead {
+  max-width: 100%;
 }
 .project-card {
   position: relative;
