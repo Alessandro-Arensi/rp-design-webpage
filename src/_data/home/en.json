@@ -2,14 +2,43 @@
   "subtitle": "Ours begins by listening to yours.",
   "blocks": [
     {
-      "image": "/assets/uploads/home/block-1.jpg",
-      "alt": "Hands drawing",
+      "type": "pair",
+      "images": [
+        {
+          "image": "/assets/uploads/home/01.jpg",
+          "alt": "Armchair beside a window onto a garden"
+        },
+        {
+          "image": "/assets/uploads/home/02.jpg",
+          "alt": "Chalet terrace overlooking the mountains"
+        }
+      ]
+    },
+    {
+      "type": "text",
       "text": "Some things can only be gained by living them. Roberto Piana grew up immersed in a craft and a city — Milan — that his father, Giancarlo, lived and transformed into a distinct way of doing architecture, starting in 1998."
     },
     {
-      "image": "/assets/uploads/home/block-2.jpg",
-      "alt": "Roberto Piana and his father Giancarlo",
+      "type": "wide",
+      "image": "/assets/uploads/home/03.jpg",
+      "alt": "Dining room with sculptural chandelier and black marble"
+    },
+    {
+      "type": "text",
       "text": "Today, Roberto leads the practice with the same approach he brings when entering a home: listening, with perspective and vision, already knowing what to look for. Because within every space is an unseen potential, and within every individual, a singular way of living it."
+    },
+    {
+      "type": "pair",
+      "images": [
+        {
+          "image": "/assets/uploads/home/04.jpg",
+          "alt": "Hands choosing colour samples"
+        },
+        {
+          "image": "/assets/uploads/home/05.jpg",
+          "alt": "Portrait of Roberto Piana"
+        }
+      ]
     }
   ]
 }

@@ -6,19 +6,22 @@ translationKey: projects
 title: Progetti
 ---
 <section class="section bleed page-top">
-  <p class="eyebrow" data-reveal>{{ ui[lang].selectedProjects }}</p>
-  <h1 class="statement" data-reveal>{{ ui[lang].archiveHeadline }}</h1>
-  <p class="measure" data-reveal>{{ ui[lang].archiveStatement }}</p>
+  <p class="eyebrow" data-reveal>{{ nav[lang].projects.label }}</p>
+  <h1 class="statement" data-reveal>{{ ui[lang].archiveStatement }}</h1>
   <div class="row block-large-1-2 block-tab-full projects-grid">
     {% for project in collections.projects %}
       <div class="column" data-reveal>
         <a class="project-card" href="{{ ('/progetti/' if lang == 'it' else '/en/projects/') + project.data.slug + '/' }}">
           <div class="project-card__media">
             {% set cov = project.data.gallery | cover %}
-            {% if cov %}{% image cov, (project.data | field('title', lang)), "(max-width:800px) 100vw, 50vw" %}{% endif %}
+            {% if cov %}{% image cov, "", "(max-width:800px) 100vw, 50vw" %}{% endif %}
           </div>
+          <h2 class="project-card__title">{{ project.data | field('title', lang) }}</h2>
         </a>
       </div>
     {% endfor %}
   </div>
+  <p class="cta-center" data-reveal>
+    <a href="{{ nav[lang].contact.url }}">{{ ui[lang].archiveCta }}</a>
+  </p>
 </section>

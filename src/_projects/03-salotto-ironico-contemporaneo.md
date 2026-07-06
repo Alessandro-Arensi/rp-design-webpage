@@ -1,27 +1,31 @@
 ---
 slug: salotto-ironico-contemporaneo
-order: 3
-featured: false
+order: 4
 draft: false
-title_it: "Salotto ironico e contemporaneo"
-title_en: "Ironic, Contemporary Living Room"
+title_it: Salotto ironico e contemporaneo
+title_en: Ironic and Contemporary Living Room
+statement_it: L'impatto è quello di un salotto di rappresentanza, ma in chiave contemporanea.
+statement_en: The space captures the feel of a classic formal living room,
+  reinterpreted through a contemporary lens.
 gallery:
+  - type: image
+    orientation: verticale
+    image: /assets/uploads/progetto-3/01.jpg
+  - type: image
+    orientation: verticale
+    image: /assets/uploads/progetto-3/02.jpg
   - type: text
-    text_it: "L'impatto è quello di un salotto di rappresentanza, ma in chiave contemporanea. Gli arredi mantengono una linea elegante. I quadri introducono una nota ironica. Il camino restituisce l'effetto del fuoco, ma in totale sicurezza, grazie a vapore acqueo e LED ad alta potenza."
-    text_en: "The impression is that of a formal drawing room, reimagined in a contemporary key. The furnishings keep an elegant line. The artworks introduce a note of irony. The fireplace recreates the effect of flame in complete safety, through water vapour and high-power LEDs."
-  - type: image
-    orientation: verticale
-    image: /assets/uploads/proj-03/01.jpg
-  - type: image
-    orientation: verticale
-    image: /assets/uploads/home/block-1.jpg
+    text_it: Gli arredi mantengono una linea elegante. I quadri introducono una nota
+      ironica. Il camino restituisce l'effetto del fuoco, ma in totale
+      sicurezza, grazie a vapore acqueo e LED ad alta potenza.
+    text_en: While the furnishings maintain sleek, elegant lines, the artwork
+      introduces an unexpected touch of irony. Nearby, the fireplace creates the
+      ambient warmth of an open flame in total safety, powered entirely by water
+      vapor and high-output LEDs.
   - type: image
     orientation: orizzontale
-    image: /assets/uploads/proj-03/hero.jpg
+    image: /assets/uploads/progetto-3/03.jpg
   - type: image
-    orientation: verticale
-    image: /assets/uploads/home/block-2.jpg
-  - type: image
-    orientation: verticale
-    image: /assets/uploads/proj-02/01.jpg
+    orientation: orizzontale
+    image: /assets/uploads/progetto-3/04.jpg
 ---

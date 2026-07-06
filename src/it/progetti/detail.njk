@@ -4,6 +4,7 @@ pagination:
   data: collections.projects
   size: 1
   alias: project
+  addAllPagesToCollections: true
 permalink: "/progetti/{{ project.data.slug }}/"
 pageKey: projects
 eleventyComputed:
@@ -14,7 +15,8 @@ eleventyComputed:
 <article class="project-detail">
   <div class="project-body">
     <header class="project-head" data-reveal>
-      <h1 class="eyebrow">{{ p | field('title', lang) }}</h1>
+      <p class="eyebrow">{{ p | field('title', lang) }}</p>
+      <h1 class="statement">{{ p | field('statement', lang) }}</h1>
     </header>
 
     <div class="project-gallery">

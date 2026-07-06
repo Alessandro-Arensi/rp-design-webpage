@@ -102,6 +102,15 @@ html {
 html::-webkit-scrollbar {
   display: none; /* Chrome / Safari */
 }
+/* Art direction: layout is responsive from ~1024px up to 1600px; past that
+   it stays fixed (max-width) and centred, excess space left empty at the
+   sides. The fixed header centres too (left/right 0 + auto margins). */
+main,
+.s-header,
+.s-footer {
+  max-width: 160rem;
+  margin-inline: auto;
+}
 ::selection {
   background: var(--c-accent);
   color: #fff;
@@ -195,9 +204,13 @@ a {
   height: var(--header-h);
   display: flex;
   align-items: center;
+  /* hairline that "materialises" the bar on inner pages; hidden while the
+     header floats over the home hero (data-state="on-image") */
+  border-bottom: 1px solid var(--c-ink);
   transition:
     background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
+    color var(--dur-fast) var(--ease-out),
+    border-bottom-color var(--dur-fast) var(--ease-out);
 }
 /* Centered, stacked: RP monogram on top, nav below. */
 .s-header__bar {
@@ -257,9 +270,7 @@ a {
 .header-nav a,
 .s-header__lang a,
 .s-footer__col a,
-.contact-emails a,
-.project-nav a,
-.project-card__title {
+.project-nav a {
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 0.35em;
@@ -270,9 +281,7 @@ a {
 .header-nav a:hover,
 .s-header__lang a:hover,
 .s-footer__col a:hover,
-.contact-emails a:hover,
 .project-nav a:hover,
-.project-card:hover .project-card__title,
 .header-nav a[aria-current="page"],
 .s-header__lang a[aria-current="true"] {
   text-decoration-color: currentColor;
@@ -281,6 +290,7 @@ a {
 /* header colour states (set by JS) */
 .s-header[data-state="on-image"] {
   color: #fff;
+  border-bottom-color: transparent;
 }
 /* Scrim behind the header over a hero image — guarantees legibility of the
    white chrome over any photo (contrast can't be statically verified over images). */
@@ -302,9 +312,8 @@ a {
      full-screen mobile overlay, which caused the peek/confinement/close glitches.
      Solid background keeps content from bleeding through. */
   background: var(--c-bg);
-  /* Per art direction: a touch darker than --c-line (#ddd7c9) so the separator
-     reads against the near-white solid header. */
-  border-bottom: 1px solid #c2bdb1;
+  /* border-bottom intentionally NOT overridden — the ink hairline from
+     .s-header must stay identical before and after the scroll switch */
   color: var(--c-ink);
 }
 /* While the mobile overlay is open: no backdrop-filter (so the fixed overlay
@@ -379,7 +388,8 @@ a {
   aspect-ratio: 3601 / 1601;
   display: block;
   background-color: #fff;
-  -webkit-mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
+  -webkit-mask: url("/assets/icons/rp-horizontal.png") center / contain
+    no-repeat;
   mask: url("/assets/icons/rp-horizontal.png") center / contain no-repeat;
 }
 .s-footer__cols {
@@ -595,41 +605,29 @@ html.lenis body {
   line-height: 1.4;
   max-width: 50ch;
 }
-/* narrative copy under the lead — left aligned, full band width to match the
-   two photos below (was the per-image block text) */
-.home-intro__copy {
-  max-width: 100%;
+/* the home narrative reuses the project-gallery block grid (pair / text /
+   wide interleaved); left-aligned text rows, tight image gaps */
+.home-blocks {
   text-align: left;
 }
-.home-intro__copy p:last-child {
-  margin-bottom: 0;
-}
-/* two photos side by side, portrait 3:4, filling the band */
-.home-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--sp-2);
-  width: 100%;
-}
-.home-gallery__item {
+/* centred, understated CTA link closing home / studio / archive (per mockups).
+   The top margin gives it the same air as on the home page; inside .home-intro
+   the parent grid's gap already provides it, so it collapses to zero there. */
+.cta-center {
   margin: 0;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
+  margin-block-start: var(--sp-7);
+  text-align: center;
 }
-.home-gallery__item picture,
-.home-gallery__item img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.home-intro .cta-center {
+  margin-block-start: 0;
 }
-.home-intro__cta {
-  margin: 0;
-}
-@media screen and (max-width: 600px) {
-  .home-gallery {
-    grid-template-columns: 1fr;
-  }
+.cta-center a {
+  font-family: var(--ff-display);
+  font-size: var(--fs-h3);
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
 }
 
 /* ----- projects overview ----------------------------------------- */
@@ -655,22 +653,22 @@ html.lenis body {
 .project-card:hover .project-card__media img {
   transform: scale(1.04);
 }
-.project-card__meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-top: var(--sp-2);
-}
+/* underlined title below the cover, always on one row (per archive mockup).
+   overflow:hidden (needed for the ellipsis) would clip an offset underline,
+   so the box gets bottom padding for the line to live in. */
 .project-card__title {
-  font-family: var(--ff-sans);
-  font-size: var(--fs-h3);
+  margin-top: var(--sp-2);
+  font-family: var(--ff-display);
+  font-size: 2rem;
+  font-weight: normal;
   letter-spacing: 0.01em;
-}
-.project-card__year {
-  font-family: var(--ff-sans);
-  color: var(--c-ink-soft);
-  font-size: var(--fs-small);
-  letter-spacing: var(--track-label);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 0.45em;
 }
 
 /* ----- project detail -------------------------------------------- */
@@ -693,16 +691,6 @@ html.lenis body {
 .project-hero__cap h1 {
   font-size: var(--fs-h1);
 }
-.project-meta {
-  display: flex;
-  font-family: var(--ff-sans);
-  gap: var(--sp-5);
-  flex-wrap: wrap;
-  color: var(--c-ink-soft);
-  font-size: var(--fs-small);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-}
 /* centred content band — eyebrow, text + image grids share one inset column;
    top padding clears the fixed header (this page has no hero) */
 .project-body {
@@ -714,9 +702,6 @@ html.lenis body {
 }
 .project-head {
   margin-bottom: var(--sp-6);
-}
-.project-head .project-meta {
-  margin-top: var(--sp-1);
 }
 /* body copy: full width of the content band, matching the image box */
 .project-text {
@@ -738,11 +723,33 @@ html.lenis body {
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(0.4rem, 0.8vw, 0.8rem);
 }
+/* the crop box lives on the FIGURE so it applies with or without a lightbox
+   trigger (home / studio use plain figures, project pages wrap a button) */
 .project-gallery figure {
   margin: 0;
+  overflow: hidden;
 }
 .project-gallery figure.is-full {
   grid-column: 1 / -1;
+}
+.project-gallery figure.is-r-3-4 {
+  aspect-ratio: 3 / 4;
+}
+.project-gallery figure.is-r-9-16 {
+  aspect-ratio: 9 / 16;
+}
+.project-gallery figure.is-r-4-3 {
+  aspect-ratio: 4 / 3;
+}
+.project-gallery figure.is-r-16-9 {
+  aspect-ratio: 16 / 9;
+}
+.project-gallery figure > picture,
+.project-gallery figure > picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .project-gallery figcaption {
   margin-top: var(--sp-1);
@@ -768,31 +775,16 @@ html.lenis body {
 .project-nav__next {
   text-align: right;
 }
-/* gallery image button: fixed-ratio crop. The chosen ratio sets BOTH the crop
-   box and the layout role — portrait (3:4 / 9:16) = half, landscape
-   (4:3 / 16:9) = full row. Source is cropped to the box via object-fit. */
+/* gallery lightbox trigger: fills the figure's crop box (ratio set above) */
 .g-trigger {
   display: block;
   width: 100%;
+  height: 100%;
   padding: 0;
   border: 0;
   background: none;
   color: inherit;
   cursor: zoom-in;
-  overflow: hidden;
-  aspect-ratio: 3 / 4;
-}
-.project-gallery figure.is-r-3-4 .g-trigger {
-  aspect-ratio: 3 / 4;
-}
-.project-gallery figure.is-r-9-16 .g-trigger {
-  aspect-ratio: 9 / 16;
-}
-.project-gallery figure.is-r-4-3 .g-trigger {
-  aspect-ratio: 4 / 3;
-}
-.project-gallery figure.is-r-16-9 .g-trigger {
-  aspect-ratio: 16 / 9;
 }
 .g-trigger picture,
 .g-trigger img {
@@ -822,14 +814,56 @@ html.lenis body {
   text-align: center;
   gap: var(--sp-3);
 }
-.contact-emails {
-  display: grid;
-  gap: var(--sp-4);
-  margin-block: var(--sp-5);
+/* contact head band: eyebrow + two-line statement, then the sand band below */
+.contact-head {
+  padding-bottom: var(--sp-7);
 }
-.contact-emails a {
+/* full-width sand band split in two columns: form left, showroom right
+   (per contatti mockup) */
+.contact-band {
+  background: var(--c-line);
+  border-top: 1px solid var(--c-ink);
+  padding: var(--sp-7) var(--gutter) var(--sp-8);
+}
+.contact-band__inner {
+  max-width: 108rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-7);
+  align-items: start;
+}
+.contact-band__title {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--sp-5);
+}
+.contact-band address {
   font-family: var(--ff-display);
   font-size: var(--fs-h3);
+  color: var(--c-ink);
+  line-height: 1.4;
+  margin-block: 0 var(--sp-5);
+}
+.contact-quote {
+  color: var(--c-accent);
+  font-style: italic;
+  font-size: var(--fs-h3);
+  line-height: 1.4;
+  max-width: 44rem;
+}
+/* inputs sit on the sand background — darker rule so the lines read */
+.contact-band input,
+.contact-band textarea {
+  border-bottom-color: var(--c-ink-soft);
+}
+.contact-band .btn {
+  width: 100%;
+  margin-top: var(--sp-2);
+}
+@media screen and (max-width: 800px) {
+  .contact-band__inner {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ----- lightbox --------------------------------------------------- */
@@ -964,9 +998,6 @@ form input:focus,
 form textarea:focus {
   outline: none;
   border-color: var(--c-accent);
-}
-.contact-emails .eyebrow {
-  margin-bottom: 0.4rem;
 }
 address {
   font-style: normal;

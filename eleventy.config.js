@@ -41,8 +41,14 @@ export default function (eleventyConfig) {
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
 
     const CANDS = {
-      orizzontale: [["4:3", 4 / 3], ["16:9", 16 / 9]],
-      verticale: [["3:4", 3 / 4], ["9:16", 9 / 16]],
+      orizzontale: [
+        ["4:3", 4 / 3],
+        ["16:9", 16 / 9],
+      ],
+      verticale: [
+        ["3:4", 3 / 4],
+        ["9:16", 9 / 16],
+      ],
     };
     const SEX = { 184: "3:4", 556: "9:16", 243: "4:3", 969: "16:9" };
 
@@ -86,6 +92,11 @@ export default function (eleventyConfig) {
     };
 
     for (const p of projects) {
+      // CMS no longer writes a slug field: the filename (already slugified
+      // from the Italian title by Decap) doubles as the URL slug. Older
+      // entries with an explicit front-matter slug keep it.
+      if (!p.data.slug) p.data.slug = p.fileSlug;
+
       const gallery = p.data.gallery || [];
       let run = 0; // length of the current unbroken vertical run
       let lastVertIdx = -1;

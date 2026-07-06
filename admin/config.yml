@@ -13,6 +13,13 @@ media_folder: "src/assets/uploads"
 public_folder: "/assets/uploads"
 locale: "it"
 
+# How generated filenames/slugs are built from the title: lowercase ASCII,
+# accents stripped ("Località" -> "localita"), spaces -> hyphens.
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
 # The CMS edits ONLY projects. Everything else (brand, home, studio, contact)
 # is developer-managed in the repo and is intentionally not exposed here.
 collections:
@@ -22,29 +29,20 @@ collections:
     label_singular: "Progetto"
     folder: "src/_projects"
     create: true
-    identifier_field: slug
-    slug: "{{fields.slug}}"
+    # URL slug is derived automatically from the Italian title: it becomes the
+    # filename, and the build uses the filename as the page slug when no
+    # explicit `slug` front-matter exists (older entries keep theirs).
+    identifier_field: title_it
+    slug: "{{slug}}"
     summary: "{{order}} · {{title_it}}"
     sortable_fields: [order]
     fields:
-      - {
-          name: slug,
-          label: "Slug (URL)",
-          widget: string,
-          hint: "Minuscolo, senza spazi. Es: cucina-elevata",
-        }
       - {
           name: order,
           label: "Ordine",
           widget: number,
           value_type: int,
           default: 1,
-        }
-      - {
-          name: featured,
-          label: "In evidenza in home",
-          widget: boolean,
-          default: false,
         }
       - {
           name: draft,
@@ -54,6 +52,17 @@ collections:
         }
       - { name: title_it, label: "Titolo (IT)", widget: string }
       - { name: title_en, label: "Title (EN)", widget: string }
+      - {
+          name: statement_it,
+          label: "Frase di apertura (IT)",
+          widget: string,
+          hint: "La frase grande sotto il titolo. Es: Una cucina che mette al centro l'ospitalità.",
+        }
+      - {
+          name: statement_en,
+          label: "Opening line (EN)",
+          widget: string,
+        }
       - name: gallery
         label: "Contenuto del progetto"
         label_singular: "blocco"

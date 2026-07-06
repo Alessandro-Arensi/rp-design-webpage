@@ -5,31 +5,30 @@ pageKey: contact
 translationKey: contact
 title: Contatti
 ---
-<section class="section bleed page-top">
+<section class="section bleed page-top contact-head">
   <p class="eyebrow" data-reveal>{{ contact[lang].heading }}</p>
-  <h1 class="statement" data-reveal>{{ contact[lang].intro }}</h1>
+  <h1 class="statement" data-reveal>{{ contact[lang].intro }}<br>{{ contact[lang].introLine2 }}</h1>
+</section>
 
-  <div class="contact-emails" data-reveal>
-    {% if contact[lang].emails.general %}<div><p class="eyebrow">{{ ui[lang].general }}</p><a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a></div>{% endif %}
-    {% if contact[lang].emails.press %}<div><p class="eyebrow">{{ ui[lang].press }}</p><a href="mailto:{{ contact[lang].emails.press }}">{{ contact[lang].emails.press }}</a></div>{% endif %}
-    {% if contact[lang].emails.careers %}<div><p class="eyebrow">{{ ui[lang].careers }}</p><a href="mailto:{{ contact[lang].emails.careers }}">{{ contact[lang].emails.careers }}</a></div>{% endif %}
+<section class="contact-band">
+  <div class="contact-band__inner">
+    <div class="contact-form" data-reveal>
+      <h2 class="contact-band__title">{{ contact[lang].formTitle }}</h2>
+      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contatti/grazie/">
+        <input type="hidden" name="form-name" value="contact">
+        <p hidden><label>Non compilare <input type="text" name="bot-field"></label></p>
+        <label>{{ ui[lang].name }}<input type="text" name="name" required></label>
+        <label>{{ ui[lang].email }}<input type="email" name="email" required></label>
+        <label>{{ ui[lang].message }}<textarea name="message" rows="5" required></textarea></label>
+        <button class="btn btn--stroke" type="submit">{{ ui[lang].send }}</button>
+      </form>
+    </div>
+    <div class="contact-showroom" data-reveal>
+      <h2 class="contact-band__title">{{ contact[lang].showroom.heading }}</h2>
+      <address>
+        {{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}
+      </address>
+      <p class="contact-quote">“{{ contact[lang].showroom.text }}”</p>
+    </div>
   </div>
-
-  <div class="contact-showroom" data-reveal>
-    {% if contact[lang].showroom.heading %}<p class="eyebrow">{{ contact[lang].showroom.heading }}</p>{% endif %}
-    <address>
-      {{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}
-    </address>
-    {% if contact[lang].showroom.text %}<p class="measure">{{ contact[lang].showroom.text }}</p>{% endif %}
-  </div>
-
-  {% if contact[lang].formTitle %}<h2 class="lead measure" data-reveal>{{ contact[lang].formTitle }}</h2>{% endif %}
-  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contatti/grazie/" class="measure" data-reveal>
-    <input type="hidden" name="form-name" value="contact">
-    <p hidden><label>Non compilare <input type="text" name="bot-field"></label></p>
-    <label>{{ ui[lang].name }}<input type="text" name="name" required></label>
-    <label>{{ ui[lang].email }}<input type="email" name="email" required></label>
-    <label>{{ ui[lang].message }}<textarea name="message" rows="5" required></textarea></label>
-    <button class="btn btn--stroke" type="submit">{{ ui[lang].send }}</button>
-  </form>
 </section>

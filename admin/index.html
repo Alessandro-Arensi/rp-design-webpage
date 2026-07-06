@@ -103,6 +103,7 @@
             var getAsset = this.props.getAsset;
             var data = entry.get("data");
             var title = data.get("title_it") || data.get("title_en") || "Progetto";
+            var statement = data.get("statement_it") || data.get("statement_en") || "";
             var gallery = data.get("gallery");
             var items = gallery && gallery.toArray ? gallery.toArray() : [];
 
@@ -146,7 +147,12 @@
               h(
                 "div",
                 { className: "project-body" },
-                h("header", { className: "project-head" }, h("h1", { className: "eyebrow" }, title)),
+                h(
+                  "header",
+                  { className: "project-head" },
+                  h("p", { className: "eyebrow" }, title),
+                  statement ? h("h1", { className: "statement" }, statement) : null
+                ),
                 h("div", { className: "project-gallery" }, blocks)
               )
             );

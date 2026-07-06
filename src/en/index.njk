@@ -27,20 +27,25 @@ bodyClass: is-home
     <h1 class="home-headline">{{ settings[lang].tagline }}</h1>
     <p class="lead">{{ home[lang].subtitle }}</p>
   </div>
-  <div class="home-intro__copy" data-reveal>
+  <div class="project-gallery home-blocks">
     {% for block in home[lang].blocks %}
-      <p>{{ block.text }}</p>
+      {% if block.type == 'text' %}
+        <div class="project-text" data-reveal><p>{{ block.text }}</p></div>
+      {% elif block.type == 'wide' %}
+        <figure data-reveal class="is-full is-r-16-9">
+          {% image block.image, block.alt, "100vw" %}
+        </figure>
+      {% elif block.type == 'pair' %}
+        {% for img in block.images %}
+          <figure data-reveal class="is-r-3-4">
+            {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
+          </figure>
+        {% endfor %}
+      {% endif %}
     {% endfor %}
   </div>
-  <div class="home-gallery" data-reveal>
-    {% for block in home[lang].blocks %}
-      <figure class="home-gallery__item">
-        {% image block.image, block.alt, "(max-width:600px) 100vw, 50vw" %}
-      </figure>
-    {% endfor %}
-  </div>
-  <p class="home-intro__cta" data-reveal>
-    <a class="btn btn--stroke" href="{{ nav[lang].studio.url }}">{{ nav[lang].studio.label }}</a>
+  <p class="cta-center" data-reveal>
+    <a href="{{ nav[lang].projects.url }}">{{ ui[lang].homeCta }}</a>
   </p>
 </section>
 

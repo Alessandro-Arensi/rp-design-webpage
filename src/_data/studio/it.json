@@ -1,6 +1,20 @@
 {
   "eyebrow": "Studio",
   "statement": "Su ogni nostro lavoro c'è sempre l'occhio di chi vuole bene a quella casa.",
+  "pair": [
+    {
+      "image": "/assets/uploads/studio/01.jpg",
+      "alt": "Roberto Piana e il padre Giancarlo al tavolo di lavoro"
+    },
+    {
+      "image": "/assets/uploads/studio/02.jpg",
+      "alt": "Campioni di materiali e finiture in showroom"
+    }
+  ],
+  "wide": {
+    "image": "/assets/uploads/studio/03.jpg",
+    "alt": "Roberto Piana sceglie materiali e riferimenti su tablet"
+  },
   "paragraphs": [
     "Quando un cliente ci affida la sua casa, il nostro lavoro non finisce con la consegna delle chiavi. Una casa deve durare, funzionare, invecchiare bene. Servono conoscenze, fornitori affidabili e materiali giusti: li cerchiamo, li testiamo e li collaudiamo ogni giorno.",
     "E quando, nel tempo, qualcosa va rivisto, torniamo: controlliamo e interveniamo con discrezione. Con noi resta attivo un servizio di manutenzione e cura continuativa, per tutta la vita dell'immobile. Dal primo giorno c'è un unico interlocutore, un unico numero da chiamare: per ogni scelta, dubbio o urgenza. O semplicemente per un consiglio."

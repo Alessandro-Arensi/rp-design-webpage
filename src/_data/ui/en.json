@@ -3,9 +3,9 @@
   "menu": "Menu",
   "close": "Close",
   "scroll": "Scroll",
-  "selectedProjects": "Selected projects",
   "viewProject": "View project",
   "allProjects": "All projects",
+  "homeCta": "Archive",
   "next": "Next",
   "prev": "Previous",
   "backTop": "Back to top",
@@ -25,6 +25,6 @@
   "gallery": "Gallery",
   "enlarge": "Enlarge image",
   "notFound": "Page not found",
-  "archiveHeadline": "From intuition to execution",
-  "archiveStatement": "Translating a feeling, a desire, a sensation into space."
+  "archiveStatement": "Translating a feeling, a desire, a sensation into space.",
+  "archiveCta": "We give shape to your ideas"
 }
