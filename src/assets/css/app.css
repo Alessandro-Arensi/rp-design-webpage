@@ -467,17 +467,25 @@ a {
 html.intro-play .intro {
   display: grid;
 }
+/* the curtain sign occupies the SAME footprint as the hero lockup PNG
+   (rp-firma-payoff, 2401x1110) at the same width + centring, so the animated
+   script lands exactly on the background signature when the curtain lifts */
 .intro__sign {
+  position: relative;
   width: clamp(21.5rem, 81vw, 62rem);
   max-width: 90%;
+  aspect-ratio: 2401 / 1110;
 }
-.intro__sign img {
-  display: block;
-  width: 100%;
+/* animated signature: paths fill #fff for the dark curtain; a clip-rect grows
+   left->right (intro.js) so the mark "writes" itself. Positioned to the script
+   sub-rect measured inside the hero PNG (left 8.5%, top 18%, width 83%). */
+.intro__logo {
+  position: absolute;
+  left: 8.5%;
+  top: 18%;
+  width: 83%;
   height: auto;
-  /* logo art is black ink on transparent — force it white for the dark curtain */
-  filter: brightness(0) invert(1);
-  /* hidden until intro.js fades it in, so it never flashes before the tween */
+  /* hidden until intro.js starts the tween, so it never flashes beforehand */
   opacity: 0;
   visibility: hidden;
 }
@@ -561,8 +569,13 @@ html.lenis body {
 .s-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, #241a0f 0%, #ffffff 100%);
-  opacity: 0.65;
+  /* per art direction: a tone darker at the top easing to the photo's normal
+     tone at the bottom — never towards white */
+  background: linear-gradient(
+    to bottom,
+    rgba(22, 17, 10, 0.55) 0%,
+    rgba(22, 17, 10, 0.12) 100%
+  );
 }
 .s-hero__content {
   position: relative;

@@ -1,6 +1,6 @@
-// Homepage intro: GSAP curtain on first visit. The "Roberto Piana" logo fades in,
-// then the curtain lifts into the hero (whose static logo matches its position/size,
-// so the mark settles seamlessly).
+// Homepage intro: GSAP curtain on first visit. The "Roberto Piana" signature
+// writes itself (a clip-rect sweeps left->right over the inline logo SVG), then
+// the curtain lifts into the hero.
 // First visit is armed in <head> (html.intro-play). Repeat visits, reduced-motion
 // and no-JS all skip it and show the page immediately (content is visible by default).
 
@@ -10,10 +10,11 @@ export function initIntro() {
 
   const gsap = window.gsap;
   const playing = document.documentElement.classList.contains("intro-play");
-  const logo = intro.querySelector(".intro__sign img");
+  const logo = intro.querySelector(".intro__logo");
+  const wipe = intro.querySelector("[data-wipe]");
 
   // Repeat visit / reduced-motion / GSAP unavailable / no logo: drop the curtain.
-  if (!playing || !gsap || !logo) {
+  if (!playing || !gsap || !logo || !wipe) {
     intro.remove();
     return;
   }
@@ -52,12 +53,17 @@ export function initIntro() {
     onComplete: cleanup,
   });
 
-  // Slight fade-in of the logo (starts hidden via CSS, so no flash), then hold.
-  tl.to(logo, { autoAlpha: 1, duration: 1.4, ease: "power2.out" }, 0.3);
-  const lift = 2.1; // lift the curtain after the logo has settled
+  // Reveal the SVG, then "write" the signature by growing the clip-rect
+  // left->right across the artwork (viewBox width 460.86).
+  tl.to(logo, { autoAlpha: 1, duration: 0.5, ease: "power1.out" }, 0.2).fromTo(
+    wipe,
+    { attr: { width: 0 } },
+    { attr: { width: 460.86 }, duration: 1.7, ease: "power2.inOut" },
+    0.2,
+  );
+  const lift = 2.4; // lift the curtain after the signature has finished writing
 
-  // Crossfade the curtain (it shares the hero's logo position/size, so the
-  // "Roberto Piana" mark settles seamlessly into the static hero signature).
+  // Crossfade the curtain up into the hero.
   tl.to(intro, { autoAlpha: 0, duration: 1.1, ease: "power2.inOut" }, lift)
     .from(
       heroImg,
