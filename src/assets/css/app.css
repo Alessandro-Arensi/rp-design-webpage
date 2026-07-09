@@ -275,7 +275,8 @@ a {
    both. */
 .cta-center a,
 .project-nav__title,
-.project-card__title {
+.project-card__title,
+.contact-band address a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: currentColor;
@@ -284,7 +285,8 @@ a {
 }
 .cta-center a:hover,
 .project-nav a:hover .project-nav__title,
-.project-card:hover .project-card__title {
+.project-card:hover .project-card__title,
+.contact-band address a:hover {
   color: var(--c-accent);
 }
 
@@ -636,16 +638,6 @@ html.lenis body {
 .home-blocks {
   text-align: left;
 }
-/* wider gap between the paired vertical images on home (per home.png);
-   compound selector beats the site-wide tight .project-gallery gap */
-.project-gallery.home-blocks {
-  column-gap: var(--sp-4);
-}
-/* home narrative copy runs larger than default body per the home mockup */
-.home-blocks .project-text p {
-  font-size: 2.6rem;
-  line-height: 1.3;
-}
 /* centred CTA closing home / studio / archive (per mockups). Sits centred in the
    band between the last content block and the footer: the top margin matches the
    section's bottom padding (--section-y), so the whitespace above == below. On
@@ -758,6 +750,7 @@ html.lenis body {
   margin-block: 3rem;
 }
 .project-text p {
+  font-size: 2.6rem;
   line-height: 1.3;
 }
 .project-text p:last-child {
@@ -773,7 +766,9 @@ html.lenis body {
 .project-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  /* tight row gap; wider gap between paired vertical images (all pages) */
   gap: clamp(0.4rem, 0.8vw, 0.8rem);
+  column-gap: var(--sp-4);
 }
 /* the crop box lives on the FIGURE so it applies with or without a lightbox
    trigger (home / studio use plain figures, project pages wrap a button) */
@@ -871,9 +866,7 @@ body[data-page="projects"] .lead {
   line-height: 1.35;
   max-width: none;
 }
-body[data-page="projects"] .statement {
-  margin-bottom: var(--sp-1);
-}
+body[data-page="projects"] .statement,
 body[data-page="projects"] .lead {
   margin: 0;
 }
@@ -922,14 +915,7 @@ body[data-page="studio"] .statement {
   line-height: 1.4;
   margin-block: 0 var(--sp-5);
 }
-/* address links out to Google Maps; ink at rest, accent on hover for affordance */
-.contact-band address a {
-  color: inherit;
-  transition: color var(--dur-fast) var(--ease-out);
-}
-.contact-band address a:hover {
-  color: var(--c-accent);
-}
+/* address links out to Google Maps; uses the site-wide link treatment above */
 .contact-quote {
   color: var(--c-accent);
   font-style: italic;
