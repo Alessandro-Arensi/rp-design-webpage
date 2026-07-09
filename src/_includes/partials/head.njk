@@ -2,21 +2,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
 
-<title>{% if title %}{{ title }} — {{ settings[lang].siteName }}{% else %}{{ settings[lang].siteName }}{% endif %}</title>
-<meta name="description" content="{{ description or settings[lang].tagline }}">
+{%- set pageTitle = (title ~ " — " ~ settings[lang].siteName) if title else settings[lang].siteName -%}
+{%- set pageDesc = description or settings[lang].tagline -%}
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ pageDesc }}">
 
 {# Open Graph / Twitter. TODO: replace og:image with a 1200x630 brand image
    (then switch twitter:card to summary_large_image). #}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ settings[lang].siteName }}">
-<meta property="og:title" content="{% if title %}{{ title }} — {{ settings[lang].siteName }}{% else %}{{ settings[lang].siteName }}{% endif %}">
-<meta property="og:description" content="{{ description or settings[lang].tagline }}">
+<meta property="og:title" content="{{ pageTitle }}">
+<meta property="og:description" content="{{ pageDesc }}">
 <meta property="og:locale" content="{{ 'it_IT' if lang == 'it' else 'en_GB' }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 <meta property="og:image" content="{{ site.url }}/android-chrome-512x512.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="{% if title %}{{ title }} — {{ settings[lang].siteName }}{% else %}{{ settings[lang].siteName }}{% endif %}">
-<meta name="twitter:description" content="{{ description or settings[lang].tagline }}">
+<meta name="twitter:title" content="{{ pageTitle }}">
+<meta name="twitter:description" content="{{ pageDesc }}">
 
 {# hreflang alternates #}
 {%- set alts = collections.all | localeAlternates(translationKey) -%}

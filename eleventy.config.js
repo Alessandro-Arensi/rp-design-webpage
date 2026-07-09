@@ -5,7 +5,6 @@ import path from "node:path";
 // Resolve a public asset path (/assets/uploads/x.jpg) or a src-relative path
 // to an on-disk path Eleventy Image can read at build time.
 function toDiskPath(src) {
-  if (src.startsWith("/assets/")) return path.join("src", src);
   if (src.startsWith("/")) return path.join("src", src);
   return src;
 }

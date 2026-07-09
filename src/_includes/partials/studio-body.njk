@@ -1,0 +1,19 @@
+<section class="section bleed page-top">
+  <p class="eyebrow" data-reveal>{{ studio[lang].eyebrow }}</p>
+  <h1 class="statement" data-reveal>{{ studio[lang].statement }}</h1>
+  <div class="project-gallery home-blocks">
+    {% for img in studio[lang].pair %}
+      <figure data-reveal class="is-r-3-4">
+        {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
+      </figure>
+    {% endfor %}
+    <div class="project-text" data-reveal><p>{{ studio[lang].paragraphs[0] }}</p></div>
+    <figure data-reveal class="is-full is-r-16-9">
+      {% image studio[lang].wide.image, studio[lang].wide.alt, "100vw" %}
+    </figure>
+    <div class="project-text" data-reveal><p>{{ studio[lang].paragraphs[1] }}</p></div>
+  </div>
+  <p class="cta-center" data-reveal>
+    <a href="{{ nav[lang].projects.url }}">{{ ui[lang].homeCta }}</a>
+  </p>
+</section>

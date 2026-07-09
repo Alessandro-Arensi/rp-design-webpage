@@ -22,9 +22,7 @@ export function initIntro() {
   const html = document.documentElement;
   const lenis = window.__lenis;
   const heroImg = document.querySelector(".s-hero__media img");
-  const taglines = document.querySelectorAll(".s-hero__tagline .line > span");
   const header = document.querySelector(".s-header");
-  const cue = document.querySelector(".s-hero__scroll");
 
   // Lock scroll for the duration.
   html.style.overflow = "hidden";
@@ -34,7 +32,7 @@ export function initIntro() {
     // Clear GSAP's lingering inline styles. A leftover transform on the header
     // makes it a containing block for the fixed mobile overlay (which would trap
     // the hamburger menu on first visit, while the intro has run).
-    gsap.set([header, heroImg, cue, ...taglines].filter(Boolean), {
+    gsap.set([header, heroImg].filter(Boolean), {
       clearProps: "transform,opacity,visibility",
     });
     intro.remove();
@@ -74,8 +72,7 @@ export function initIntro() {
       header,
       { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
       lift + 0.8,
-    )
-    .from(cue, { autoAlpha: 0, y: 16, duration: 0.6 }, lift + 1.6);
+    );
 
   // Safety: if anything stalls, never trap the user behind the curtain.
   window.setTimeout(() => {

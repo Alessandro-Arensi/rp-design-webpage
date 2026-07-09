@@ -35,7 +35,7 @@ eleventyComputed:
       {% endfor %}
     </div>
 
-    {% set base = '/en/projects/' %}
+    {% set base = nav[lang].projects.url %}
     <nav class="project-nav" aria-label="Project navigation">
       {% if pagination.pageNumber > 0 %}
         {% set prev = collections.projects[pagination.pageNumber - 1] %}

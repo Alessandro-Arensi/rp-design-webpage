@@ -22,11 +22,11 @@
 
 /* ----- tokens (non-brand: scale, space, motion) ------------------- */
 :root {
-  --fs-display: clamp(3.6rem, 8vw, 8.4rem);
   --fs-h1: clamp(3rem, 5.5vw, 5.6rem);
   --fs-h2: clamp(2.4rem, 3.6vw, 4rem);
   --fs-h3: clamp(2rem, 2.4vw, 2.8rem);
   --fs-lead: clamp(1.9rem, 2.2vw, 2.6rem);
+  --fs-headline: 4.2rem; /* fixed display headline: home / studio / archive / CTA */
   --fs-body: 1.7rem;
   --fs-small: 1.3rem;
   --fs-label: 1.15rem;
@@ -47,8 +47,9 @@
   --section-y: clamp(8rem, 12vw, 18rem);
   --gutter: clamp(2.4rem, 5vw, 7rem);
 
-  --maxw-page: 1340px;
+  --maxw-content: 108rem; /* centred inner-content band (text + body images) */
   --maxw-text: 62rem;
+  --sign-w: clamp(21.5rem, 81vw, 62rem); /* signature lockup width: intro + hero MUST match */
 
   --ease-lux: cubic-bezier(0.7, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -57,6 +58,7 @@
   --dur-slow: 1.2s;
 
   --header-h: 7.5rem;
+  --content-top: calc(var(--header-h) + var(--sp-6)); /* inner-page top clearance */
   --z-header: 100;
   --z-nav: 200;
   --z-lightbox: 900;
@@ -77,7 +79,6 @@ body {
   font-family: var(--ff-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
-  -webkit-font-smoothing: antialiased;
 }
 /* Hide the scrollbar (page still scrolls via Lenis/wheel/keys). Also removes the
    layout shift when the intro unlocks overflow — no scrollbar gutter to appear. */
@@ -173,11 +174,11 @@ a {
    within, so the whole site shares one content column. Home is excluded (it
    keeps its own full-bleed centred layout). */
 .page-top {
-  max-width: 108rem;
+  max-width: var(--maxw-content);
   margin-inline: auto;
   /* clear the fixed header, then a modest, uniform gap to the eyebrow
      (was --section-y ≈ 180px — far too tall) */
-  padding-top: calc(var(--header-h) + var(--sp-6));
+  padding-top: var(--content-top);
 }
 
 /* ----- header chrome --------------------------------------------- */
@@ -441,14 +442,12 @@ a {
 @media screen and (max-width: 600px) {
   .s-footer {
     padding-block: var(--sp-5) var(--sp-3);
+    --logo-w: clamp(26rem, 72vw, 40rem);
   }
   .s-footer__top {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--sp-4);
-  }
-  .s-footer {
-    --logo-w: clamp(26rem, 72vw, 40rem);
   }
   .s-footer__cols {
     gap: var(--sp-5);
@@ -469,14 +468,12 @@ a {
   display: none;
   place-items: center;
   will-change: transform;
+  --intro-cover-shift: 4px;
 }
 /* loading screen photo (brown wall) whose baked-in groove is the signature's
    underline. It lives on a layer nudged down --intro-cover-shift so the groove
    lands on the hero PNG's underline (~7px lower) for a seamless curtain lift.
    Over-inset top/bottom so the shift never reveals an edge. */
-.intro {
-  --intro-cover-shift: 4px;
-}
 .intro::before {
   content: "";
   position: absolute;
@@ -495,7 +492,7 @@ html.intro-play .intro {
 .intro__sign {
   position: relative;
   z-index: 1;
-  width: clamp(21.5rem, 81vw, 62rem);
+  width: var(--sign-w);
   max-width: 90%;
   aspect-ratio: 2401 / 1110;
 }
@@ -557,7 +554,7 @@ html.lenis body {
 .s-hero__sign {
   position: relative;
   /* matches the intro curtain sign so it settles seamlessly when the curtain lifts */
-  width: clamp(21.5rem, 81vw, 62rem);
+  width: var(--sign-w);
   max-width: 90%;
   /* logo art is black ink on transparent — force it white for the dark hero */
   filter: brightness(0) invert(1);
@@ -589,12 +586,6 @@ html.lenis body {
   .s-hero__slide {
     transition: none;
   }
-  .s-hero__slide:not(.is-active) {
-    opacity: 0;
-  }
-  .s-hero__slide.is-active {
-    opacity: 1;
-  }
 }
 .s-hero__overlay {
   position: absolute;
@@ -607,25 +598,6 @@ html.lenis body {
     rgba(22, 17, 10, 0.12) 100%
   );
 }
-.s-hero__content {
-  position: relative;
-  align-self: end;
-  padding: var(--gutter);
-  padding-bottom: var(--sp-7);
-  color: #fff;
-}
-.s-hero__tagline {
-  font-size: var(--fs-display);
-  max-width: 26ch;
-}
-.s-hero__tagline .line {
-  display: block;
-  overflow: hidden;
-}
-.s-hero__tagline .line > span {
-  display: block;
-}
-
 /* ----- home narrative -------------------------------------------- */
 /* Home narrative shares the same centred 108rem band + left-aligned text as
    the project detail / inner pages (the hero above stays full-bleed). */
@@ -634,7 +606,7 @@ html.lenis body {
   gap: var(--sp-6);
   /* trim the big top gap above the headline and tighten head → gallery */
   padding-top: var(--sp-7);
-  max-width: 108rem;
+  max-width: var(--maxw-content);
   margin-inline: auto;
 }
 .home-intro__head {
@@ -644,21 +616,17 @@ html.lenis body {
   justify-items: start;
   text-align: left;
 }
-/* headline + lead: 42px, left-justified, full grid width, tight leading (home.png) */
-.home-headline {
-  font-size: 4.2rem;
-  line-height: 1.35;
-  max-width: none;
-  margin: 0;
-}
 .lead {
   font-family: var(--ff-display);
   font-size: var(--fs-lead);
   line-height: 1.4;
   max-width: 50ch;
 }
+/* headline + lead: display headline size, left-justified, full grid width,
+   tight leading (home.png) */
+.home-headline,
 .home-intro__head .lead {
-  font-size: 4.2rem;
+  font-size: var(--fs-headline);
   line-height: 1.35;
   max-width: none;
   margin: 0;
@@ -694,7 +662,7 @@ html.lenis body {
    from the site-wide link rule (ink → accent, 1px). */
 .cta-center a {
   font-family: var(--ff-display);
-  font-size: 4.2rem;
+  font-size: var(--fs-headline);
   color: var(--c-ink);
 }
 
@@ -715,11 +683,6 @@ html.lenis body {
     width: calc(100% + 32px);
     margin-inline: -16px;
   }
-}
-/* headline + subtitle share the same width as the gallery */
-.archive-top .statement,
-.archive-top .lead {
-  max-width: 100%;
 }
 .project-card {
   position: relative;
@@ -748,8 +711,8 @@ html.lenis body {
   font-size: 2rem;
   font-weight: normal;
   letter-spacing: 0.01em;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
+  /* underline + 1px thickness come from the site-wide link rule; only the
+     tighter offset is overridden here */
   text-underline-offset: 0.3em;
   white-space: nowrap;
   overflow: hidden;
@@ -780,10 +743,10 @@ html.lenis body {
 /* centred content band — eyebrow, text + image grids share one inset column;
    top padding clears the fixed header (this page has no hero) */
 .project-body {
-  max-width: 108rem;
+  max-width: var(--maxw-content);
   margin-inline: auto;
   padding-inline: var(--gutter);
-  padding-top: calc(var(--header-h) + var(--sp-6));
+  padding-top: var(--content-top);
   padding-bottom: var(--sp-8);
 }
 .project-head {
@@ -803,7 +766,6 @@ html.lenis body {
 /* a text block placed inside the image grid spans the whole row */
 .project-gallery .project-text {
   grid-column: 1 / -1;
-  margin-block: 3rem;
 }
 /* image grid: narrow (portrait) images sit 2-up; a wide (landscape) image
    spans the whole row. Orientation + crop ratio are driven per image by the
@@ -905,7 +867,7 @@ html.lenis body {
 body[data-page="studio"] .statement,
 body[data-page="projects"] .statement,
 body[data-page="projects"] .lead {
-  font-size: 4.2rem;
+  font-size: var(--fs-headline);
   line-height: 1.35;
   max-width: none;
 }
@@ -941,7 +903,7 @@ body[data-page="studio"] .statement {
   padding-block: var(--sp-7) var(--sp-8);
 }
 .contact-band__inner {
-  max-width: 108rem;
+  max-width: var(--maxw-content);
   margin-inline: auto;
   padding-inline: var(--gutter);
   display: grid;
