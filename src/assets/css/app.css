@@ -19,20 +19,6 @@
   font-style: italic;
   font-display: swap;
 }
-@font-face {
-  font-family: "DM Sans";
-  src: url("/assets/fonts/dm-sans-400.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Sans";
-  src: url("/assets/fonts/dm-sans-500.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* ----- tokens (non-brand: scale, space, motion) ------------------- */
 :root {
@@ -102,15 +88,11 @@ html {
 html::-webkit-scrollbar {
   display: none; /* Chrome / Safari */
 }
-/* Art direction: layout is responsive from ~1024px up to 1600px; past that
-   it stays fixed (max-width) and centred, excess space left empty at the
-   sides. The fixed header centres too (left/right 0 + auto margins). */
-main,
-.s-header,
-.s-footer {
-  max-width: 160rem;
-  margin-inline: auto;
-}
+/* Art direction: the shell — navbar, footer, landing hero and the contact-band
+   background — is fully responsive and fills the viewport at any width. Only the
+   inner content (text columns + body images) stays fixed, capped by the 108rem
+   content bands further down and centred, with empty space at the sides on very
+   wide screens. So the shell is no longer boxed at 160rem. */
 ::selection {
   background: var(--c-accent);
   color: #fff;
@@ -193,7 +175,9 @@ a {
 .page-top {
   max-width: 108rem;
   margin-inline: auto;
-  padding-top: calc(var(--header-h) + var(--section-y));
+  /* clear the fixed header, then a modest, uniform gap to the eyebrow
+     (was --section-y ≈ 180px — far too tall) */
+  padding-top: calc(var(--header-h) + var(--sp-6));
 }
 
 /* ----- header chrome --------------------------------------------- */
@@ -261,17 +245,15 @@ a {
 .header-nav a {
   letter-spacing: 0.04em;
 }
-/* Animatable underline: the line is always present but transparent, so its
-   colour can fade in (text-decoration can't transition; text-decoration-color
-   can). Hover + selected/aria-current both fade it to currentColor — same
-   underline across every text link (per WEB KIT — Menu, project name, email,
-   footer). Footer's accent colour rides the same transition. Fade duration
-   collapses to ~0 under prefers-reduced-motion via --dur-fast. */
+/* Header, lang toggle and footer are EXCLUDED from the site-wide link rule and
+   keep their own understated underline: a 1px line, transparent at rest, fading
+   to currentColor on hover / aria-current. Colour stays contextual — the header
+   inherits white over the hero / ink otherwise; the footer sets its own. */
 .header-nav a,
 .s-header__lang a,
-.s-footer__col a,
-.project-nav a {
+.s-footer__col a {
   text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-decoration-color: transparent;
   text-underline-offset: 0.35em;
   transition:
@@ -281,10 +263,28 @@ a {
 .header-nav a:hover,
 .s-header__lang a:hover,
 .s-footer__col a:hover,
-.project-nav a:hover,
 .header-nav a[aria-current="page"],
 .s-header__lang a[aria-current="true"] {
   text-decoration-color: currentColor;
+}
+
+/* Site-wide link treatment (header + footer excluded): text + a 1px underline of
+   the SAME colour in every state — ink at rest, accent on hover. currentColor
+   keeps the underline tracking the text colour, so one colour transition drives
+   both. */
+.cta-center a,
+.project-nav__title,
+.project-card__title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.35em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.cta-center a:hover,
+.project-nav a:hover .project-nav__title,
+.project-card:hover .project-card__title {
+  color: var(--c-accent);
 }
 
 /* header colour states (set by JS) */
@@ -368,6 +368,7 @@ a {
 
 /* ----- footer ----------------------------------------------------- */
 .s-footer {
+  --logo-w: clamp(32rem, 38vw, 52rem);
   background: var(--c-dark);
   color: var(--c-line);
   font-family: var(--ff-sans);
@@ -387,7 +388,7 @@ a {
    art (~88% of it). */
 .s-footer__logo-img {
   flex: 0 0 auto;
-  width: clamp(32rem, 38vw, 52rem);
+  width: var(--logo-w);
   aspect-ratio: 3601 / 1601;
   display: block;
   background-color: #fff;
@@ -421,6 +422,11 @@ a {
   color: var(--c-line);
   opacity: 0.7;
 }
+/* line the © up with the visible logo art above it: the lockup PNG carries a
+   ~11.1% transparent margin each side, so the art starts that far in from the box */
+.s-footer__copy {
+  margin-left: calc(0.111 * var(--logo-w));
+}
 .s-footer__legal {
   display: flex;
   gap: var(--sp-3);
@@ -441,8 +447,8 @@ a {
     align-items: flex-start;
     gap: var(--sp-4);
   }
-  .s-footer__logo-img {
-    width: clamp(26rem, 72vw, 40rem);
+  .s-footer {
+    --logo-w: clamp(26rem, 72vw, 40rem);
   }
   .s-footer__cols {
     gap: var(--sp-5);
@@ -464,27 +470,51 @@ a {
   place-items: center;
   will-change: transform;
 }
+/* loading screen photo (brown wall) whose baked-in groove is the signature's
+   underline. It lives on a layer nudged down --intro-cover-shift so the groove
+   lands on the hero PNG's underline (~7px lower) for a seamless curtain lift.
+   Over-inset top/bottom so the shift never reveals an edge. */
+.intro {
+  --intro-cover-shift: 4px;
+}
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: -16px 0;
+  background: url("/assets/uploads/intro-cover.jpg") center center / cover
+    no-repeat;
+  transform: translateY(var(--intro-cover-shift));
+  z-index: 0;
+}
 html.intro-play .intro {
   display: grid;
 }
-/* the curtain sign occupies the SAME footprint as the hero lockup PNG
-   (rp-firma-payoff, 2401x1110) at the same width + centring, so the animated
-   script lands exactly on the background signature when the curtain lifts */
+/* the curtain lockup occupies the SAME footprint as the hero lockup PNG
+   (rp-firma-payoff, 2401x1110) at the same width + centring, so the signature +
+   payoff land exactly on the hero signature when the curtain lifts */
 .intro__sign {
   position: relative;
+  z-index: 1;
   width: clamp(21.5rem, 81vw, 62rem);
   max-width: 90%;
   aspect-ratio: 2401 / 1110;
 }
-/* animated signature: paths fill #fff for the dark curtain; a clip-rect grows
-   left->right (intro.js) so the mark "writes" itself. Positioned to the script
-   sub-rect measured inside the hero PNG (left 8.5%, top 18%, width 83%). */
+/* payoff subtext (no line — the photo groove is the line): fills the sign box and
+   is present from the first frame, never animated. Its baseline sits below the
+   photo's groove. */
+.intro__payoff {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* animated signature: paths fill #fff; a clip-rect grows left->right (intro.js)
+   so the script "writes" itself. Overlays the sign box, above the groove. */
 .intro__logo {
   position: absolute;
-  left: 8.5%;
-  top: 18%;
-  width: 83%;
-  height: auto;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   /* hidden until intro.js starts the tween, so it never flashes beforehand */
   opacity: 0;
   visibility: hidden;
@@ -601,19 +631,25 @@ html.lenis body {
    the project detail / inner pages (the hero above stays full-bleed). */
 .home-intro {
   display: grid;
-  gap: var(--sp-7);
+  gap: var(--sp-6);
+  /* trim the big top gap above the headline and tighten head → gallery */
+  padding-top: var(--sp-7);
   max-width: 108rem;
   margin-inline: auto;
 }
 .home-intro__head {
   display: grid;
-  gap: var(--sp-3);
-  /* tagline + lead centred above the narrative */
-  justify-items: center;
-  text-align: center;
+  gap: 0;
+  /* tagline + lead: one tight two-line statement, left-aligned to the grid */
+  justify-items: start;
+  text-align: left;
 }
+/* headline + lead: 42px, left-justified, full grid width, tight leading (home.png) */
 .home-headline {
-  max-width: 34ch;
+  font-size: 4.2rem;
+  line-height: 1.35;
+  max-width: none;
+  margin: 0;
 }
 .lead {
   font-family: var(--ff-display);
@@ -621,29 +657,45 @@ html.lenis body {
   line-height: 1.4;
   max-width: 50ch;
 }
+.home-intro__head .lead {
+  font-size: 4.2rem;
+  line-height: 1.35;
+  max-width: none;
+  margin: 0;
+}
 /* the home narrative reuses the project-gallery block grid (pair / text /
    wide interleaved); left-aligned text rows, tight image gaps */
 .home-blocks {
   text-align: left;
 }
-/* centred, understated CTA link closing home / studio / archive (per mockups).
-   The top margin gives it the same air as on the home page; inside .home-intro
-   the parent grid's gap already provides it, so it collapses to zero there. */
+/* wider gap between the paired vertical images on home (per home.png);
+   compound selector beats the site-wide tight .project-gallery gap */
+.project-gallery.home-blocks {
+  column-gap: var(--sp-4);
+}
+/* home narrative copy runs larger than default body per the home mockup */
+.home-blocks .project-text p {
+  font-size: 2.6rem;
+  line-height: 1.3;
+}
+/* centred CTA closing home / studio / archive (per mockups). Sits centred in the
+   band between the last content block and the footer: the top margin matches the
+   section's bottom padding (--section-y), so the whitespace above == below. On
+   home the parent grid already adds --sp-6, so the top margin is reduced by that. */
 .cta-center {
   margin: 0;
-  margin-block-start: var(--sp-7);
+  margin-block-start: var(--section-y);
   text-align: center;
 }
 .home-intro .cta-center {
-  margin-block-start: 0;
+  margin-block-start: calc(var(--section-y) - var(--sp-6));
 }
+/* closing CTA (home / studio / archive): headline-sized. Colour + underline come
+   from the site-wide link rule (ink → accent, 1px). */
 .cta-center a {
   font-family: var(--ff-display);
-  font-size: var(--fs-h3);
-  color: var(--c-accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.35em;
+  font-size: 4.2rem;
+  color: var(--c-ink);
 }
 
 /* ----- projects overview ----------------------------------------- */
@@ -737,9 +789,13 @@ html.lenis body {
 .project-head {
   margin-bottom: var(--sp-6);
 }
-/* body copy: full width of the content band, matching the image box */
+/* body copy: full width of the content band, matching the image box.
+   30px top/bottom margin, 1.3 line-height */
 .project-text {
-  margin-block: var(--sp-6);
+  margin-block: 3rem;
+}
+.project-text p {
+  line-height: 1.3;
 }
 .project-text p:last-child {
   margin-bottom: 0;
@@ -747,7 +803,7 @@ html.lenis body {
 /* a text block placed inside the image grid spans the whole row */
 .project-gallery .project-text {
   grid-column: 1 / -1;
-  margin-block: var(--sp-3);
+  margin-block: 3rem;
 }
 /* image grid: narrow (portrait) images sit 2-up; a wide (landscape) image
    spans the whole row. Orientation + crop ratio are driven per image by the
@@ -809,6 +865,9 @@ html.lenis body {
 .project-nav__next {
   text-align: right;
 }
+/* Only the project title carries the underline; the eyebrow label ("Precedente"
+   / "Successivo") stays static. Ink → accent colour + underline come from the
+   site-wide link rule. */
 /* gallery lightbox trigger: fills the figure's crop box (ratio set above) */
 .g-trigger {
   display: block;
@@ -840,6 +899,26 @@ html.lenis body {
   max-width: 42ch;
   line-height: 1.2;
 }
+/* studio + archive top mirror the home headline: 42px, left-justified, full grid
+   width, tight leading (studio.png / archivio.png). Archive's lead (the long
+   statement) matches, sitting tight under the headline like the home two-liner. */
+body[data-page="studio"] .statement,
+body[data-page="projects"] .statement,
+body[data-page="projects"] .lead {
+  font-size: 4.2rem;
+  line-height: 1.35;
+  max-width: none;
+}
+body[data-page="projects"] .statement {
+  margin-bottom: var(--sp-1);
+}
+body[data-page="projects"] .lead {
+  margin: 0;
+}
+body[data-page="studio"] .statement {
+  line-height: 1.3;
+  margin-bottom: 5rem;
+}
 .error-page {
   min-height: 100svh;
   display: grid;
@@ -857,11 +936,14 @@ html.lenis body {
 .contact-band {
   background: var(--c-line);
   border-top: 1px solid var(--c-ink);
-  padding: var(--sp-7) var(--gutter) var(--sp-8);
+  /* full-width bg; the inner box carries the gutter so its left edge lines up
+     with the .page-top statement above (108rem band, inset by --gutter) */
+  padding-block: var(--sp-7) var(--sp-8);
 }
 .contact-band__inner {
   max-width: 108rem;
   margin-inline: auto;
+  padding-inline: var(--gutter);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sp-7);
@@ -877,6 +959,14 @@ html.lenis body {
   color: var(--c-ink);
   line-height: 1.4;
   margin-block: 0 var(--sp-5);
+}
+/* address links out to Google Maps; ink at rest, accent on hover for affordance */
+.contact-band address a {
+  color: inherit;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.contact-band address a:hover {
+  color: var(--c-accent);
 }
 .contact-quote {
   color: var(--c-accent);

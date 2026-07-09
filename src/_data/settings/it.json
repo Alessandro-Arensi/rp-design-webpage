@@ -4,9 +4,8 @@
   "introWordmark": "PIANA",
   "tagline": "Ogni casa racconta una storia.",
   "homeStatement": "Architettura che custodisce la luce, la materia e il tempo.",
-  "homeHero": "/assets/uploads/home/slide-01.jpg",
+  "homeHero": "/assets/uploads/home/slide-02.jpg",
   "homeSlides": [
-    { "image": "/assets/uploads/home/slide-01.jpg", "alt": "" },
     { "image": "/assets/uploads/home/slide-02.jpg", "alt": "" },
     { "image": "/assets/uploads/home/slide-03.jpg", "alt": "" },
     { "image": "/assets/uploads/home/slide-04.jpg", "alt": "" },

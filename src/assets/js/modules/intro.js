@@ -53,12 +53,12 @@ export function initIntro() {
     onComplete: cleanup,
   });
 
-  // Reveal the SVG, then "write" the signature by growing the clip-rect
-  // left->right across the artwork (viewBox width 460.86).
+  // Reveal the SVG, then "write" the lockup by growing the clip-rect
+  // left->right across the artwork (viewBox width 600).
   tl.to(logo, { autoAlpha: 1, duration: 0.5, ease: "power1.out" }, 0.2).fromTo(
     wipe,
     { attr: { width: 0 } },
-    { attr: { width: 460.86 }, duration: 1.7, ease: "power2.inOut" },
+    { attr: { width: 600 }, duration: 1.7, ease: "power2.inOut" },
     0.2,
   );
   const lift = 2.4; // lift the curtain after the signature has finished writing
