@@ -766,9 +766,8 @@ html.lenis body {
 .project-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* tight row gap; wider gap between paired vertical images (all pages) */
-  gap: clamp(0.4rem, 0.8vw, 0.8rem);
-  column-gap: var(--sp-4);
+  /* equal gap both axes: stacked images sit as far apart as side-by-side ones */
+  gap: var(--sp-4);
 }
 /* the crop box lives on the FIGURE so it applies with or without a lightbox
    trigger (home / studio use plain figures, project pages wrap a button) */
