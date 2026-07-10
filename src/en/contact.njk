@@ -27,6 +27,7 @@ title: Contact
       <h2 class="contact-band__title">{{ contact[lang].showroom.heading }}</h2>
       <address>
         <a href="https://maps.app.goo.gl/7rcYGewRCh8eLsQLA" target="_blank" rel="noopener">{{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}</a>
+        {% if contact[lang].phone %}<a class="contact-phone" href="tel:{{ contact[lang].phone | replace(' ', '') }}">{{ contact[lang].phone }}</a>{% endif %}
       </address>
       <p class="contact-quote">“{{ contact[lang].showroom.text }}”</p>
     </div>

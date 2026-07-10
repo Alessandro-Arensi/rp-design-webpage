@@ -134,6 +134,9 @@ export default function (eleventyConfig) {
     return projects;
   });
 
+  // current year for the footer copyright (evaluated at build time)
+  eleventyConfig.addGlobalData("currentYear", () => new Date().getFullYear());
+
   // --- i18n helpers (IT primary at /, EN under /en/) ---
   // counterpart URL of the current page in the other language
   eleventyConfig.addFilter("localeHref", (all, key, lang) => {

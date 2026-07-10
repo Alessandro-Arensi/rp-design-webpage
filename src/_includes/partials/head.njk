@@ -52,7 +52,8 @@
 
 <link rel="stylesheet" href="/assets/css/base.css">
 <link rel="stylesheet" href="/assets/css/app.css">
-{% if pageKey == 'home' %}
-{# Arm the intro curtain before first paint, first visit only (no flash on repeat/reduced-motion). #}
+{% if false and pageKey == 'home' %}
+{# Arm the intro curtain before first paint, first visit only (no flash on repeat/reduced-motion).
+   TEMPORARILY DISABLED: change `false and` back to just `pageKey == 'home'` to re-enable. #}
 <script>(function(){var d=document.documentElement;try{var r=matchMedia("(prefers-reduced-motion: reduce)").matches;var s=sessionStorage.getItem("piana_intro");if(!r&&!s){d.classList.add("intro-play");}}catch(e){}})();</script>
 {% endif %}

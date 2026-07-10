@@ -28,6 +28,7 @@
   --fs-lead: clamp(1.9rem, 2.2vw, 2.6rem);
   --fs-headline: 4.2rem; /* fixed display headline: home / studio / archive / CTA */
   --fs-body: 1.7rem;
+  --fs-copy: 3rem; /* site-wide reading body copy: studio/project text, archive intro */
   --fs-small: 1.3rem;
   --fs-label: 1.15rem;
   --lh-tight: 1.07;
@@ -392,6 +393,9 @@ a {
 .s-footer__logo-img {
   flex: 0 0 auto;
   width: var(--logo-w);
+  /* cancel the PNG's ~11.1% transparent side margin so the visible art lines up
+     with the gutter — matches the right column's edge (left margin == right) */
+  margin-left: calc(-0.111 * var(--logo-w));
   aspect-ratio: 3601 / 1601;
   display: block;
   background-color: #fff;
@@ -425,11 +429,8 @@ a {
   color: var(--c-line);
   opacity: 0.7;
 }
-/* line the © up with the visible logo art above it: the lockup PNG carries a
-   ~11.1% transparent margin each side, so the art starts that far in from the box */
-.s-footer__copy {
-  margin-left: calc(0.111 * var(--logo-w));
-}
+/* © lines up with the visible logo art above it — now that the lockup is pulled
+   flush to the gutter, the © needs no extra inset (both sit at the gutter) */
 .s-footer__legal {
   display: flex;
   gap: var(--sp-3);
@@ -650,6 +651,18 @@ html.lenis body {
 .home-intro .cta-center {
   margin-block-start: calc(var(--section-y) - var(--sp-6));
 }
+/* studio: same divider line as the project-nav sits above the CTA. The CTA is
+   centred in the band between the divider and the footer — the section's bottom
+   padding is trimmed to --sp-7 and the CTA's padding-top matches it, so the gap
+   above == below while keeping the band compact. */
+body[data-page="studio"] .page-top {
+  padding-bottom: var(--sp-7);
+}
+body[data-page="studio"] .cta-center {
+  border-top: 1px solid var(--c-line);
+  margin-block-start: var(--sp-7);
+  padding-top: var(--sp-7);
+}
 /* closing CTA (home / studio / archive): headline-sized. Colour + underline come
    from the site-wide link rule (ink → accent, 1px). */
 .cta-center a {
@@ -750,7 +763,7 @@ html.lenis body {
   margin-block: 3rem;
 }
 .project-text p {
-  font-size: 2.6rem;
+  font-size: var(--fs-copy);
   line-height: 1.3;
 }
 .project-text p:last-child {
@@ -856,18 +869,22 @@ html.lenis body {
   line-height: 1.2;
 }
 /* studio + archive top mirror the home headline: 42px, left-justified, full grid
-   width, tight leading (studio.png / archivio.png). Archive's lead (the long
-   statement) matches, sitting tight under the headline like the home two-liner. */
+   width, tight leading (studio.png / archivio.png). */
 body[data-page="studio"] .statement,
-body[data-page="projects"] .statement,
-body[data-page="projects"] .lead {
+body[data-page="projects"] .statement {
   font-size: var(--fs-headline);
   line-height: 1.35;
   max-width: none;
 }
-body[data-page="projects"] .statement,
-body[data-page="projects"] .lead {
+body[data-page="projects"] .statement {
   margin: 0;
+}
+/* archive intro reads as body copy, same size as .project-text p (studio/project).
+   Wider than the 62rem reading measure so it uses the room under the headline. */
+.archive-statement {
+  font-size: var(--fs-copy);
+  line-height: 1.3;
+  max-width: var(--maxw-content);
 }
 body[data-page="studio"] .statement {
   line-height: 1.3;
@@ -915,6 +932,11 @@ body[data-page="studio"] .statement {
   margin-block: 0 var(--sp-5);
 }
 /* address links out to Google Maps; uses the site-wide link treatment above */
+/* phone sits on its own line below the address, same display treatment */
+.contact-phone {
+  display: block;
+  margin-top: var(--sp-3);
+}
 .contact-quote {
   color: var(--c-accent);
   font-style: italic;
