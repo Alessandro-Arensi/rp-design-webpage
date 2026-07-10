@@ -1,74 +1,54 @@
-// Project gallery lightbox: open on click, ← → navigate, Esc close, focus trap.
-// No-op if the page has no lightbox / triggers.
+// Project gallery lightbox, powered by PhotoSwipe v5. Click/tap a gallery image
+// to open; PhotoSwipe supplies touch gestures (swipe nav, pinch-zoom + pan,
+// double-tap zoom, swipe-down close) plus keyboard, focus trap and ARIA.
+// PhotoSwipe is loaded lazily (dynamic import) on first open, so only project
+// pages ever fetch it. No-op if the page has no triggers.
 export function initGallery() {
-  const lightbox = document.querySelector("[data-lightbox]");
   const triggers = Array.from(document.querySelectorAll(".g-trigger"));
-  if (!lightbox || !triggers.length) return;
+  if (!triggers.length) return;
 
-  const imgEl = lightbox.querySelector(".lightbox__img");
-  const capEl = lightbox.querySelector(".lightbox__cap");
-  const btnClose = lightbox.querySelector(".lightbox__close");
-  const btnPrev = lightbox.querySelector(".lightbox__prev");
-  const btnNext = lightbox.querySelector(".lightbox__next");
-  let index = 0;
-  let lastFocused = null;
-
+  // Full-size src + intrinsic dimensions are baked onto each trigger at build
+  // time (the `pswp` shortcode). Fall back to the displayed image if missing.
   const items = triggers.map((t) => {
     const img = t.querySelector("img");
     return {
-      src: (img && (img.currentSrc || img.src)) || "",
+      src: t.dataset.pswpSrc || (img && (img.currentSrc || img.src)) || "",
+      width: Number(t.dataset.pswpWidth) || (img && img.naturalWidth) || 0,
+      height: Number(t.dataset.pswpHeight) || (img && img.naturalHeight) || 0,
       alt: (img && img.alt) || "",
-      cap: t.dataset.caption || "",
     };
   });
 
-  function show(i) {
-    index = (i + items.length) % items.length;
-    const it = items[index];
-    imgEl.src = it.src;
-    imgEl.alt = it.alt;
-    capEl.textContent = it.cap;
-    capEl.hidden = !it.cap;
-  }
-  function open(i) {
-    lastFocused = document.activeElement;
-    show(i);
-    lightbox.hidden = false;
-    document.documentElement.style.overflow = "hidden";
-    if (window.__lenis) window.__lenis.stop();
-    btnClose.focus();
-  }
-  function close() {
-    lightbox.hidden = true;
-    document.documentElement.style.overflow = "";
-    if (window.__lenis) window.__lenis.start();
-    if (lastFocused) lastFocused.focus();
-  }
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let PhotoSwipe; // memoised after the first dynamic import
 
-  triggers.forEach((t, i) => t.addEventListener("click", () => open(i)));
-  btnClose.addEventListener("click", close);
-  btnPrev.addEventListener("click", () => show(index - 1));
-  btnNext.addEventListener("click", () => show(index + 1));
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) close();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (lightbox.hidden) return;
-    if (e.key === "Escape") close();
-    else if (e.key === "ArrowLeft") show(index - 1);
-    else if (e.key === "ArrowRight") show(index + 1);
-    else if (e.key === "Tab") {
-      const f = [btnPrev, btnNext, btnClose];
-      const first = f[0];
-      const last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
+  async function open(index) {
+    if (!PhotoSwipe) {
+      ({ default: PhotoSwipe } = await import(
+        "/assets/js/vendor/photoswipe.esm.min.js"
+      ));
     }
-  });
+    const lenis = window.__lenis;
+    const pswp = new PhotoSwipe({
+      dataSource: items,
+      index,
+      showHideAnimationType: reduce ? "fade" : "zoom",
+      wheelToZoom: true,
+      bgOpacity: 1,
+    });
+    // Pause Lenis so its smooth-scroll transform doesn't fight PhotoSwipe's own
+    // scroll lock; resume when the viewer tears down. PhotoSwipe handles the
+    // focus trap, focus-return, Esc and arrow keys itself.
+    if (lenis) lenis.stop();
+    pswp.on("destroy", () => {
+      if (lenis) lenis.start();
+    });
+    pswp.init();
+  }
+
+  triggers.forEach((t, i) =>
+    t.addEventListener("click", () => {
+      open(i);
+    }),
+  );
 }

@@ -8,7 +8,7 @@
       <div class="s-footer__col">
         <p><a href="https://maps.app.goo.gl/7rcYGewRCh8eLsQLA" target="_blank" rel="noopener">{{ contact[lang].address.street }}, {{ contact[lang].address.city }}</a></p>
         {% if contact[lang].emails.general %}<a href="mailto:{{ contact[lang].emails.general }}">{{ contact[lang].emails.general }}</a>{% endif %}
-        {% if contact[lang].phone %}<a href="tel:{{ contact[lang].phone | replace(' ', '') }}">{{ contact[lang].phone }}</a>{% endif %}
+        {% if contact[lang].phone %}<a href="tel:{{ contact[lang].phone | replace(' ', '') }}">{{ contact[lang].phone | replace(' ', '&nbsp;') | safe }}</a>{% endif %}
       </div>
     </div>
   </div>

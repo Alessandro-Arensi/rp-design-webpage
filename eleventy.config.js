@@ -163,14 +163,22 @@ export default function (eleventyConfig) {
   );
 
   // --- Eleventy Image: responsive <picture> (AVIF/WebP/JPEG) ---
+  // Shared options: the `image` and `pswp` shortcodes MUST pass the identical
+  // object shape so a second Image() call on the same source hits eleventy-img's
+  // in-memory cache instead of reprocessing.
+  // `null` emits a rendition at the source's own width (never upscaled). This
+  // gives PhotoSwipe the full-resolution original to zoom into (e.g. 1200px-wide
+  // portraits that would otherwise cap at the 1000 step), and adds it as the
+  // top srcset candidate for the responsive <picture>.
+  const IMAGE_OPTS = {
+    widths: [600, 1000, 1600, 2400, null],
+    formats: ["avif", "webp", "jpeg"],
+    outputDir: "./dist/assets/img/",
+    urlPath: "/assets/img/",
+  };
   async function imagePicture(src, alt = "", sizes = "100vw", attrs = {}) {
     if (!src) return "";
-    const metadata = await Image(toDiskPath(src), {
-      widths: [600, 1000, 1600, 2400],
-      formats: ["avif", "webp", "jpeg"],
-      outputDir: "./dist/assets/img/",
-      urlPath: "/assets/img/",
-    });
+    const metadata = await Image(toDiskPath(src), IMAGE_OPTS);
     const imageAttributes = {
       alt,
       sizes,
@@ -182,6 +190,18 @@ export default function (eleventyConfig) {
     return Image.generateHTML(metadata, imageAttributes);
   }
   eleventyConfig.addAsyncShortcode("image", imagePicture);
+
+  // PhotoSwipe needs the full-size source + intrinsic dimensions up front to size
+  // the zoom. Emit them as data attributes on the gallery trigger. Reuses the
+  // cached Image() metadata (same IMAGE_OPTS) — the jpeg array is width-ascending,
+  // so the last entry is the largest rendition (the source itself if smaller).
+  async function pswpData(src) {
+    if (!src) return "";
+    const metadata = await Image(toDiskPath(src), IMAGE_OPTS);
+    const largest = metadata.jpeg[metadata.jpeg.length - 1];
+    return `data-pswp-src="${largest.url}" data-pswp-width="${largest.width}" data-pswp-height="${largest.height}"`;
+  }
+  eleventyConfig.addAsyncShortcode("pswp", pswpData);
 
   return {
     dir: {

@@ -62,7 +62,6 @@
   --content-top: calc(var(--header-h) + var(--sp-6)); /* inner-page top clearance */
   --z-header: 100;
   --z-nav: 200;
-  --z-lightbox: 900;
   --z-intro: 1000;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -959,69 +958,18 @@ body[data-page="studio"] .statement {
   }
 }
 
-/* ----- lightbox --------------------------------------------------- */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-lightbox);
-  background: rgba(10, 10, 9, 0.94);
-  display: grid;
-  place-items: center;
+/* ----- lightbox (PhotoSwipe v5) ---------------------------------- */
+/* Theme PhotoSwipe's chrome to match the site: dark backdrop, restrained
+   controls that pick up the accent on hover/focus. Behaviour is in gallery.js;
+   PhotoSwipe's own stylesheet (photoswipe.css) is linked on project pages. */
+.pswp {
+  --pswp-bg: var(--c-dark);
+  --pswp-icon-color: var(--c-line);
+  --pswp-icon-color-secondary: var(--c-dark);
 }
-.lightbox[hidden] {
-  display: none;
-}
-.lightbox img {
-  max-width: 92vw;
-  max-height: 84vh;
-  object-fit: contain;
-}
-.lightbox__figure {
-  margin: 0;
-  display: grid;
-  justify-items: center;
-  gap: var(--sp-2);
-}
-.lightbox__cap {
-  font-family: var(--ff-sans);
-  color: rgba(255, 255, 255, 0.7);
-  font-size: var(--fs-small);
-  text-align: center;
-}
-.lightbox__close,
-.lightbox__nav {
-  position: absolute;
-  background: none;
-  border: 0;
-  color: #fff;
-  cursor: pointer;
-  line-height: 1;
-  opacity: 0.7;
-  width: 6rem;
-  height: 6rem;
-  display: grid;
-  place-items: center;
-  transition: opacity var(--dur-fast) var(--ease-out);
-}
-.lightbox__close:hover,
-.lightbox__nav:hover {
-  opacity: 1;
-}
-.lightbox__close {
-  top: 1rem;
-  right: 1rem;
-  font-size: 3.2rem;
-}
-.lightbox__nav {
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 4.4rem;
-}
-.lightbox__prev {
-  left: 0.5rem;
-}
-.lightbox__next {
-  right: 0.5rem;
+.pswp__button:hover .pswp__icn,
+.pswp__button:focus-visible .pswp__icn {
+  fill: var(--c-accent);
 }
 
 /* ----- scroll reveal --------------------------------------------- */

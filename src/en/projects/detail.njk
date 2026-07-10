@@ -27,7 +27,7 @@ eleventyComputed:
           </div>
         {% else %}
           <figure data-reveal class="{{ 'is-full ' if g._wide else '' }}{{ g._rclass }}">
-            <button class="g-trigger" type="button" aria-label="{{ ui[lang].enlarge }} {{ loop.index }}">
+            <button class="g-trigger" type="button" aria-label="{{ ui[lang].enlarge }} {{ loop.index }}" {% pswp g.image %}>
               {% image g.image, "", ('100vw' if g._wide else '(max-width:600px) 100vw, 50vw') %}
             </button>
           </figure>
@@ -54,5 +54,3 @@ eleventyComputed:
     </nav>
   </div>
 </article>
-
-{% include "partials/lightbox.njk" %}
