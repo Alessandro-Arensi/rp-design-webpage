@@ -1,11 +1,11 @@
 # PIANA — Roberto Piana studio site
 
-> Canonical project reference, as-built (June 2026). Verified against source.
+> Canonical project reference, as-built (July 2026). Verified against source.
 
 A **bilingual (IT-primary / EN) static site** for the architecture studio of **Roberto
 Piana**, built with **Eleventy**, edited by a non-technical client through **Decap CMS**
-(git-based), hosted on **Netlify**. Minimalist, photography-led, with a hand-drawn
-"Roberto Piana" **signature intro** (GSAP) and smooth scroll (Lenis).
+(git-based), hosted on **Netlify**. Minimalist, photography-led, with a **full-screen video
+intro curtain** (GSAP lift into the hero) and smooth scroll (Lenis).
 
 | Attribute       | Value                                                                                    |
 | --------------- | ---------------------------------------------------------------------------------------- |
@@ -14,8 +14,9 @@ Piana**, built with **Eleventy**, edited by a non-technical client through **Dec
 | CMS             | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account)             |
 | Hosting         | Netlify (primary); `gh-pages` is a fallback target                                       |
 | Fonts           | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2 |
-| Animation       | GSAP (signature intro) + Lenis (smooth scroll), self-hosted/vendored                     |
-| Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG)                           |
+| Animation       | GSAP (intro curtain lift) + Lenis (smooth scroll), self-hosted/vendored                  |
+| Gallery         | PhotoSwipe v5 (vendored, lazy-loaded) — swipe / pinch-zoom / double-tap on project images |
+| Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG, + original-width source)  |
 | Accessibility   | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16                                  |
 | Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects`            |
 | Status          | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain              |
@@ -93,14 +94,14 @@ src/
 │   └── _projects.json           # { permalink: false } — data only, not rendered
 ├── _includes/
 │   ├── layouts/base.njk         # <html>, head, header, {{content}}, footer, scripts
-│   └── partials/                # head, header, nav, lang-toggle, footer, intro, logo-sign,
-│                                #   lightbox, netlify-identity
+│   └── partials/                # head, header, nav, lang-toggle, footer, intro, firma-payoff-anim(svg),
+│                                #   home-body, studio-body, projects-index-body, error-body, netlify-identity
 ├── it/  (→ /)                   # index, studio, contatti(+grazie), progetti(index+detail), 404
 ├── en/ (→ /en/)                 # mirror: index, studio, contact(+thanks), projects(index+detail), 404
 ├── assets/
-│   ├── css/{base.css, app.css}  # base = vendored grid+normalize; app = design system
-│   ├── js/app.js + modules/* + vendor/{gsap,lenis}.min.js
-│   ├── fonts/  icons/  uploads/ # woff2; brand SVGs; CMS image uploads
+│   ├── css/{base.css, app.css, photoswipe.css}  # base = vendored grid+normalize; app = design system; photoswipe = vendored gallery
+│   ├── js/app.js + modules/* + vendor/{gsap,lenis,photoswipe.esm}.min.js
+│   ├── fonts/  icons/  uploads/  video/  # woff2; brand SVGs; CMS uploads; intro video (mp4+webm+poster)
 ├── redirects.njk sitemap.njk robots.njk   # → /_redirects, /sitemap.xml, /robots.txt
 admin/{index.html, config.yml}   # Decap CMS
 eleventy.config.js  Makefile  netlify.toml  package.json
@@ -125,8 +126,8 @@ rebuilds. Local editing without Netlify: `make cms` (decap-server) + `make dev`
 | Projects         | `src/_projects/NN-slug.md`        | **Progetti** (folder, "New") | Bilingual fields in one file; `featured`, `draft`, `order`; gallery list. **First gallery image = project cover/thumbnail.** |
 | Home             | `src/_data/home/{it,en}.json`     | — (dev-managed)              | subtitle + narrative `blocks[]` (image/alt/text)                                                                            |
 | Studio           | `src/_data/studio/{it,en}.json`   | — (dev-managed)              | eyebrow, statement (headline), paragraphs[]                                                                                 |
-| Contact          | `src/_data/contact/{it,en}.json`  | — (dev-managed)              | emails (general/press/careers), address, maps                                                                               |
-| Brand            | `src/_data/settings/{it,en}.json` | — (dev-managed)              | siteName, tagline, homeHero, **homeSlides** (hero slideshow), social, colours, fonts                                        |
+| Contact          | `src/_data/contact/{it,en}.json`  | — (dev-managed)              | emails, address, phone (footer + contatti tel: link), maps                                                                  |
+| Brand            | `src/_data/settings/{it,en}.json` | — (dev-managed)              | siteName, vat (footer P.Iva), tagline, homeHero, **homeSlides** (hero slideshow), social, colours, fonts                    |
 | Nav / UI strings | `src/_data/nav,ui/*`              | — (dev-managed)              | not in CMS                                                                                                                  |
 
 `media_folder: src/assets/uploads` (`public_folder: /assets/uploads`); `publish_mode:
@@ -148,7 +149,10 @@ see `src/assets/js/modules/hero.js`.
   `/en/* → /en/404.html [404]`, `/* → /404.html [404]`. Resolved by Netlify at the edge —
   **not** by the dev server (locally `/en/*` shows the IT 404; verify on a deploy).
 - Filters (`eleventy.config.js`): `localeHref`, `localeAlternates`, `field(obj,name,lang)`
-  (picks `title_it`/`title_en` etc.), `year`.
+  (picks `title_it`/`title_en` etc.), `cover` (first gallery image with an image).
+- Shortcodes: `{% image %}` (responsive `<picture>`), `{% pswp %}` (bakes full-res
+  `data-pswp-*` dims onto gallery triggers for PhotoSwipe). Global data: `currentYear`
+  (build-time year, used in the footer © / P.Iva line).
 
 ---
 
@@ -157,7 +161,8 @@ see `src/assets/js/modules/hero.js`.
 `base.css` = the vendored flexbox grid (`.row/.column/.large-*/.medium-*/.tab-*/.mob-*`, block
 grids, helpers) + normalize, `html{font-size:62.5%}` (1rem=10px); the original Google-Fonts
 `@import` was removed (fonts are self-hosted). `app.css` = the brand layer (tokens, chrome,
-hero, intro, projects, lightbox, scroll-reveal, responsive).
+hero, intro video curtain, projects, PhotoSwipe theme overrides, scroll-reveal, responsive).
+Body reading copy is `--fs-copy` (3rem / 30px: studio & project text, archive intro).
 
 **Palette** (WEB KIT) — injected into `:root` from `settings[lang].colors` in `head.njk`, so the
 client can re-theme from the CMS:
@@ -183,23 +188,31 @@ light over a hero, ink when the header is solid). SVG favicon = `favicon-rp.svg`
 
 `src/assets/js/app.js` (`type="module" defer`) initialises small ES modules. Progressive
 enhancement: the site is fully usable with **no JS**, and every motion module respects
-`prefers-reduced-motion`. GSAP + Lenis are vendored under `assets/js/vendor/`.
+`prefers-reduced-motion`. GSAP + Lenis are vendored under `assets/js/vendor/`; PhotoSwipe is
+vendored there too but **lazy-loaded** (dynamic `import()` on first gallery open, so only
+project pages fetch it).
 
-| Module         | Role                                                                                              |
-| -------------- | ------------------------------------------------------------------------------------------------- |
-| `lenis.js`     | Smooth scroll (disabled under reduced-motion)                                                     |
-| `intro.js`     | Home curtain: draws the signature then lifts into the hero                                        |
-| `nav.js`       | Mobile full-screen overlay menu                                                                   |
-| `header.js`    | Header colour state (transparent over hero → solid on scroll)                                     |
-| `reveal.js`    | Scroll reveals via IntersectionObserver                                                           |
-| `gallery.js`   | Project-image lightbox (focus-trap, Esc, ← →)                                                     |
-| `logo-draw.js` | `setupSignature()` — hand-draws "Roberto Piana" stroke-by-stroke (clip-rect + masked centerlines) |
+| Module       | Role                                                                                                        |
+| ------------ | ----------------------------------------------------------------------------------------------------------- |
+| `lenis.js`   | Smooth scroll (disabled under reduced-motion)                                                                |
+| `intro.js`   | Home curtain: plays the intro video, then lifts (GSAP crossfade) into the hero                               |
+| `nav.js`     | Mobile full-screen overlay menu                                                                              |
+| `header.js`  | Header colour state (transparent over hero → solid on scroll)                                                |
+| `reveal.js`  | Scroll reveals via IntersectionObserver                                                                      |
+| `gallery.js` | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
 
-**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); GSAP timeline draws
-the signature (`logo-draw`), lifts the curtain, then reveals hero/tagline/header/scroll-cue, and
-**clears its inline transforms on completion** (a leftover transform on the header would make it a
-containing block and trap the fixed mobile overlay). Repeat visits / reduced-motion / no-JS skip
-the curtain entirely.
+**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); a full-screen muted
+`<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays, then a GSAP timeline
+crossfades the curtain up into the hero (hero scale + header slide-in), **capped at 3.5s** (or
+sooner on video `ended`/error/blocked autoplay), and **clears its inline transforms on completion**
+(a leftover transform on the header would make it a containing block and trap the fixed mobile
+overlay). Repeat visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn
+signature (`firma-payoff-anim.svg` + its CSS/tween) is retained but **disabled** — see the
+restore note in `intro.njk`.
+
+**Gallery:** `gallery.js` builds a PhotoSwipe `dataSource` from the `.g-trigger` buttons, using
+build-time `data-pswp-*` dims from the `{% pswp %}` shortcode; PhotoSwipe supplies all touch
+gestures, keyboard, focus trap and ARIA. Lenis is paused while the viewer is open.
 
 ---
 

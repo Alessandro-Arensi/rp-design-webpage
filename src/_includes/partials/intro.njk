@@ -1,7 +1,15 @@
 {# Home intro curtain. Decorative (aria-hidden); shown only on first visit via
-   html.intro-play. JS lifts it; no-JS/reduced-motion never show it. #}
+   html.intro-play. JS plays the video then lifts the curtain into the hero;
+   no-JS / reduced-motion never show it.
+   NOTE: the signature lockup is disabled for now — the art-director video is the
+   curtain. To restore the signature, swap the <video> back for:
+     <div class="intro__sign">{% include "partials/firma-payoff-anim.svg" %}</div>
+   (and re-enable the signature-writing tween in intro.js). #}
 <div class="intro" data-intro aria-hidden="true">
-  <div class="intro__sign">
-    {% include "partials/firma-payoff-anim.svg" %}
-  </div>
+  <video class="intro__video" data-intro-video
+         poster="/assets/video/intro-poster.jpg"
+         muted playsinline autoplay preload="auto">
+    <source src="/assets/video/intro.webm" type="video/webm">
+    <source src="/assets/video/intro.mp4" type="video/mp4">
+  </video>
 </div>

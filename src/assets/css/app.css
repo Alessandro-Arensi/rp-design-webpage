@@ -472,10 +472,19 @@ a {
   will-change: transform;
   --intro-cover-shift: 4px;
 }
-/* loading screen photo (brown wall) whose baked-in groove is the signature's
-   underline. It lives on a layer nudged down --intro-cover-shift so the groove
-   lands on the hero PNG's underline (~7px lower) for a seamless curtain lift.
-   Over-inset top/bottom so the shift never reveals an edge. */
+/* Full-screen curtain video (art-director dolly-in). Covers the viewport; the
+   dark .intro bg shows only in any letterbox gap before it loads. */
+.intro__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+/* NOTE: signature disabled for now — the intro-cover.jpg (::before) existed only
+   to align the signature's underline groove, so it's off. To restore the
+   signature, re-enable .intro::before and swap the video back in intro.njk.
 .intro::before {
   content: "";
   position: absolute;
@@ -485,6 +494,7 @@ a {
   transform: translateY(var(--intro-cover-shift));
   z-index: 0;
 }
+*/
 html.intro-play .intro {
   display: grid;
 }
