@@ -42,7 +42,14 @@ export function initHeroSlideshow() {
 
   let timer;
   const start = () => {
-    if (!timer) timer = window.setInterval(advance, hold);
+    if (timer) return;
+    // Enable the Ken Burns zoom (CSS gated on .hero-live) only now — after the
+    // intro curtain has cleared — so its transform animation can't fight GSAP's
+    // inline dolly-in tween on slide 0 during the lift. Span the zoom over the
+    // full time a slide is on screen: the hold plus both 1.5s crossfades.
+    document.documentElement.style.setProperty("--hero-zoom-dur", `${hold + 3000}ms`);
+    document.documentElement.classList.add("hero-live");
+    timer = window.setInterval(advance, hold);
   };
 
   // Start only once the intro curtain is gone. intro.js animates and clears

@@ -100,8 +100,8 @@ src/
 ├── en/ (→ /en/)                 # mirror: index, studio, contact(+thanks), projects(index+detail), 404
 ├── assets/
 │   ├── css/{base.css, app.css, photoswipe.css}  # base = vendored grid+normalize; app = design system; photoswipe = vendored gallery
-│   ├── js/app.js + modules/* + vendor/{gsap,lenis,photoswipe.esm}.min.js
-│   ├── fonts/  icons/  uploads/  video/  # woff2; brand SVGs; CMS uploads; intro video (mp4+webm+poster)
+│   ├── js/app.js + modules/* + vendor/{gsap,lenis,photoswipe.esm,lottie}.min.js
+│   ├── fonts/ icons/ uploads/ video/ lottie/  # woff2; brand SVGs; CMS uploads; intro video (mp4+webm+poster); intro logo animation (logo.json)
 ├── redirects.njk sitemap.njk robots.njk   # → /_redirects, /sitemap.xml, /robots.txt
 admin/{index.html, config.yml}   # Decap CMS
 eleventy.config.js  Makefile  netlify.toml  package.json
@@ -188,9 +188,10 @@ light over a hero, ink when the header is solid). SVG favicon = `favicon-rp.svg`
 
 `src/assets/js/app.js` (`type="module" defer`) initialises small ES modules. Progressive
 enhancement: the site is fully usable with **no JS**, and every motion module respects
-`prefers-reduced-motion`. GSAP + Lenis are vendored under `assets/js/vendor/`; PhotoSwipe is
-vendored there too but **lazy-loaded** (dynamic `import()` on first gallery open, so only
-project pages fetch it).
+`prefers-reduced-motion`. GSAP + Lenis are vendored under `assets/js/vendor/`; PhotoSwipe
+(gallery) and Lottie (intro logo) are vendored there too but **lazy-loaded** via dynamic
+`import()` — PhotoSwipe on first gallery open (project pages only), Lottie on the first-visit
+intro (so repeat visits never fetch its ~670 KB of player + JSON).
 
 | Module       | Role                                                                                                        |
 | ------------ | ----------------------------------------------------------------------------------------------------------- |
@@ -202,13 +203,20 @@ project pages fetch it).
 | `gallery.js` | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); a full-screen muted
-`<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays, then a GSAP timeline
-crossfades the curtain up into the hero (hero scale + header slide-in), **capped at 3.5s** (or
+`<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays with a **Lottie logo
+animation** (`assets/lottie/logo.json`, vendored `lottie.min.js`) centred over it, then a GSAP
+timeline crossfades the curtain up into the hero (hero scale + header slide-in), **capped at 3.5s** (or
 sooner on video `ended`/error/blocked autoplay), and **clears its inline transforms on completion**
 (a leftover transform on the header would make it a containing block and trap the fixed mobile
 overlay). Repeat visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn
 signature (`firma-payoff-anim.svg` + its CSS/tween) is retained but **disabled** — see the
 restore note in `intro.njk`.
+
+**One logo, no duplication:** the hero logo (`.s-hero__sign` → `assets/icons/rp-logo.png`) is the
+Lottie's **final frame** rendered to a lightweight still (~21 KB, 1953×747). Same artwork, width
+(`--sign-w`) and white filter as the intro Lottie — which rests on that frame — so the animated
+logo settles seamlessly onto the static hero logo when the curtain lifts. The still is regenerated
+from `logo.json` if the animation changes (headless Lottie render → screenshot → pngquant).
 
 **Gallery:** `gallery.js` builds a PhotoSwipe `dataSource` from the `.g-trigger` buttons, using
 build-time `data-pswp-*` dims from the `{% pswp %}` shortcode; PhotoSwipe supplies all touch

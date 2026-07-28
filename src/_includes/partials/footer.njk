@@ -15,9 +15,9 @@
   <div class="s-footer__bottom">
     <span class="s-footer__copy">© {{ settings[lang].siteName }} {{ currentYear }} · P.Iva {{ settings[lang].vat }}</span>
     <nav class="s-footer__legal" aria-label="{{ 'Note legali' if lang == 'it' else 'Legal' }}">
-      {# TODO: point these at real pages once they exist #}
-      <a href="#">{{ ui[lang].privacy }}</a>
-      <a href="#">{{ ui[lang].cookie }}</a>
+      {# IT legal pages; EN footer links here too (legal stays in Italian) #}
+      <a href="/privacy-policy/">{{ ui[lang].privacy }}</a>
+      <a href="/cookie-policy/">{{ ui[lang].cookie }}</a>
     </nav>
   </div>
 </footer>

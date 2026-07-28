@@ -1,15 +1,12 @@
-{# Home intro curtain. Decorative (aria-hidden); shown only on first visit via
-   html.intro-play. JS plays the video then lifts the curtain into the hero;
-   no-JS / reduced-motion never show it.
-   NOTE: the signature lockup is disabled for now — the art-director video is the
-   curtain. To restore the signature, swap the <video> back for:
-     <div class="intro__sign">{% include "partials/firma-payoff-anim.svg" %}</div>
-   (and re-enable the signature-writing tween in intro.js). #}
+{# Home intro curtain. Decorative (aria-hidden); first visit only (html.intro-play).
+   The curtain shows the hero's first carousel image (+ the same overlay) while the
+   logo signs itself (Lottie); intro.js lifts it into the identical hero. no-JS /
+   reduced-motion skip it. The old hand-drawn signature (firma-payoff-anim.svg) is
+   retained but disabled. #}
 <div class="intro" data-intro aria-hidden="true">
-  <video class="intro__video" data-intro-video
-         poster="/assets/video/intro-poster.jpg"
-         muted playsinline autoplay preload="auto">
-    <source src="/assets/video/intro.webm" type="video/webm">
-    <source src="/assets/video/intro.mp4" type="video/mp4">
-  </video>
+  {% set slides = settings[lang].homeSlides %}
+  {% set introBg = slides[0].image if slides and slides.length else settings[lang].homeHero %}
+  {% image introBg, "", "100vw", { eager: true, class: "intro__bg" } %}
+  <div class="intro__overlay"></div>
+  <div class="intro__lottie" data-intro-lottie></div>
 </div>

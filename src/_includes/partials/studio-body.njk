@@ -1,19 +1,52 @@
+{# La firma / The Signature. Ordered narrative built from blocks (pair / text /
+   wide / cta), like the home page. Two sections: the intro closes on the Archive
+   CTA; the "origin" section after it sits on a tinted (--c-line) full-bleed band.
+   NB: the {% image %} async shortcode does NOT work inside a Nunjucks macro, so
+   the block loop is inlined in both sections rather than shared via a macro. #}
 <section class="section bleed page-top">
   <p class="eyebrow" data-reveal>{{ studio[lang].eyebrow }}</p>
   <h1 class="statement" data-reveal>{{ studio[lang].statement }}</h1>
   <div class="project-gallery home-blocks">
-    {% for img in studio[lang].pair %}
-      <figure data-reveal class="is-r-3-4">
-        {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
-      </figure>
+    {% for block in studio[lang].blocks %}
+      {% if block.type == 'text' %}
+        <div class="project-text" data-reveal><p>{{ block.text }}</p></div>
+      {% elif block.type == 'wide' %}
+        <figure data-reveal class="is-full is-r-16-9">
+          {% image block.image, block.alt, "100vw" %}
+        </figure>
+      {% elif block.type == 'pair' %}
+        {% for img in block.images %}
+          <figure data-reveal class="is-r-3-4">
+            {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
+          </figure>
+        {% endfor %}
+      {% elif block.type == 'cta' %}
+        <p class="cta-center" data-reveal>
+          <a href="{{ nav[lang].projects.url }}">{{ ui[lang].homeCta }}</a>
+        </p>
+      {% endif %}
     {% endfor %}
-    <div class="project-text" data-reveal><p>{{ studio[lang].paragraphs[0] }}</p></div>
-    <figure data-reveal class="is-full is-r-16-9">
-      {% image studio[lang].wide.image, studio[lang].wide.alt, "100vw" %}
-    </figure>
-    <div class="project-text" data-reveal><p>{{ studio[lang].paragraphs[1] }}</p></div>
   </div>
-  <p class="cta-center" data-reveal>
-    <a href="{{ nav[lang].projects.url }}">{{ ui[lang].homeCta }}</a>
-  </p>
+</section>
+
+<section class="s-firma-origin">
+  <div class="section bleed s-firma-origin__inner">
+    <div class="project-gallery home-blocks">
+      {% for block in studio[lang].blocksAfter %}
+        {% if block.type == 'text' %}
+          <div class="project-text" data-reveal><p>{{ block.text }}</p></div>
+        {% elif block.type == 'wide' %}
+          <figure data-reveal class="is-full is-r-16-9">
+            {% image block.image, block.alt, "100vw" %}
+          </figure>
+        {% elif block.type == 'pair' %}
+          {% for img in block.images %}
+            <figure data-reveal class="is-r-3-4">
+              {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
+            </figure>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 </section>

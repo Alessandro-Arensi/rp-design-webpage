@@ -28,7 +28,7 @@
   --fs-lead: clamp(1.9rem, 2.2vw, 2.6rem);
   --fs-headline: 4.2rem; /* fixed display headline: home / studio / archive / CTA */
   --fs-body: 1.7rem;
-  --fs-copy: 3rem; /* site-wide reading body copy: studio/project text, archive intro */
+  --fs-copy: 2.8rem; /* site-wide reading body copy: studio/project text, archive intro */
   --fs-small: 1.3rem;
   --fs-label: 1.15rem;
   --lh-tight: 1.07;
@@ -276,7 +276,8 @@ a {
 .cta-center a,
 .project-nav__title,
 .project-card__title,
-.contact-band address a {
+.contact-band address a,
+.form-note a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: currentColor;
@@ -286,7 +287,8 @@ a {
 .cta-center a:hover,
 .project-nav a:hover .project-nav__title,
 .project-card:hover .project-card__title,
-.contact-band address a:hover {
+.contact-band address a:hover,
+.form-note a:hover {
   color: var(--c-accent);
 }
 
@@ -472,15 +474,53 @@ a {
   will-change: transform;
   --intro-cover-shift: 4px;
 }
-/* Full-screen curtain video (art-director dolly-in). Covers the viewport; the
-   dark .intro bg shows only in any letterbox gap before it loads. */
-.intro__video {
+/* Curtain background = the hero's first carousel image + the same overlay, so the
+   lift reveals an identical hero underneath (seamless). Both cover the viewport
+   behind the logo (z-0); the overlay sits above the photo (later in the DOM). */
+/* the {% image %} shortcode wraps the bg in a <picture>; take it out of grid flow
+   (like the hero's absolute .s-hero__media) so the ONLY in-flow grid item is the
+   logo — otherwise the picture adds a row and shifts the logo off centre. */
+.intro picture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.intro__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 0;
+}
+.intro__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* matches .s-hero__overlay so the tone is identical before/after the lift */
+  background: linear-gradient(
+    to bottom,
+    rgba(22, 17, 10, 0.55) 0%,
+    rgba(22, 17, 10, 0.12) 100%
+  );
+}
+/* Logo animation (Lottie) over the curtain image. Stays in the grid flow so the
+   curtain's place-items:center centres it; z-index lifts it above the bg/overlay.
+   Same width + max-width as .s-hero__sign so it lands on the hero logo when the
+   curtain lifts; brightness(0) invert(1) forces the artwork white (matches hero). */
+.intro__lottie {
+  position: relative;
+  z-index: 1;
+  width: var(--sign-w);
+  max-width: 90%;
+  aspect-ratio: 1953 / 747;
+  pointer-events: none;
+  filter: brightness(0) invert(1);
+}
+.intro__lottie svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 /* NOTE: signature disabled for now — the intro-cover.jpg (::before) existed only
    to align the signature's underline groove, so it's off. To restore the
@@ -589,14 +629,44 @@ html.lenis body {
 }
 .s-hero__slide {
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transform: scale(1);
+  transition:
+    opacity 1.5s ease-in-out,
+    transform 1.5s linear;
+  will-change: transform;
 }
 .s-hero__slide.is-active {
   opacity: 1;
 }
+/* Ken Burns: very slow, subtle zoom-in that runs the whole time a slide is on
+   screen. Gated behind .hero-live (added by hero.js once the slideshow starts) so
+   it never overrides GSAP's inline dolly-in tween on slide 0 during the intro
+   curtain lift. --hero-zoom-dur is set from JS to match the slide interval (+ the
+   crossfades) so the creep spans the full picture duration and never finishes early. */
+
+/* Resting scale = the zoom END, so a slide that just lost is-active holds its
+   zoomed size (and eases toward the end via the transition) while it crossfades
+   out — no flash of the unzoomed image. The active slide's animation overrides
+   this, restarting from scale(1); that reset lands while the slide is still at
+   opacity 0, so it's invisible. linear keeps the creep pace constant. */
+.hero-live .s-hero__slide {
+  transform: scale(1.08);
+}
+.hero-live .s-hero__slide.is-active {
+  animation: heroZoom var(--hero-zoom-dur, 9s) linear forwards;
+}
+@keyframes heroZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .s-hero__slide {
     transition: none;
+    animation: none;
   }
 }
 .s-hero__overlay {
@@ -660,17 +730,64 @@ html.lenis body {
 .home-intro .cta-center {
   margin-block-start: calc(var(--section-y) - var(--sp-6));
 }
-/* studio: same divider line as the project-nav sits above the CTA. The CTA is
-   centred in the band between the divider and the footer — the section's bottom
-   padding is trimmed to --sp-7 and the CTA's padding-top matches it, so the gap
-   above == below while keeping the band compact. */
-body[data-page="studio"] .page-top {
-  padding-bottom: var(--sp-7);
+/* La firma (studio) places its Archive CTA mid-page, inside the block grid, with
+   more paragraphs after it — so it spans the full grid width and takes balanced
+   vertical breathing room instead of the closing-CTA's section-height margin. */
+.home-blocks .cta-center {
+  grid-column: 1 / -1;
+  margin-block: var(--sp-5);
 }
-body[data-page="studio"] .cta-center {
-  border-top: 1px solid var(--c-line);
-  margin-block-start: var(--sp-7);
-  padding-top: var(--sp-7);
+/* La firma "origin" section after the CTA: full-bleed tinted band (--c-line),
+   content re-centred in the same 108rem column as the rest of the page. */
+.s-firma-origin {
+  background: var(--c-line);
+}
+.s-firma-origin__inner {
+  max-width: var(--maxw-content);
+  margin-inline: auto;
+}
+
+/* ----- legal pages (privacy / cookie) ---------------------------- */
+.legal {
+  max-width: 76rem;
+  margin-inline: auto;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.legal__title {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--sp-5);
+}
+.legal h2 {
+  font-size: var(--fs-h3);
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-2);
+}
+.legal h3 {
+  font-size: var(--fs-lead);
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-1);
+}
+.legal p {
+  margin: 0 0 1.4rem;
+}
+.legal ul {
+  margin: 0 0 1.6rem;
+  padding-left: 2.4rem;
+}
+.legal li {
+  margin-bottom: 0.6rem;
+}
+.legal a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+/* contact form privacy notice (GDPR art. 13 link at point of collection) */
+.form-note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-small);
+  color: var(--c-ink-soft);
 }
 /* closing CTA (home / studio / archive): headline-sized. Colour + underline come
    from the site-wide link rule (ink → accent, 1px). */
@@ -789,7 +906,7 @@ body[data-page="studio"] .cta-center {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   /* equal gap both axes: stacked images sit as far apart as side-by-side ones */
-  gap: var(--sp-4);
+  gap: var(--sp-2);
 }
 /* the crop box lives on the FIGURE so it applies with or without a lightbox
    trigger (home / studio use plain figures, project pages wrap a button) */

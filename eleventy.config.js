@@ -16,6 +16,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/fonts": "assets/fonts" });
   eleventyConfig.addPassthroughCopy({ "src/assets/icons": "assets/icons" });
   eleventyConfig.addPassthroughCopy({ "src/assets/video": "assets/video" });
+  eleventyConfig.addPassthroughCopy({ "src/assets/lottie": "assets/lottie" });
   eleventyConfig.addPassthroughCopy({ "src/assets/uploads": "assets/uploads" });
   eleventyConfig.addPassthroughCopy("admin");
   eleventyConfig.addPassthroughCopy("favicon.ico");

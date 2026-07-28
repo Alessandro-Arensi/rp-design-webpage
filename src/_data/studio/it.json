@@ -1,22 +1,60 @@
 {
-  "eyebrow": "Studio",
-  "statement": "Su ogni nostro lavoro c'è sempre l'occhio di chi vuole bene a quella casa.",
-  "pair": [
+  "eyebrow": "La firma",
+  "statement": "Da oltre 30 anni interpretiamo il desiderio di chi cerca l'unicità.",
+  "blocks": [
     {
-      "image": "/assets/uploads/studio/01.jpg",
-      "alt": "Roberto Piana e il padre Giancarlo al tavolo di lavoro"
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/studio/01.jpg", "alt": "Roberto Piana e il padre Giancarlo al tavolo di lavoro" },
+        { "image": "/assets/uploads/studio/02.jpg", "alt": "Campioni di materiali e finiture in showroom" }
+      ]
     },
     {
-      "image": "/assets/uploads/studio/02.jpg",
-      "alt": "Campioni di materiali e finiture in showroom"
-    }
+      "type": "text",
+      "text": "Ogni progetto nasce dall'esperienza, dalla conoscenza dei materiali e da una rigorosa selezione di maestranze. Perché una casa deve emozionare, oggi, e conservare il suo valore nel tempo."
+    },
+    {
+      "type": "wide",
+      "image": "/assets/uploads/studio/03.jpg",
+      "alt": "Roberto Piana sceglie materiali e riferimenti su tablet"
+    },
+    {
+      "type": "text",
+      "text": "Affidarsi a noi significa essere accompagnati da professionisti che pensano a tutto, ancora prima che ce ne sia bisogno. Vivere il sogno della propria casa, lasciando a noi la complessità di realizzarlo."
+    },
+    {
+      "type": "text",
+      "text": "Parte della nostra firma è la continuità. Anche quando le lavorazioni sono concluse, garantiamo un punto di riferimento unico per coordinare con discrezione e tempestività ogni necessità successiva."
+    },
+    { "type": "cta" }
   ],
-  "wide": {
-    "image": "/assets/uploads/studio/03.jpg",
-    "alt": "Roberto Piana sceglie materiali e riferimenti su tablet"
-  },
-  "paragraphs": [
-    "Quando un cliente ci affida la sua casa, il nostro lavoro non finisce con la consegna delle chiavi. Una casa deve durare, funzionare, invecchiare bene. Servono conoscenze, fornitori affidabili e materiali giusti: li cerchiamo, li testiamo e li collaudiamo ogni giorno.",
-    "E quando, nel tempo, qualcosa va rivisto, torniamo: controlliamo e interveniamo con discrezione. Con noi resta attivo un servizio di manutenzione e cura continuativa, per tutta la vita dell'immobile. Dal primo giorno c'è un unico interlocutore, un unico numero da chiamare: per ogni scelta, dubbio o urgenza. O semplicemente per un consiglio."
+  "blocksAfter": [
+    {
+      "type": "text",
+      "text": "È questa l'eredità professionale di Giancarlo Piana: un'architettura fondata sull'ascolto, sulla misura e sulla capacità di leggere la vocazione nascosta di ogni spazio."
+    },
+    {
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bagno con mattonelle verdi" },
+        { "image": "/assets/uploads/progetto-1/04.jpg", "alt": "Camera da letto con dettagli rossi" }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Non un archivio nostalgico, ma un punto d'origine."
+    },
+    {
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/progetto-2/01.jpg", "alt": "Salone con soppalco" },
+        { "image": "/assets/uploads/progetto-2/02.jpg", "alt": "Salone con soppalco e pubblicazione" }
+      ]
+    },
+    {
+      "type": "wide",
+      "image": "/assets/uploads/progetto-2/03.jpg",
+      "alt": "Bagno di una suite"
+    }
   ]
 }

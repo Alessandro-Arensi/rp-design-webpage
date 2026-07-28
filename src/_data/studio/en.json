@@ -1,22 +1,60 @@
 {
-  "eyebrow": "Studio",
-  "statement": "Because every project we deliver remains under the watchful eye of someone who truly cares for that home.",
-  "pair": [
+  "eyebrow": "The Signature",
+  "statement": "For over 30 years, we have interpreted the vision of those who seek the unique.",
+  "blocks": [
     {
-      "image": "/assets/uploads/studio/01.jpg",
-      "alt": "Roberto Piana and his father Giancarlo at the work table"
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/studio/01.jpg", "alt": "Roberto Piana and his father Giancarlo at the work table" },
+        { "image": "/assets/uploads/studio/02.jpg", "alt": "Material and finish samples in the showroom" }
+      ]
     },
     {
-      "image": "/assets/uploads/studio/02.jpg",
-      "alt": "Material and finish samples in the showroom"
-    }
+      "type": "text",
+      "text": "Every project is born from experience, a deep knowledge of materials, and a rigorous selection of master craftsmen. Because a home must inspire emotion today, and retain its value over time."
+    },
+    {
+      "type": "wide",
+      "image": "/assets/uploads/studio/03.jpg",
+      "alt": "Roberto Piana selecting materials and references on a tablet"
+    },
+    {
+      "type": "text",
+      "text": "Choosing us means being guided by professionals who anticipate every detail, even before the need arises. Live the dream of your home, and leave the complexity of its creation to us."
+    },
+    {
+      "type": "text",
+      "text": "Continuity is part of our Signature. Even after the work is completed, we provide a single point of contact to coordinate any future needs with discretion and promptness."
+    },
+    { "type": "cta" }
   ],
-  "wide": {
-    "image": "/assets/uploads/studio/03.jpg",
-    "alt": "Roberto Piana selecting materials and references on a tablet"
-  },
-  "paragraphs": [
-    "When clients trust us with their home, our work doesn't end with the keys. A home must endure, be functional, and age well. It requires technical expertise, trusted suppliers, and the right materials: all of which we source, test, and verify every day.",
-    "If a space needs refining over time, we return. We provide ongoing care and maintenance for the entire life of the property. From day one, you have one single contact and one number to call: for every decision, doubt, or emergency. Or simply for a piece of advice."
+  "blocksAfter": [
+    {
+      "type": "text",
+      "text": "This is Giancarlo Piana's professional legacy: an architecture founded on listening, a sense of proportion, and the ability to perceive the hidden vocation of every space."
+    },
+    {
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bathroom with green tiles" },
+        { "image": "/assets/uploads/progetto-1/04.jpg", "alt": "Bedroom with red details" }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "Not a nostalgic archive, but a point of origin."
+    },
+    {
+      "type": "pair",
+      "images": [
+        { "image": "/assets/uploads/progetto-2/01.jpg", "alt": "Living room with mezzanine" },
+        { "image": "/assets/uploads/progetto-2/02.jpg", "alt": "Living room with mezzanine and featured publication" }
+      ]
+    },
+    {
+      "type": "wide",
+      "image": "/assets/uploads/progetto-2/03.jpg",
+      "alt": "Suite bathroom"
+    }
   ]
 }
