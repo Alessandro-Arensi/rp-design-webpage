@@ -85,7 +85,7 @@ is set by directory data (`src/it/it.json` → `{lang:"it"}`, `src/en/en.json` �
 ```
 src/
 ├── _data/                       # global + per-language content (folder = key)
-│   ├── site.json languages.js   # site-wide config + language list
+│   ├── site.json languages.js   # canonical url (single home for the domain) + langs + form-subject copy
 │   ├── settings/{it,en}.json    # brand: siteName, tagline, social, COLOURS, FONTS, homeHero, homeSlides
 │   ├── nav/{it,en}.json  ui/{it,en}.json
 │   ├── contact/{it,en}.json  studio/{it,en}.json  home/{it,en}.json
@@ -95,20 +95,28 @@ src/
 ├── _includes/
 │   ├── layouts/base.njk         # <html>, head, header, {{content}}, footer, scripts
 │   └── partials/                # head, header, nav, lang-toggle, footer, intro, firma-payoff-anim(svg),
-│                                #   home-body, studio-body, projects-index-body, error-body, netlify-identity
+│                                #   home-body, studio-body, projects-index-body, contact-body, error-body, netlify-identity
 ├── it/  (→ /)                   # index, studio, contatti(+grazie), progetti(index+detail), 404
 ├── en/ (→ /en/)                 # mirror: index, studio, contact(+thanks), projects(index+detail), 404
 ├── assets/
 │   ├── css/{base.css, app.css, photoswipe.css}  # base = vendored grid+normalize; app = design system; photoswipe = vendored gallery
 │   ├── js/app.js + modules/* + vendor/{gsap,lenis,photoswipe.esm,lottie}.min.js
 │   ├── fonts/ icons/ uploads/ video/ lottie/  # woff2; brand SVGs; CMS uploads; intro video (mp4+webm+poster); intro logo animation (logo.json)
-├── redirects.njk sitemap.njk robots.njk   # → /_redirects, /sitemap.xml, /robots.txt
+│   ├── favicons/                # apple-touch + android-chrome + favicon PNGs — copied to the site ROOT
+├── redirects.njk sitemap.njk robots.njk site.webmanifest.njk  # → /_redirects, /sitemap.xml, /robots.txt, /site.webmanifest
 admin/{index.html, config.yml}   # Decap CMS
-eleventy.config.js  Makefile  netlify.toml  package.json
+eleventy.config.js  Makefile  netlify.toml  package.json  favicon.ico
 ```
 
-Root favicons (`favicon.ico`, PNGs, `site.webmanifest`) + `admin/` are passthrough-copied.
-The raw client delivery bundle (`assets/` at repo root) and `docs/` are **gitignored**.
+`src/assets/favicons/*` is passthrough-copied to the site **root** (`{ "src/assets/favicons": "." }`),
+because browsers and iOS probe `/favicon.ico` and `/apple-touch-icon.png` without reading any
+`<link>`, and the `og:image` URL is already public. `favicon.ico` is the one icon still at repo
+root. `site.webmanifest` is **generated** from `src/site.webmanifest.njk` (like `robots.txt` /
+`sitemap.xml`), so its `name` and colours derive from `settings[it]` instead of being retyped.
+`admin/` is passthrough-copied.
+The raw client delivery bundle (`assets/` at repo root — copy sheet, WEB KIT, mockups, photos,
+source fonts/logos) is **tracked but never shipped**: nothing outside `src/` reaches `dist/`.
+`docs/` is **gitignored**.
 
 ---
 
@@ -149,7 +157,8 @@ see `src/assets/js/modules/hero.js`.
   `/en/* → /en/404.html [404]`, `/* → /404.html [404]`. Resolved by Netlify at the edge —
   **not** by the dev server (locally `/en/*` shows the IT 404; verify on a deploy).
 - Filters (`eleventy.config.js`): `localeHref`, `localeAlternates`, `field(obj,name,lang)`
-  (picks `title_it`/`title_en` etc.), `cover` (first gallery image with an image).
+  (picks `title_it`/`title_en` etc.), `cover` (first gallery image with an image),
+  `host` (strips the scheme off `site.url` for prose/email copy).
 - Shortcodes: `{% image %}` (responsive `<picture>`), `{% pswp %}` (bakes full-res
   `data-pswp-*` dims onto gallery triggers for PhotoSwipe). Global data: `currentYear`
   (build-time year, used in the footer © / P.Iva line).
@@ -201,6 +210,7 @@ intro (so repeat visits never fetch its ~670 KB of player + JSON).
 | `header.js`  | Header colour state (transparent over hero → solid on scroll)                                                |
 | `reveal.js`  | Scroll reveals via IntersectionObserver                                                                      |
 | `gallery.js` | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
+| `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line) |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); a full-screen muted
 `<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays with a **Lottie logo
@@ -246,7 +256,10 @@ stylelint (vendored) and `vendor/` from eslint/terser.
   UI; invite the client by email). Decap supports git-gateway; Sveltia does not — that's why
   Decap was chosen.
 - **Contact form** posts via Netlify Forms (`data-netlify`, honeypot, hidden `form-name`,
-  success → thank-you page).
+  success → thank-you page). A hidden `subject` field drives the notification email's
+  subject line: `site.formSubject` is the no-JS fallback, and `contact-form.js` substitutes
+  `{name}` into `site.formSubjectNamed` (both deliberately Italian — studio inbox, not
+  visitor-facing) when JS runs.
 - Deployed from the `piana-design-build` branch to a Netlify subdomain; `make deploy` (gh-pages)
   exists only as a fallback.
 
@@ -275,8 +288,9 @@ assess text over images) — a scrim gradient guarantees legibility; verify visu
   the **Contact page** copy is placeholder (the client CSV had none).
 - **English is a translation** of the Italian copy — have a native/client review it.
 - **Raster icons are still generic:** the SVG browser favicon is the RP mark, but
-  `apple-touch-icon.png`, `favicon.ico`, and the `android-chrome` PWA icons need regenerating from
-  the RP monogram.
+  `src/assets/favicons/apple-touch-icon.png`, `favicon.ico`, and the `android-chrome` PWA icons
+  need regenerating from the RP monogram. (`favicon-16x16.png` / `favicon-32x32.png` ship but
+  nothing links them — `head.njk` uses the SVG favicon only; drop them or add the links.)
 - Local dev (and `netlify dev`) do **not** apply the 404 `_redirects` — language-404 only works on
   a real Netlify deploy.
 
@@ -288,4 +302,5 @@ Launchpad v1, live on a Netlify subdomain. To go to production:
 2. Add real **projects** + **Contact** copy; review the EN translation.
 3. Regenerate `apple-touch`/`favicon.ico`/PWA PNGs from the RP mark.
 4. Final `make audit` (Lighthouse/CWV) + responsive/keyboard pass.
-5. Merge `piana-design-build` → `main`, point Netlify at `main`, attach the `piana.design` domain.
+5. Merge `piana-design-build` → `main`, point Netlify at `main`, attach the
+   `www.robertopianastudio.it` domain (already the canonical `site.url`).

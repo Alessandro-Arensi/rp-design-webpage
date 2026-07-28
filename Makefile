@@ -1,6 +1,6 @@
 # =====================================================================
-#  PIANA — build & tooling (Eleventy + Sveltia CMS, bilingual)
-#  Reference : PROJECT_ANALYSIS.md, docs/superpowers/specs, .claude/plans
+#  Roberto Piana — build & tooling (Eleventy + Decap CMS, bilingual)
+#  Reference : README.md
 #  Usage     : `make` or `make help` lists every target.
 # =====================================================================
 
@@ -10,6 +10,8 @@ DIST     ?= dist
 REPORTS  ?= reports
 BIN      := ./node_modules/.bin
 ELEVENTY := $(BIN)/eleventy
+# canonical origin — read from the data layer so the domain has one home
+SITE_URL := $(shell node -p "require('./src/_data/site.json').url" 2>/dev/null)
 
 # open command: macOS `open`, else `xdg-open`
 OPEN := $(shell command -v open >/dev/null 2>&1 && echo open || echo xdg-open)
@@ -79,7 +81,7 @@ a11y: build-dev ## Accessibility audit (WCAG2AA via pa11y-ci) over the built sit
 	@python3 -m http.server $(PORT) --directory "$(DIST)" >/dev/null 2>&1 & echo $$! > .srv.pid; \
 	  node -e 'setTimeout(()=>{}, 2000)'; \
 	  $(BIN)/pa11y-ci --sitemap http://localhost:$(PORT)/sitemap.xml \
-	    --sitemap-find "https://piana.design" --sitemap-replace "http://localhost:$(PORT)"; \
+	    --sitemap-find "$(SITE_URL)" --sitemap-replace "http://localhost:$(PORT)"; \
 	  status=$$?; kill `cat .srv.pid` 2>/dev/null; rm -f .srv.pid; exit $$status
 
 size: ## Report built asset sizes and flag images > 500 KB

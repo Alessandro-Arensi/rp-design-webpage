@@ -19,13 +19,11 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/lottie": "assets/lottie" });
   eleventyConfig.addPassthroughCopy({ "src/assets/uploads": "assets/uploads" });
   eleventyConfig.addPassthroughCopy("admin");
+  // favicons/PWA icons are authored under src/ but MUST be served from the site
+  // root: browsers and iOS probe /favicon.ico and /apple-touch-icon.png without
+  // reading any <link>, and the og:image URL is already public.
+  eleventyConfig.addPassthroughCopy({ "src/assets/favicons": "." });
   eleventyConfig.addPassthroughCopy("favicon.ico");
-  eleventyConfig.addPassthroughCopy("favicon-16x16.png");
-  eleventyConfig.addPassthroughCopy("favicon-32x32.png");
-  eleventyConfig.addPassthroughCopy("apple-touch-icon.png");
-  eleventyConfig.addPassthroughCopy("android-chrome-192x192.png");
-  eleventyConfig.addPassthroughCopy("android-chrome-512x512.png");
-  eleventyConfig.addPassthroughCopy("site.webmanifest");
 
   eleventyConfig.addWatchTarget("src/assets/");
 
@@ -152,6 +150,11 @@ export default function (eleventyConfig) {
     (all || [])
       .filter((p) => p.data.translationKey === key)
       .map((p) => ({ lang: p.data.lang, url: p.url })),
+  );
+  // bare display host for prose and email copy, so site.url stays the single
+  // place the domain is written: https://www.example.it → www.example.it
+  eleventyConfig.addFilter("host", (url) =>
+    (url || "").replace(/^https?:\/\//, ""),
   );
   // pick a per-language field: project.title_it / project.title_en via field("title", lang)
   eleventyConfig.addFilter("field", (obj, name, lang) =>

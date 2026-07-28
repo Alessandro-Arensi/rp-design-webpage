@@ -1,6 +1,7 @@
 /* PIANA — app entry. Progressive enhancement: fully usable with no JS.
  * Lenis (smooth scroll) + GSAP intro are layered on top, both guarded for
  * reduced-motion / missing libs. */
+import { initContactForm } from "./modules/contact-form.js";
 import { initGallery } from "./modules/gallery.js";
 import { initHeader } from "./modules/header.js";
 import { initHeroSlideshow } from "./modules/hero.js";
@@ -16,3 +17,4 @@ initNav();
 initHeader();
 initReveal();
 initGallery();
+initContactForm();

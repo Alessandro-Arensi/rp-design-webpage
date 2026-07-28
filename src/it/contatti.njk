@@ -5,32 +5,4 @@ pageKey: contact
 translationKey: contact
 title: Contatti
 ---
-<section class="section bleed page-top contact-head">
-  <p class="eyebrow" data-reveal>{{ contact[lang].heading }}</p>
-  <h1 class="statement" data-reveal>{{ contact[lang].intro }}<br>{{ contact[lang].introLine2 }}</h1>
-</section>
-
-<section class="contact-band">
-  <div class="contact-band__inner">
-    <div class="contact-form" data-reveal>
-      <h2 class="contact-band__title">{{ contact[lang].formTitle }}</h2>
-      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contatti/grazie/">
-        <input type="hidden" name="form-name" value="contact">
-        <p hidden><label>Non compilare <input type="text" name="bot-field"></label></p>
-        <label>{{ ui[lang].name }}<input type="text" name="name" required></label>
-        <label>{{ ui[lang].email }}<input type="email" name="email" required></label>
-        <label>{{ ui[lang].message }}<textarea name="message" rows="5" required></textarea></label>
-        <button class="btn btn--stroke" type="submit">{{ ui[lang].send }}</button>
-        <p class="form-note">Inviando il modulo dichiari di aver letto l’<a href="/privacy-policy/">informativa privacy</a>.</p>
-      </form>
-    </div>
-    <div class="contact-showroom" data-reveal>
-      <h2 class="contact-band__title">{{ contact[lang].showroom.heading }}</h2>
-      <address>
-        <a href="https://maps.app.goo.gl/7rcYGewRCh8eLsQLA" target="_blank" rel="noopener">{{ contact[lang].address.street }}<br>{{ contact[lang].address.zip }} {{ contact[lang].address.city }}, {{ contact[lang].address.country }}</a>
-        {% if contact[lang].phone %}<a class="contact-phone" href="tel:{{ contact[lang].phone | replace(' ', '') }}">{{ contact[lang].phone | replace(' ', '&nbsp;') | safe }}</a>{% endif %}
-      </address>
-      <p class="contact-quote">“{{ contact[lang].showroom.text }}”</p>
-    </div>
-  </div>
-</section>
+{% include "partials/contact-body.njk" %}

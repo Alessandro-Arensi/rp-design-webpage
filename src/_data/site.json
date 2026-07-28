@@ -1,6 +1,7 @@
 {
-  "name": "PIANA",
-  "url": "https://piana.design",
+  "url": "https://www.robertopianastudio.it",
   "defaultLang": "it",
-  "langs": ["it", "en"]
+  "langs": ["it", "en"],
+  "formSubject": "Nuovo messaggio dal sito {domain}",
+  "formSubjectNamed": "Nuovo messaggio da {name} — {domain}"
 }
