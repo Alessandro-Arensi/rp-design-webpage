@@ -277,7 +277,8 @@ a {
 .project-nav__title,
 .project-card__title,
 .contact-band address a,
-.form-note a {
+.form-note a,
+.thanks-back a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-decoration-color: currentColor;
@@ -288,7 +289,8 @@ a {
 .project-nav a:hover .project-nav__title,
 .project-card:hover .project-card__title,
 .contact-band address a:hover,
-.form-note a:hover {
+.form-note a:hover,
+.thanks-back a:hover {
   color: var(--c-accent);
 }
 
@@ -788,6 +790,12 @@ html.lenis body {
   margin-top: var(--sp-3);
   font-size: var(--fs-small);
   color: var(--c-ink-soft);
+}
+/* thank-you page: give the back link air below the message, and size it just a
+   couple px under the .statement message (tracks its clamp at every breakpoint) */
+.thanks-back {
+  margin-top: var(--sp-6);
+  font-size: calc(var(--fs-h2) - 1rem);
 }
 /* closing CTA (home / studio / archive): headline-sized. Colour + underline come
    from the site-wide link rule (ink → accent, 1px). */
