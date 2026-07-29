@@ -4,9 +4,9 @@ order: 6
 featured: false
 draft: false
 title_it: "Cinema privato"
-title_en: "Private Cinema"
-statement_it: "Vedere il potenziale, dove altri vedono un limite."
-statement_en: "Seeing potential where others see a limitation."
+title_en: "Private cinema"
+statement_it: "L'arte dell'intrattenimento privato."
+statement_en: "The art of private entertainment."
 gallery:
   - type: image
     orientation: verticale
@@ -15,8 +15,8 @@ gallery:
     orientation: verticale
     image: /assets/uploads/progetto-5/02.jpg
   - type: text
-    text_it: "Il cinemino nasce in una stanza angusta, vincolata dalle tubature. Non potendo arretrare le pareti, lo spazio è stato costruito in profondità: tre livelli a gradoni, una zona relax, un frigorifero nascosto, uno schermo OLED da 100 pollici."
-    text_en: "This private screening room was carved out of a cramped space heavily constrained by existing pipework. Since the walls couldn't be pushed back, the room was developed vertically: featuring a three-tiered layout, a dedicated lounge area, a concealed fridge, and a 100-inch OLED screen."
+    text_it: "Due file di divani accolgono la visione in un ambiente concepito per il massimo comfort, mentre una terza, più raccolta e informale, offre la possibilità di godersi un drink o un sigaro senza interrompere lo spettacolo. Un'eleganza misurata, fatta di dettagli che si rivelano con naturalezza: frigoriferi e dotazioni celati alla vista, perfettamente integrati nell'architettura, e nicchie illuminate che scandiscono lo spazio con una luce morbida e scenografica. Un ambiente dove la tecnologia scompare, il comfort si rivela e ogni momento della visione diventa un'esperienza."
+    text_en: "Two rows of sofas invite viewing in an environment designed for absolute comfort, while a third, more intimate and informal row, offers the chance to enjoy a drink or a cigar without interrupting the show. A measured elegance, made of details that reveal themselves naturally: refrigerators and amenities concealed from view, perfectly integrated into the architecture, and illuminated niches that punctuate the space with soft, scenic lighting. An environment where technology disappears, comfort takes center stage, and every moment of viewing becomes an experience."
   - type: image
     orientation: orizzontale
     image: /assets/uploads/progetto-5/03.jpg

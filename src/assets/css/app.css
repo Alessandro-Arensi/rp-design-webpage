@@ -925,11 +925,11 @@ html.lenis body {
 .project-gallery figure.is-full {
   grid-column: 1 / -1;
 }
-.project-gallery figure.is-r-3-4 {
-  aspect-ratio: 3 / 4;
-}
+/* vertical images use a single site-wide standard: 5:4 portrait (4/5). Both
+   vertical ratio tokens resolve to it, so every "verticale" image matches. */
+.project-gallery figure.is-r-3-4,
 .project-gallery figure.is-r-9-16 {
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 4 / 5;
 }
 .project-gallery figure.is-r-4-3 {
   aspect-ratio: 4 / 3;
@@ -1066,10 +1066,18 @@ body[data-page="studio"] .statement {
   margin-block: 0 var(--sp-5);
 }
 /* address links out to Google Maps; uses the site-wide link treatment above */
-/* phone sits on its own line below the address, same display treatment */
+/* labelled phone numbers below the address — smaller than the display address,
+   the number itself keeps the site-wide link treatment (.contact-band address a) */
 .contact-phone {
   display: block;
   margin-top: var(--sp-3);
+  font-size: var(--fs-body);
+  line-height: 1.4;
+}
+.contact-phone__label {
+  display: block;
+  color: var(--c-ink-soft);
+  font-size: var(--fs-small);
 }
 .contact-quote {
   color: var(--c-accent);
@@ -1077,6 +1085,27 @@ body[data-page="studio"] .statement {
   font-size: var(--fs-h3);
   line-height: 1.4;
   max-width: 44rem;
+}
+/* two showroom images at the foot of the contact page (2-up, content-width) */
+.contact-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-2);
+  max-width: var(--maxw-content);
+  margin-inline: auto;
+  padding-block: var(--sp-6);
+}
+.contact-gallery figure {
+  margin: 0;
+}
+.contact-gallery picture {
+  display: block;
+}
+.contact-gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
 }
 /* inputs sit on the sand background — darker rule so the lines read */
 .contact-band input,

@@ -33,6 +33,8 @@ export default function (eleventyConfig) {
   //   verticale   → 3:4 or 9:16   (half a row; MUST come two-per-row)
   //   orizzontale → 4:3 or 16:9   (whole row; sits alone)
   // then tag each image (_wide + _rclass) and fail the build on a lone vertical.
+  // NOTE: both vertical tokens render at the site-wide 5:4 (4/5) standard in CSS
+  // (.is-r-3-4 / .is-r-9-16); the token only drives pairing, not the crop.
   eleventyConfig.addCollection("projects", async (api) => {
     const projects = api
       .getFilteredByGlob("src/_projects/*.md")

@@ -1,14 +1,14 @@
 {
   "heading": "Contact",
   "intro": "Every project begins with an encounter.",
-  "introLine2": "Where an intuition becomes a sketch.",
-  "formTitle": "For enquiries made directly, or through a family office, house manager or personal assistant.",
+  "introLine2": "We build yours.",
+  "formTitle": "For direct inquiries, including those via family offices, house managers, or personal assistants.",
   "emails": {
     "general": "info@rpinteriordesign.it"
   },
   "showroom": {
     "heading": "Visit the Showroom",
-    "text": "Where an intuition becomes a sketch, a sketch becomes material, and your home begins to reveal itself."
+    "text": "We manage complexity to deliver a flawless result."
   },
   "address": {
     "street": "Via Paolo Giovio 3",
@@ -17,5 +17,9 @@
     "country": "Italy"
   },
   "mapsUrl": "https://maps.google.com/",
+  "phones": [
+    { "label": "For new projects and initial consultations", "number": "+39 02 37 011 944" },
+    { "label": "To schedule an appointment", "number": "+39 02 37 011 945" }
+  ],
   "phone": "+39 02 37 011 942"
 }

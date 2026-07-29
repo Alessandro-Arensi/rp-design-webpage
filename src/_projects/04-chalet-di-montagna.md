@@ -3,9 +3,9 @@ slug: chalet-di-montagna
 order: 3
 draft: false
 title_it: "Chalet di montagna"
-title_en: "Alpine Chalet"
-statement_it: "Il paesaggio d'alta quota entra nella casa senza diventare tema."
-statement_en: "The high-altitude landscape flows into the home, escaping the clichés of a themed interior."
+title_en: "Alpine chalet"
+statement_it: "Il paesaggio d'alta quota entra in casa, senza diventare tema."
+statement_en: "The high-altitude landscape enters the home, without becoming a cliché."
 gallery:
   - type: image
     orientation: verticale
@@ -14,8 +14,8 @@ gallery:
     orientation: verticale
     image: /assets/uploads/progetto-4/02.jpg
   - type: text
-    text_it: "La solidità della roccia torna nel tavolino da caffè, costruito come un piccolo blocco di marmo e legno. Le linee morbide del divano, invece, richiamano le montagne coperte di neve: curve, silenziose, continue."
-    text_en: "The raw solidity of the stone returns in the coffee table, crafted from a single block of marble and wood. In contrast, the soft lines of the sofa echo the snow-covered mountains outside: curved, silent, and seamless."
+    text_it: "La solidità della montagna si traduce nel blocco materico del tavolino in marmo e legno. In continuità con le linee avvolgenti e morbide del divano, che richiamano il profilo delle montagne innevate."
+    text_en: "The solidity of the mountain translates into the textural block of the marble and wood coffee table. This flows in continuity with the enveloping, soft lines of the sofa, which echo the profile of the snow-capped peaks."
   - type: image
     orientation: verticale
     image: /assets/uploads/progetto-4/03.jpg

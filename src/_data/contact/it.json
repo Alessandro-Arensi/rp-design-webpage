@@ -8,7 +8,7 @@
   },
   "showroom": {
     "heading": "Vieni in showroom",
-    "text": "Dove un'intuizione diventa schizzo, lo schizzo diventa materia, e la tua casa comincia a rivelarsi."
+    "text": "Gestiamo la complessità restituendo un risultato impeccabile."
   },
   "address": {
     "street": "Via Paolo Giovio 3",
@@ -17,5 +17,9 @@
     "country": "Italia"
   },
   "mapsUrl": "https://maps.google.com/",
+  "phones": [
+    { "label": "Per nuovi progetti e prime valutazioni", "number": "+39 02 37 011 944" },
+    { "label": "Per richiedere un appuntamento", "number": "+39 02 37 011 945" }
+  ],
   "phone": "+39 02 37 011 942"
 }
