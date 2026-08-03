@@ -37,7 +37,7 @@
       "type": "pair",
       "images": [
         { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bathroom with green tiles" },
-        { "image": "/assets/uploads/progetto-1/04.jpg", "alt": "Bedroom with red details" }
+        { "image": "/assets/uploads/studio/05.webp", "alt": "Bedroom with red details" }
       ]
     },
     {
@@ -45,16 +45,14 @@
       "text": "Not a nostalgic archive, but a point of origin."
     },
     {
-      "type": "pair",
-      "images": [
-        { "image": "/assets/uploads/progetto-2/01.jpg", "alt": "Living room with mezzanine" },
-        { "image": "/assets/uploads/progetto-2/02.jpg", "alt": "Living room with mezzanine and featured publication" }
-      ]
+      "type": "feature",
+      "image": "/assets/uploads/studio/07.webp",
+      "alt": "The mezzanine living room featured in an interior-design magazine"
     },
     {
       "type": "wide",
-      "image": "/assets/uploads/progetto-2/03.jpg",
-      "alt": "Suite bathroom"
+      "image": "/assets/uploads/studio/06.webp",
+      "alt": "The master bathroom featured in an interior-design magazine"
     }
   ]
 }

@@ -37,7 +37,7 @@
       "type": "pair",
       "images": [
         { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bagno con mattonelle verdi" },
-        { "image": "/assets/uploads/progetto-1/04.jpg", "alt": "Camera da letto con dettagli rossi" }
+        { "image": "/assets/uploads/studio/05.webp", "alt": "Camera da letto con dettagli rossi" }
       ]
     },
     {
@@ -45,16 +45,14 @@
       "text": "Non un archivio nostalgico, ma un punto d'origine."
     },
     {
-      "type": "pair",
-      "images": [
-        { "image": "/assets/uploads/progetto-2/01.jpg", "alt": "Salone con soppalco" },
-        { "image": "/assets/uploads/progetto-2/02.jpg", "alt": "Salone con soppalco e pubblicazione" }
-      ]
+      "type": "feature",
+      "image": "/assets/uploads/studio/07.webp",
+      "alt": "Il salone con soppalco pubblicato su una rivista d'arredamento"
     },
     {
       "type": "wide",
-      "image": "/assets/uploads/progetto-2/03.jpg",
-      "alt": "Bagno di una suite"
+      "image": "/assets/uploads/studio/06.webp",
+      "alt": "Il bagno padronale pubblicato su una rivista d'arredamento"
     }
   ]
 }

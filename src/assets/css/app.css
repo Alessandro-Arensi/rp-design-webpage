@@ -944,6 +944,18 @@ html.lenis body {
   object-fit: cover;
   display: block;
 }
+/* magazine tearsheet (a squarish ~5:4 publication scan): full grid width like the
+   horizontal images, filled with a SUBTLE horizontal stretch to 4:3 (~9%, tested
+   as barely noticeable) so nothing is cropped and the title/text stay readable.
+   Near-16:9 spreads use the plain `wide` box instead (no stretch needed). */
+.project-gallery figure.is-feature {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 3;
+}
+.project-gallery figure.is-feature > picture img {
+  height: 100%;
+  object-fit: fill;
+}
 .project-gallery figcaption {
   margin-top: var(--sp-1);
   font-family: var(--ff-sans);

@@ -45,6 +45,11 @@
               {% image img.image, img.alt, "(max-width:600px) 100vw, 50vw" %}
             </figure>
           {% endfor %}
+        {% elif block.type == 'feature' %}
+          {# magazine tearsheet: full-width, natural aspect (no crop), centred #}
+          <figure data-reveal class="is-full is-feature">
+            {% image block.image, block.alt, "(max-width:800px) 100vw, 80rem" %}
+          </figure>
         {% endif %}
       {% endfor %}
     </div>
