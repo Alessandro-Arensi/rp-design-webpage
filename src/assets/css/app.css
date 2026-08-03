@@ -1287,7 +1287,7 @@ address {
   :root {
     --fs-headline: 3.2rem;
     --fs-lead: 3.2rem;
-    --fs-copy: 2.4rem;
+    --fs-copy: 1.8rem;
   }
   .statement {
     font-size: 3.2rem;
