@@ -2,6 +2,12 @@
 permalink: /_redirects
 eleventyExcludeFromCollections: true
 ---
+# Canonicalise to the .it primary: the .com alias 301s across (host-matched), so
+# the site lives at one domain with no duplicate-content ambiguity. These must
+# stay above the path-only rules below, or the /* 404 would catch .com first.
+https://robertopianastudio.com/*      https://robertopianastudio.it/:splat  301!
+https://www.robertopianastudio.com/*  https://robertopianastudio.it/:splat  301!
+
 # The CMS lives only at /admin. Send the language-prefixed guess there.
 # Forced (!) so it wins over the physical fallback page + the /en 404 below.
 /en/admin/*  /admin/  301!
