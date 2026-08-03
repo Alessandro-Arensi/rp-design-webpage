@@ -15,7 +15,7 @@ gallery:
     orientation: verticale
     image: /assets/uploads/progetto-5/02.jpg
   - type: text
-    text_it: "Due file di divani accolgono la visione in un ambiente concepito per il massimo comfort, mentre una terza, più raccolta e informale, offre la possibilità di godersi un drink o un sigaro senza interrompere lo spettacolo. Un'eleganza misurata, fatta di dettagli che si rivelano con naturalezza: frigoriferi e dotazioni celati alla vista, perfettamente integrati nell'architettura, e nicchie illuminate che scandiscono lo spazio con una luce morbida e scenografica. Un ambiente dove la tecnologia scompare, il comfort si rivela e ogni momento della visione diventa un'esperienza."
+    text_it: "Le prime due file sono pensate per il massimo comfort. Più in alto, una zona informale permette di godersi un drink o un sigaro senza spezzare il ritmo della serata. Frigoriferi e dotazioni scompaiono nell’architettura; le nicchie illuminate danno profondità allo spazio con una luce morbida e misurata. La tecnologia lavora senza mostrarsi. Resta la sensazione di entrare nel film, senza uscire da casa."
     text_en: "Two rows of sofas invite viewing in an environment designed for absolute comfort, while a third, more intimate and informal row, offers the chance to enjoy a drink or a cigar without interrupting the show. A measured elegance, made of details that reveal themselves naturally: refrigerators and amenities concealed from view, perfectly integrated into the architecture, and illuminated niches that punctuate the space with soft, scenic lighting. An environment where technology disappears, comfort takes center stage, and every moment of viewing becomes an experience."
   - type: image
     orientation: orizzontale

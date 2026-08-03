@@ -1,5 +1,5 @@
 {# La firma / The Signature. Ordered narrative built from blocks (pair / text /
-   wide / cta), like the home page. Two sections: the intro closes on the Archive
+   headline / wide / cta), like the home page. Two sections: the intro closes on the Archive
    CTA; the "origin" section after it sits on a tinted (--c-line) full-bleed band.
    NB: the {% image %} async shortcode does NOT work inside a Nunjucks macro, so
    the block loop is inlined in both sections rather than shared via a macro. #}
@@ -35,6 +35,8 @@
       {% for block in studio[lang].blocksAfter %}
         {% if block.type == 'text' %}
           <div class="project-text" data-reveal><p>{{ block.text }}</p></div>
+        {% elif block.type == 'headline' %}
+          <h2 class="block-headline" data-reveal>{{ block.text }}</h2>
         {% elif block.type == 'wide' %}
           <figure data-reveal class="is-full is-r-16-9">
             {% image block.image, block.alt, "100vw" %}

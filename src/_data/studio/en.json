@@ -30,19 +30,19 @@
   ],
   "blocksAfter": [
     {
+      "type": "headline",
+      "text": "Not a nostalgic archive, but a point of origin."
+    },
+    {
       "type": "text",
       "text": "This is Giancarlo Piana's professional legacy: an architecture founded on listening, a sense of proportion, and the ability to perceive the hidden vocation of every space."
     },
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bathroom with green tiles" },
-        { "image": "/assets/uploads/studio/05.webp", "alt": "Bedroom with red details" }
+        { "image": "/assets/uploads/studio/05.webp", "alt": "Bedroom with red details" },
+        { "image": "/assets/uploads/studio/04.webp", "alt": "Bathroom with green tiles" }
       ]
-    },
-    {
-      "type": "text",
-      "text": "Not a nostalgic archive, but a point of origin."
     },
     {
       "type": "feature",

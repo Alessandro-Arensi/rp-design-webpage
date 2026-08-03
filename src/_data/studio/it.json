@@ -11,7 +11,7 @@
     },
     {
       "type": "text",
-      "text": "Ogni progetto nasce dall'esperienza, dalla conoscenza dei materiali e da una rigorosa selezione di maestranze. Perché una casa deve emozionare, oggi, e conservare il suo valore nel tempo."
+      "text": "Ogni progetto si fonda sull’esperienza, sulla conoscenza profonda dei materiali e su una selezione rigorosa delle maestranze. Perché una casa deve emozionare, oggi, e conservare il suo valore nel tempo."
     },
     {
       "type": "wide",
@@ -20,15 +20,19 @@
     },
     {
       "type": "text",
-      "text": "Affidarsi a noi significa essere accompagnati da professionisti che pensano a tutto, ancora prima che ce ne sia bisogno. Vivere il sogno della propria casa, lasciando a noi la complessità di realizzarlo."
+      "text": "Affidarsi allo studio significa vivere il progetto e il sogno della propria casa, lasciando a professionisti esperti la gestione di ogni complessità."
     },
     {
       "type": "text",
-      "text": "Parte della nostra firma è la continuità. Anche quando le lavorazioni sono concluse, garantiamo un punto di riferimento unico per coordinare con discrezione e tempestività ogni necessità successiva."
+      "text": "Una cura che continua per tutta la vita dell’immobile: anche dopo la consegna delle chiavi, lo studio resta un riferimento unico e discreto, pronto a coordinare tempestivamente ogni intervento necessario."
     },
     { "type": "cta" }
   ],
   "blocksAfter": [
+    {
+      "type": "headline",
+      "text": "Non un archivio nostalgico, ma un punto d'origine."
+    },
     {
       "type": "text",
       "text": "È questa l'eredità professionale di Giancarlo Piana: un'architettura fondata sull'ascolto, sulla misura e sulla capacità di leggere la vocazione nascosta di ogni spazio."
@@ -36,13 +40,9 @@
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/progetto-1/03.jpg", "alt": "Bagno con mattonelle verdi" },
-        { "image": "/assets/uploads/studio/05.webp", "alt": "Camera da letto con dettagli rossi" }
+        { "image": "/assets/uploads/studio/05.webp", "alt": "Camera da letto con dettagli rossi" },
+        { "image": "/assets/uploads/studio/04.webp", "alt": "Bagno con mattonelle verdi" }
       ]
-    },
-    {
-      "type": "text",
-      "text": "Non un archivio nostalgico, ma un punto d'origine."
     },
     {
       "type": "feature",

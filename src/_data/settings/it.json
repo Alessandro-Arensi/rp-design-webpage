@@ -3,7 +3,7 @@
   "vat": "13145970151",
   "logo": "/assets/icons/logo.svg",
   "introWordmark": "PIANA",
-  "tagline": "Ogni casa racconta una storia.",
+  "tagline": "Ogni spazio ha una possibilità nascosta.",
   "homeStatement": "Architettura che custodisce la luce, la materia e il tempo.",
   "homeHero": "/assets/uploads/home/slide-02.jpg",
   "homeSlides": [
@@ -14,7 +14,7 @@
   ],
   "social": [
     { "label": "Instagram", "url": "https://www.instagram.com/robertopiana_studio/" },
-    { "label": "LinkedIn", "url": "https://linkedin.com/" }
+    { "label": "Youtube", "url": "https://www.youtube.com/@RobertoPianaStudio" }
   ],
   "colors": {
     "bg": "#f9f7f2",
