@@ -9,6 +9,10 @@
 <title>{{ pageTitle }}</title>
 <meta name="description" content="{{ pageDesc }}">
 
+{#- Self-referencing canonical. site.url pins the www host, so the apex and the
+   .com aliases (which 301 across) never read as duplicate content. -#}
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
 {# Open Graph / Twitter. TODO: replace og:image with a 1200x630 brand image
    (then switch twitter:card to summary_large_image). #}
 <meta property="og:type" content="website">

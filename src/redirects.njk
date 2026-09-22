@@ -2,12 +2,18 @@
 permalink: /_redirects
 eleventyExcludeFromCollections: true
 ---
-# Canonicalise to the .it primary: the .com alias 301s across (host-matched), so
-# the site lives at one domain with no duplicate-content ambiguity. These must
-# stay above the path-only rules below, or the /* 404 would catch .com first.
-https://robertopianastudio.com/*      https://robertopianastudio.it/:splat  301!
-https://www.robertopianastudio.com/*  https://robertopianastudio.it/:splat  301!
-https://rpdesigngroup.com/*         https://robertopianastudio.it/:splat  301!
+# Canonicalise to www.robertopianastudio.it — the one host the sitemap and the
+# rel=canonical tag both declare. Every alias 301s across (host-matched), the bare
+# apex included, so nothing reads as duplicate content. These must stay above the
+# path-only rules below, or the /* 404 would catch the aliases first.
+#
+# NOTE: the rpdesigngroup.com rule is currently INERT. That domain does not resolve
+# to this Netlify site — a forwarding rule upstream (Hostinger) 301s every path to
+# the root before Netlify ever sees it. Point its DNS here to make this line work.
+https://robertopianastudio.it/*       https://www.robertopianastudio.it/:splat  301!
+https://robertopianastudio.com/*      https://www.robertopianastudio.it/:splat  301!
+https://www.robertopianastudio.com/*  https://www.robertopianastudio.it/:splat  301!
+https://rpdesigngroup.com/*           https://www.robertopianastudio.it/:splat  301!
 
 # The CMS lives only at /admin. Send the language-prefixed guess there.
 # Forced (!) so it wins over the physical fallback page + the /en 404 below.
