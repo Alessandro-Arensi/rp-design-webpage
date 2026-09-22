@@ -24,9 +24,8 @@ export function initGallery() {
 
   async function open(index) {
     if (!PhotoSwipe) {
-      ({ default: PhotoSwipe } = await import(
-        "/assets/js/vendor/photoswipe.esm.min.js"
-      ));
+      ({ default: PhotoSwipe } =
+        await import("/assets/js/vendor/photoswipe.esm.min.js"));
     }
     const lenis = window.__lenis;
     const pswp = new PhotoSwipe({

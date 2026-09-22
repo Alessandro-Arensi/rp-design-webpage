@@ -5,6 +5,10 @@ featured: false
 draft: false
 title_it: "Cinema privato"
 title_en: "Private cinema"
+seo_title_it: "Cinema privato | Roberto Piana Studio"
+seo_description_it: "Un cinema privato progettato per trasformare la visione in esperienza, tra comfort assoluto, tecnologia integrata e atmosfera scenografica."
+seo_title_en: "Private Cinema | Roberto Piana Studio"
+seo_description_en: "A private cinema designed to turn viewing into an experience, combining absolute comfort, integrated technology and a cinematic atmosphere."
 statement_it: "L'arte dell'intrattenimento privato."
 statement_en: "The art of private entertainment."
 gallery:

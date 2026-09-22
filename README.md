@@ -7,19 +7,19 @@ Piana**, built with **Eleventy**, edited by a non-technical client through **Dec
 (git-based), hosted on **Netlify**. Minimalist, photography-led, with a **full-screen video
 intro curtain** (GSAP lift into the hero) and smooth scroll (Lenis).
 
-| Attribute       | Value                                                                                    |
-| --------------- | ---------------------------------------------------------------------------------------- |
-| Generator       | Eleventy v3 (`src/` → `dist/`)                                                           |
-| Languages       | Italian at `/`, English under `/en/`                                                     |
-| CMS             | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account)             |
-| Hosting         | Netlify (primary); `gh-pages` is a fallback target                                       |
-| Fonts           | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2 |
-| Animation       | GSAP (intro curtain lift) + Lenis (smooth scroll), self-hosted/vendored                  |
+| Attribute       | Value                                                                                     |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| Generator       | Eleventy v3 (`src/` → `dist/`)                                                            |
+| Languages       | Italian at `/`, English under `/en/`                                                      |
+| CMS             | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account)              |
+| Hosting         | Netlify (primary); `gh-pages` is a fallback target                                        |
+| Fonts           | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2  |
+| Animation       | GSAP (intro curtain lift) + Lenis (smooth scroll), self-hosted/vendored                   |
 | Gallery         | PhotoSwipe v5 (vendored, lazy-loaded) — swipe / pinch-zoom / double-tap on project images |
-| Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG, + original-width source)  |
-| Accessibility   | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16                                  |
-| Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects`            |
-| Status          | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain              |
+| Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG, + original-width source)   |
+| Accessibility   | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16                                   |
+| Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects`             |
+| Status          | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain               |
 
 **I want to… →**
 
@@ -129,14 +129,14 @@ is **developer-managed** in the repo and intentionally not exposed in the CMS. B
 rebuilds. Local editing without Netlify: `make cms` (decap-server) + `make dev`
 (`local_backend: true`, localhost only).
 
-| Content          | File(s)                           | CMS collection               | Notes                                                                                                                       |
-| ---------------- | --------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Projects         | `src/_projects/NN-slug.md`        | **Progetti** (folder, "New") | Bilingual fields in one file; `featured`, `draft`, `order`; gallery list. **First gallery image = project cover/thumbnail.** |
-| Home             | `src/_data/home/{it,en}.json`     | — (dev-managed)              | subtitle + narrative `blocks[]` (image/alt/text)                                                                            |
-| Studio           | `src/_data/studio/{it,en}.json`   | — (dev-managed)              | eyebrow, statement (headline), paragraphs[]                                                                                 |
-| Contact          | `src/_data/contact/{it,en}.json`  | — (dev-managed)              | emails, address, phone (footer + contatti tel: link), maps                                                                  |
-| Brand            | `src/_data/settings/{it,en}.json` | — (dev-managed)              | siteName, vat (footer P.Iva), tagline, homeHero, **homeSlides** (hero slideshow), social, colours, fonts                    |
-| Nav / UI strings | `src/_data/nav,ui/*`              | — (dev-managed)              | not in CMS                                                                                                                  |
+| Content          | File(s)                           | CMS collection               | Notes                                                                                                                                                           |
+| ---------------- | --------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Projects         | `src/_projects/NN-slug.md`        | **Progetti** (folder, "New") | Bilingual fields in one file; `featured`, `draft`, `order`; gallery list; `seo_{title,description}_{it,en}`. **First gallery image = project cover/thumbnail.** |
+| Home             | `src/_data/home/{it,en}.json`     | — (dev-managed)              | subtitle + narrative `blocks[]` (image/alt/text)                                                                                                                |
+| Studio           | `src/_data/studio/{it,en}.json`   | — (dev-managed)              | eyebrow, statement (headline), paragraphs[]                                                                                                                     |
+| Contact          | `src/_data/contact/{it,en}.json`  | — (dev-managed)              | emails, address, phone (footer + contatti tel: link), maps                                                                                                      |
+| Brand            | `src/_data/settings/{it,en}.json` | — (dev-managed)              | siteName, vat (footer P.Iva), tagline, homeHero, **homeSlides** (hero slideshow), social, colours, fonts                                                        |
+| Nav / UI strings | `src/_data/nav,ui/*`              | — (dev-managed)              | not in CMS                                                                                                                                                      |
 
 `media_folder: src/assets/uploads` (`public_folder: /assets/uploads`); `publish_mode:
 editorial_workflow`. Project **detail pages** are generated by paginating the `projects`
@@ -145,6 +145,24 @@ collection once per language (`eleventy.config.js` collection + `it/progetti/det
 (`cover` filter in `eleventy.config.js`). The **home hero** is a crossfade slideshow over
 `settings[lang].homeSlides` (array of `{image, alt}`, falls back to `homeHero` when empty) —
 see `src/assets/js/modules/hero.js`.
+
+### SEO metadata (`<title>` + meta description)
+
+`head.njk` resolves both from front matter, with a fallback chain:
+
+- **`seoTitle`** wins outright. Otherwise `title — siteName`, else `siteName` alone.
+  SEO titles are hand-written (`Pagina | Roberto Piana Studio`) and deliberately do not
+  follow the on-site `title` or the `—` pattern, so the two are separate fields.
+- **`description`** → falls back to `settings[lang].tagline`.
+
+Every indexable page sets both explicitly. **Do not let a page fall back to the tagline**: it
+is ~40 chars and duplicates the home `<h1>`, so Google discards it and builds the snippet
+from whatever body text comes first — on the home that was the lead paragraph glued to two
+image `alt` strings. Legal pages carry a `seoTitle` only (no ranking objective, by design).
+
+Project pages get theirs from the CMS (`seo_title_it/en`, `seo_description_it/en`, all
+optional) wired through `eleventyComputed` in the two `detail.njk` files; empty fields fall
+back to the chain above. Aim for **≤60 chars** of title and **140–160** of description.
 
 ---
 
@@ -202,15 +220,15 @@ enhancement: the site is fully usable with **no JS**, and every motion module re
 `import()` — PhotoSwipe on first gallery open (project pages only), Lottie on the first-visit
 intro (so repeat visits never fetch its ~670 KB of player + JSON).
 
-| Module       | Role                                                                                                        |
-| ------------ | ----------------------------------------------------------------------------------------------------------- |
-| `lenis.js`   | Smooth scroll (disabled under reduced-motion)                                                                |
-| `intro.js`   | Home curtain: plays the intro video, then lifts (GSAP crossfade) into the hero                               |
-| `nav.js`     | Mobile full-screen overlay menu                                                                              |
-| `header.js`  | Header colour state (transparent over hero → solid on scroll)                                                |
-| `reveal.js`  | Scroll reveals via IntersectionObserver                                                                      |
-| `gallery.js` | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
-| `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line) |
+| Module            | Role                                                                                                                              |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `lenis.js`        | Smooth scroll (disabled under reduced-motion)                                                                                     |
+| `intro.js`        | Home curtain: plays the intro video, then lifts (GSAP crossfade) into the hero                                                    |
+| `nav.js`          | Mobile full-screen overlay menu                                                                                                   |
+| `header.js`       | Header colour state (transparent over hero → solid on scroll)                                                                     |
+| `reveal.js`       | Scroll reveals via IntersectionObserver                                                                                           |
+| `gallery.js`      | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
+| `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line)          |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); a full-screen muted
 `<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays with a **Lottie logo

@@ -50,7 +50,11 @@
 
   --maxw-content: 108rem; /* centred inner-content band (text + body images) */
   --maxw-text: 62rem;
-  --sign-w: clamp(21.5rem, 81vw, 62rem); /* signature lockup width: intro + hero MUST match */
+  --sign-w: clamp(
+    21.5rem,
+    81vw,
+    62rem
+  ); /* signature lockup width: intro + hero MUST match */
 
   --ease-lux: cubic-bezier(0.7, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -59,7 +63,9 @@
   --dur-slow: 1.2s;
 
   --header-h: 7.5rem;
-  --content-top: calc(var(--header-h) + var(--sp-6)); /* inner-page top clearance */
+  --content-top: calc(
+    var(--header-h) + var(--sp-6)
+  ); /* inner-page top clearance */
   --z-header: 100;
   --z-nav: 200;
   --z-intro: 1000;

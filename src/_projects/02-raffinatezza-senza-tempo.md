@@ -4,6 +4,10 @@ order: 2
 draft: false
 title_it: "Raffinatezza senza tempo"
 title_en: "Timeless elegance"
+seo_title_it: "Raffinatezza senza tempo | Roberto Piana Studio"
+seo_description_it: "Un progetto di interior design in cui il paesaggio lacustre entra negli spazi, tra tonalità delicate, arredi su misura e raffinata continuità visiva."
+seo_title_en: "Timeless Elegance | Roberto Piana Studio"
+seo_description_en: "An interior design project where the lakeside landscape becomes part of the home, through soft tones, bespoke furnishings and visual harmony."
 statement_it: "Dove il lago diventa parte dell'architettura."
 statement_en: "Where the lake becomes part of the architecture."
 gallery:

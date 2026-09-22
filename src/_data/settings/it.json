@@ -13,7 +13,10 @@
     { "image": "/assets/uploads/home/slide-05.jpg", "alt": "" }
   ],
   "social": [
-    { "label": "Instagram", "url": "https://www.instagram.com/robertopiana_studio/" },
+    {
+      "label": "Instagram",
+      "url": "https://www.instagram.com/robertopiana_studio/"
+    },
     { "label": "Youtube", "url": "https://www.youtube.com/@RobertoPianaStudio" }
   ],
   "colors": {

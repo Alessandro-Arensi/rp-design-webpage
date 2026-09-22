@@ -18,7 +18,10 @@
   },
   "mapsUrl": "https://maps.google.com/",
   "phones": [
-    { "label": "Per nuovi progetti e prime valutazioni", "number": "+39 02 37 011 942" },
+    {
+      "label": "Per nuovi progetti e prime valutazioni",
+      "number": "+39 02 37 011 942"
+    },
     { "label": "Per richiedere un appuntamento", "number": "+39 02 37 011 945" }
   ],
   "phone": "+39 02 37 011 942"

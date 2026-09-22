@@ -18,7 +18,10 @@
   },
   "mapsUrl": "https://maps.google.com/",
   "phones": [
-    { "label": "For new projects and initial consultations", "number": "+39 02 37 011 942" },
+    {
+      "label": "For new projects and initial consultations",
+      "number": "+39 02 37 011 942"
+    },
     { "label": "To schedule an appointment", "number": "+39 02 37 011 945" }
   ],
   "phone": "+39 02 37 011 942"

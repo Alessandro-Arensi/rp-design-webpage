@@ -4,6 +4,10 @@ order: 3
 draft: false
 title_it: "Chalet di montagna"
 title_en: "Alpine chalet"
+seo_title_it: "Chalet di montagna | Roberto Piana Studio"
+seo_description_it: "Uno chalet d’alta quota in cui il paesaggio entra in casa senza diventare tema, tra materiali naturali, linee morbide e comfort contemporaneo."
+seo_title_en: "Alpine Chalet | Roberto Piana Studio"
+seo_description_en: "A high-altitude chalet where the mountain landscape enters the home with natural materials, soft lines and contemporary comfort."
 statement_it: "Il paesaggio d'alta quota entra in casa, senza diventare tema."
 statement_en: "The high-altitude landscape enters the home, without becoming a cliché."
 gallery:

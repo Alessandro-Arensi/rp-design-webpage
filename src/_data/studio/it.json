@@ -5,8 +5,14 @@
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/studio/01.jpg", "alt": "Roberto Piana e il padre Giancarlo al tavolo di lavoro" },
-        { "image": "/assets/uploads/studio/02.jpg", "alt": "Campioni di materiali e finiture in showroom" }
+        {
+          "image": "/assets/uploads/studio/01.jpg",
+          "alt": "Roberto Piana e il padre Giancarlo al tavolo di lavoro"
+        },
+        {
+          "image": "/assets/uploads/studio/02.jpg",
+          "alt": "Campioni di materiali e finiture in showroom"
+        }
       ]
     },
     {
@@ -40,8 +46,14 @@
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/studio/05.webp", "alt": "Camera da letto con dettagli rossi" },
-        { "image": "/assets/uploads/studio/04.webp", "alt": "Bagno con mattonelle verdi" }
+        {
+          "image": "/assets/uploads/studio/05.webp",
+          "alt": "Camera da letto con dettagli rossi"
+        },
+        {
+          "image": "/assets/uploads/studio/04.webp",
+          "alt": "Bagno con mattonelle verdi"
+        }
       ]
     },
     {

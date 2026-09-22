@@ -53,6 +53,34 @@ collections:
       - { name: title_it, label: "Titolo (IT)", widget: string }
       - { name: title_en, label: "Title (EN)", widget: string }
       - {
+          name: seo_title_it,
+          label: "Titolo Google (IT)",
+          widget: string,
+          required: false,
+          hint: "Titolo mostrato nei risultati Google. Max ~60 caratteri. Es: Cinema privato | Roberto Piana Studio. Se vuoto usa il titolo del progetto.",
+        }
+      - {
+          name: seo_description_it,
+          label: "Descrizione Google (IT)",
+          widget: text,
+          required: false,
+          hint: "Testo sotto il titolo nei risultati Google. 140-160 caratteri.",
+        }
+      - {
+          name: seo_title_en,
+          label: "Google title (EN)",
+          widget: string,
+          required: false,
+          hint: "Shown in Google results. Max ~60 characters. Falls back to the project title if empty.",
+        }
+      - {
+          name: seo_description_en,
+          label: "Google description (EN)",
+          widget: text,
+          required: false,
+          hint: "Text below the title in Google results. 140-160 characters.",
+        }
+      - {
           name: statement_it,
           label: "Frase di apertura (IT)",
           widget: string,

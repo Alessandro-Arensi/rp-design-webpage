@@ -14,6 +14,16 @@ https://rpdesigngroup.com/*         https://robertopianastudio.it/:splat  301!
 /en/admin/*  /admin/  301!
 /en/admin    /admin/  301!
 
+# Legacy rpdesigngroup.com paths. These still rank in Google (la-storia, contattaci,
+# commerciale/showroom, chi-siamo/il-team) and the .com blanket-301s to this domain's ROOT,
+# so the old deep links lose their target. Map each to its nearest surviving page instead of
+# letting the /* rule below serve a 404 — that is what carries the ranking across.
+/la-storia            /studio/    301
+/chi-siamo/il-team    /studio/    301
+/chi-siamo/*          /studio/    301
+/contattaci           /contatti/  301
+/commerciale/showroom /contatti/  301
+
 # Language-aware 404. Existing files take precedence, so these only fire for
 # unmatched paths. Specific rule first.
 /en/*  /en/404.html  404

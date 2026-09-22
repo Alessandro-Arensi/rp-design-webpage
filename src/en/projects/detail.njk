@@ -9,6 +9,8 @@ permalink: "/en/projects/{{ project.data.slug }}/"
 pageKey: projects
 eleventyComputed:
   title: "{{ project.data.title_en }}"
+  seoTitle: "{{ project.data.seo_title_en }}"
+  description: "{{ project.data.seo_description_en }}"
   translationKey: "project:{{ project.data.slug }}"
 ---
 {% set p = project.data %}

@@ -2,7 +2,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
 
-{%- set pageTitle = (title ~ " — " ~ settings[lang].siteName) if title else settings[lang].siteName -%}
+{#- seoTitle (front matter) wins outright: SEO titles are written by hand and
+   do not follow the "Page — Brand" pattern. Fall back to that pattern otherwise. -#}
+{%- set pageTitle = seoTitle if seoTitle else ((title ~ " — " ~ settings[lang].siteName) if title else settings[lang].siteName) -%}
 {%- set pageDesc = description or settings[lang].tagline -%}
 <title>{{ pageTitle }}</title>
 <meta name="description" content="{{ pageDesc }}">

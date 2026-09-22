@@ -5,8 +5,14 @@
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/studio/01.jpg", "alt": "Roberto Piana and his father Giancarlo at the work table" },
-        { "image": "/assets/uploads/studio/02.jpg", "alt": "Material and finish samples in the showroom" }
+        {
+          "image": "/assets/uploads/studio/01.jpg",
+          "alt": "Roberto Piana and his father Giancarlo at the work table"
+        },
+        {
+          "image": "/assets/uploads/studio/02.jpg",
+          "alt": "Material and finish samples in the showroom"
+        }
       ]
     },
     {
@@ -40,8 +46,14 @@
     {
       "type": "pair",
       "images": [
-        { "image": "/assets/uploads/studio/05.webp", "alt": "Bedroom with red details" },
-        { "image": "/assets/uploads/studio/04.webp", "alt": "Bathroom with green tiles" }
+        {
+          "image": "/assets/uploads/studio/05.webp",
+          "alt": "Bedroom with red details"
+        },
+        {
+          "image": "/assets/uploads/studio/04.webp",
+          "alt": "Bathroom with green tiles"
+        }
       ]
     },
     {

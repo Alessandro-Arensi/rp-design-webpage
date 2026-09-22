@@ -4,6 +4,10 @@ order: 5
 draft: false
 title_it: "Dove dimora il verde"
 title_en: "Where nature resides"
+seo_title_it: "Dove dimora il verde | Roberto Piana Studio"
+seo_description_it: "Un progetto che costruisce un equilibrio raffinato tra interno e natura, con spazi aperti, materiali caldi e un’anima giovane e internazionale."
+seo_title_en: "Where Nature Resides | Roberto Piana Studio"
+seo_description_en: "A refined balance between interior and nature, with open spaces, warm materials and a young, international spirit."
 statement_it: "Un equilibrio raffinato tra interno e natura."
 statement_en: "A refined balance between interior and nature."
 gallery:

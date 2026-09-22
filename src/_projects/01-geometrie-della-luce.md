@@ -4,6 +4,10 @@ order: 1
 draft: false
 title_it: "Geometrie di luce"
 title_en: "Geometries of light"
+seo_title_it: "Geometrie di luce | Roberto Piana Studio"
+seo_description_it: "Un progetto in cui architettura, luce e tecnologia si integrano con discrezione, creando un ambiente elegante, funzionale e impeccabile."
+seo_title_en: "Geometries of Light | Roberto Piana Studio"
+seo_description_en: "A project where architecture, light and technology merge discreetly, shaping an elegant, functional and flawless living environment."
 statement_it: "L'arte di abitare."
 statement_en: "The art of living."
 gallery:
