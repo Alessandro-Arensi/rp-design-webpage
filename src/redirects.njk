@@ -3,14 +3,23 @@ permalink: /_redirects
 eleventyExcludeFromCollections: true
 ---
 # Canonicalise to www.robertopianastudio.it — the one host the sitemap and the
-# rel=canonical tag both declare. Every alias 301s across (host-matched), the bare
-# apex included, so nothing reads as duplicate content. These must stay above the
-# path-only rules below, or the /* 404 would catch the aliases first.
+# rel=canonical tag both declare. The aliases 301 across (host-matched), so nothing
+# reads as duplicate content. These must stay above the path-only rules below, or
+# the /* 404 would catch the aliases first.
+#
+# The apex → www redirect is deliberately NOT here. Netlify issues it natively from
+# the primary-domain setting, and a rule here would fight it: while the panel still
+# had the apex as primary (it 301'd www → apex), an apex → www line here would have
+# bounced every request between the two hosts forever. Set the primary domain in the
+# Netlify panel instead, and leave this file out of it.
 #
 # NOTE: the rpdesigngroup.com rule is currently INERT. That domain does not resolve
 # to this Netlify site — a forwarding rule upstream (Hostinger) 301s every path to
-# the root before Netlify ever sees it. Point its DNS here to make this line work.
-https://robertopianastudio.it/*       https://www.robertopianastudio.it/:splat  301!
+# the root before Netlify ever sees it, so old deep links lose their target page.
+#
+# To activate it, repoint ONLY that domain's A/CNAME records at Netlify and delete
+# the forwarding rule. Do NOT delegate its nameservers: the client's mailboxes on
+# @rpdesigngroup.com are hosted at Hostinger and the MX records must stay put.
 https://robertopianastudio.com/*      https://www.robertopianastudio.it/:splat  301!
 https://www.robertopianastudio.com/*  https://www.robertopianastudio.it/:splat  301!
 https://rpdesigngroup.com/*           https://www.robertopianastudio.it/:splat  301!

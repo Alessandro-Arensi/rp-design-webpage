@@ -172,8 +172,11 @@ back to the chain above. Aim for **≤60 chars** of title and **140–160** of d
 
 - **IT is primary at `/`**, EN under `/en/` (directory-based; permalinks set per page).
 - **`www.robertopianastudio.it` is the canonical host.** `site.json` `url`, the sitemap, the
-  `rel=canonical` tag and the `_redirects` host rules must all agree on it. The bare apex and
-  both `.com` aliases 301 across. The `rpdesigngroup.com` rule is **inert**: that domain is
+  `rel=canonical` tag and the `_redirects` host rules must all agree on it, **and so must
+  Netlify's primary-domain setting** — that setting is what redirects the bare apex to www.
+  Never write that apex → www hop into `_redirects`: if the panel is still set the other way
+  the two rules bounce requests between the hosts forever and the site goes down. The `.com`
+  aliases do belong in the file. The `rpdesigngroup.com` rule is **inert**: that domain is
   forwarded upstream (Hostinger) and never reaches Netlify — see the comment in
   `src/redirects.njk`.
 - Each translatable page carries a `translationKey`; the header **IT·EN toggle** links to its
