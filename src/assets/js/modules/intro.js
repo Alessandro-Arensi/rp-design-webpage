@@ -1,7 +1,8 @@
 // Homepage intro: GSAP curtain on first visit. The curtain shows the hero's first
 // carousel image while the logo (Lottie) signs itself, then crossfades up into the
 // (identical) hero. First visit is armed in <head> (html.intro-play). Repeat visits,
-// reduced-motion and no-JS all skip it and show the page immediately.
+// reduced-motion and no-JS all skip it and show the page immediately. Scroll is
+// never locked: the curtain is absolute over the hero and scrolls away with it.
 
 export function initIntro() {
   const intro = document.querySelector("[data-intro]");
@@ -17,14 +18,9 @@ export function initIntro() {
   }
 
   const html = document.documentElement;
-  const lenis = window.__lenis;
   const header = document.querySelector(".s-header");
   const lottieBox = intro.querySelector("[data-intro-lottie]");
   let lottieAnim = null;
-
-  // Lock scroll for the duration.
-  html.style.overflow = "hidden";
-  if (lenis) lenis.stop();
 
   const cleanup = () => {
     if (lottieAnim) lottieAnim.destroy();
@@ -35,9 +31,7 @@ export function initIntro() {
       gsap.set(header, { clearProps: "transform,opacity,visibility" });
     }
     intro.remove();
-    html.style.overflow = "";
     html.classList.remove("intro-play");
-    if (lenis) lenis.start();
     try {
       sessionStorage.setItem("piana_intro", "1");
     } catch {
@@ -58,11 +52,17 @@ export function initIntro() {
       defaults: { ease: "power2.inOut" },
       onComplete: cleanup,
     });
-    tl.to(intro, { autoAlpha: 0, duration: 1.1 }, 0).from(
-      header,
-      { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
-      0.3,
-    );
+    tl.to(intro, { autoAlpha: 0, duration: 1.1 }, 0);
+    // Slide the header in only while the curtain still covers the top of the
+    // viewport; once the visitor has scrolled past it the header is already in
+    // view, and re-hiding it would make it jump.
+    if (header && window.scrollY < intro.offsetHeight) {
+      tl.from(
+        header,
+        { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
+        0.3,
+      );
+    }
   };
 
   // Logo animation (Lottie), signing itself over the curtain image. Lazy-load the

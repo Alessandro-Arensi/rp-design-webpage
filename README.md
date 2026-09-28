@@ -198,7 +198,7 @@ back to the chain above. Aim for **≤60 chars** of title and **140–160** of d
 `base.css` = the vendored flexbox grid (`.row/.column/.large-*/.medium-*/.tab-*/.mob-*`, block
 grids, helpers) + normalize, `html{font-size:62.5%}` (1rem=10px); the original Google-Fonts
 `@import` was removed (fonts are self-hosted). `app.css` = the brand layer (tokens, chrome,
-hero, intro video curtain, projects, PhotoSwipe theme overrides, scroll-reveal, responsive).
+hero, intro curtain, projects, PhotoSwipe theme overrides, scroll-reveal, responsive).
 Body reading copy is `--fs-copy` (3rem / 30px: studio & project text, archive intro).
 
 **Palette** (WEB KIT) — injected into `:root` from `settings[lang].colors` in `head.njk`, so the
@@ -240,15 +240,17 @@ intro (so repeat visits never fetch its ~670 KB of player + JSON).
 | `gallery.js`      | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
 | `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line)          |
 
-**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); a full-screen muted
-`<video>` (art-director dolly-in, mp4+webm+poster in `assets/video/`) plays with a **Lottie logo
-animation** (`assets/lottie/logo.json`, vendored `lottie.min.js`) centred over it, then a GSAP
-timeline crossfades the curtain up into the hero (hero scale + header slide-in), **capped at 3.5s** (or
-sooner on video `ended`/error/blocked autoplay), and **clears its inline transforms on completion**
-(a leftover transform on the header would make it a containing block and trap the fixed mobile
-overlay). Repeat visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn
-signature (`firma-payoff-anim.svg` + its CSS/tween) is retained but **disabled** — see the
-restore note in `intro.njk`.
+**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); the curtain shows the
+hero's first carousel image + overlay while a **Lottie logo animation** (`assets/lottie/logo.json`,
+vendored `lottie.min.js`, lazy-loaded) signs itself over it, then a GSAP timeline crossfades the
+curtain into the identical hero (+ header slide-in) when the Lottie completes (**6s backstop**), and
+**clears its inline transforms on completion** (a leftover transform on the header would make it a
+containing block and trap the fixed mobile overlay). **Scroll is never locked:** the curtain is
+`position: absolute`, sized like the hero, so visitors can scroll the page while the logo is still
+signing (the header slide-in is skipped if they have already scrolled past the curtain). Repeat
+visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn signature
+(`firma-payoff-anim.svg` + its CSS/tween) is retained but **disabled** — see the restore note in
+`intro.njk`.
 
 **One logo, no duplication:** the hero logo (`.s-hero__sign` → `assets/icons/rp-logo.png`) is the
 Lottie's **final frame** rendered to a lightweight still (~21 KB, 1953×747). Same artwork, width

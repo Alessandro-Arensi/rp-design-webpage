@@ -86,8 +86,7 @@ body {
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
-/* Hide the scrollbar (page still scrolls via Lenis/wheel/keys). Also removes the
-   layout shift when the intro unlocks overflow — no scrollbar gutter to appear. */
+/* Hide the scrollbar (page still scrolls via Lenis/wheel/keys). */
 html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* old Edge */
@@ -472,9 +471,14 @@ a {
   }
 }
 /* ----- intro (curtain) — only on first visit (html.intro-play) ---- */
+/* Absolute (not fixed), sized like .s-hero: the curtain sits on the hero at the
+   top of the document, so the page stays scrollable and the curtain scrolls away
+   with the hero while the logo keeps signing. */
 .intro {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100svh;
+  min-height: 56rem;
   z-index: var(--z-intro);
   background: var(--c-dark);
   display: none;
