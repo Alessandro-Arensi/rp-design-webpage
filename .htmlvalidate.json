@@ -15,6 +15,10 @@
     "aria-label-misuse": "error",
     "heading-level": "error",
     "no-redundant-role": "error",
-    "require-sri": "off"
+    "require-sri": "off",
+    "no-inline-style": [
+      "error",
+      { "allowedProperties": ["display", "--focus", "--focus-phone"] }
+    ]
   }
 }

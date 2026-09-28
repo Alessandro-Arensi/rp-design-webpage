@@ -5,7 +5,8 @@
     {% set slides = settings[lang].homeSlides %}
     {% if slides and slides.length %}
       {% for slide in slides %}
-        {% image slide.image, slide.alt or "", "100vw", { eager: loop.first, class: "s-hero__slide" + (" is-active" if loop.first else "") } %}
+        {% set focusStyle %}{% if slide.focus %}--focus: {{ slide.focus }};{% endif %}{% if slide.focusPhone %}--focus-phone: {{ slide.focusPhone }};{% endif %}{% endset %}
+        {% image slide.image, slide.alt or "", "100vw", { eager: loop.first, class: "s-hero__slide" + (" is-active" if loop.first else ""), style: focusStyle } %}
       {% endfor %}
     {% else %}
       {% image settings[lang].homeHero, "", "100vw", { eager: true, class: "s-hero__slide is-active" } %}

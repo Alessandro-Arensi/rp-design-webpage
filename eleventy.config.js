@@ -192,6 +192,7 @@ export default function (eleventyConfig) {
       decoding: "async",
       ...(attrs.eager ? { fetchpriority: "high" } : {}),
       ...(attrs.class ? { class: attrs.class } : {}),
+      ...(attrs.style ? { style: attrs.style } : {}),
     };
     return Image.generateHTML(metadata, imageAttributes);
   }

@@ -7,9 +7,9 @@
   "homeStatement": "Architettura che custodisce la luce, la materia e il tempo.",
   "homeHero": "/assets/uploads/home/slide-02.jpg",
   "homeSlides": [
-    { "image": "/assets/uploads/home/slide-02.jpg", "alt": "" },
+    { "image": "/assets/uploads/home/slide-02.jpg", "alt": "", "focus": "28% 50%", "focusPhone": "34% 50%" },
     { "image": "/assets/uploads/home/slide-03.png", "alt": "" },
-    { "image": "/assets/uploads/home/slide-04.jpg", "alt": "" },
+    { "image": "/assets/uploads/home/slide-04.jpg", "alt": "", "focus": "44% 50%" },
     { "image": "/assets/uploads/home/slide-05.png", "alt": "" }
   ],
   "social": [

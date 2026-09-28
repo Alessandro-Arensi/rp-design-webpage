@@ -6,7 +6,9 @@
 <div class="intro" data-intro aria-hidden="true">
   {% set slides = settings[lang].homeSlides %}
   {% set introBg = slides[0].image if slides and slides.length else settings[lang].homeHero %}
-  {% image introBg, "", "100vw", { eager: true, class: "intro__bg" } %}
+  {% set first = slides[0] if slides and slides.length else {} %}
+  {% set focusStyle %}{% if first.focus %}--focus: {{ first.focus }};{% endif %}{% if first.focusPhone %}--focus-phone: {{ first.focusPhone }};{% endif %}{% endset %}
+  {% image introBg, "", "100vw", { eager: true, class: "intro__bg", style: focusStyle } %}
   <div class="intro__overlay"></div>
   <div class="intro__lottie" data-intro-lottie></div>
 </div>

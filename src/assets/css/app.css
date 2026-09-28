@@ -69,6 +69,7 @@
   --z-header: 100;
   --z-nav: 200;
   --z-intro: 1000;
+  --hero-overscan: 2px; /* see .s-hero__slide */
 }
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -483,6 +484,7 @@ a {
   background: var(--c-dark);
   display: none;
   place-items: center;
+  overflow: hidden; /* clips .intro__bg's overscan (see .s-hero__slide) */
   will-change: transform;
   --intro-cover-shift: 4px;
 }
@@ -499,9 +501,10 @@ a {
 }
 .intro__bg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: calc(-1 * var(--hero-overscan));
+  width: calc(100% + 2 * var(--hero-overscan));
+  max-width: none; /* base.css caps img at 100% */
+  height: calc(100% + 2 * var(--hero-overscan));
   object-fit: cover;
   z-index: 0;
 }
@@ -612,6 +615,9 @@ html.lenis body {
   display: grid;
   place-items: center;
   overflow: hidden;
+  /* backstop behind the slides: any compositor seam at the clip edge shows dark,
+     never the cream page background */
+  background: var(--c-dark);
 }
 /* White "Roberto Piana" signature centered on the hero — same size/centering as
    the animated intro logo (clamp 21.5rem / 81vw / 62rem). Mask keeps it crisp. */
@@ -638,6 +644,17 @@ html.lenis body {
    is server-rendered active, so no-JS shows a correct static hero. */
 .s-hero__media picture {
   display: contents;
+}
+/* Overscan: each slide overhangs the hero by a hair on every side. Flush with the
+   clip edge, a zooming slide lands on a fractional device pixel at the right edge
+   (DevTools device mode, fractional DPR, page zoom) and Chrome re-antialiases it
+   every frame, flashing a light line. The intro curtain's bg uses the same
+   overscan so the handoff stays pixel-identical. */
+.s-hero__media img.s-hero__slide {
+  inset: calc(-1 * var(--hero-overscan));
+  width: calc(100% + 2 * var(--hero-overscan));
+  max-width: none; /* base.css caps img at 100% */
+  height: calc(100% + 2 * var(--hero-overscan));
 }
 .s-hero__slide {
   opacity: 0;
@@ -679,6 +696,28 @@ html.lenis body {
   .s-hero__slide {
     transition: none;
     animation: none;
+  }
+}
+/* Tall viewports (phones, iPads in either orientation) crop a 16:9 slide to a
+   narrow vertical strip, so centred framing can land on an awkward edge (e.g. a
+   dark wall). A slide's optional `focus` (homeSlides[].focus → --focus) moves the
+   crop there, and the Ken Burns zoom grows from the same point. Phones keep an
+   even narrower strip, so `focusPhone` (→ --focus-phone) can override it there.
+   The intro curtain uses slide 1's values too, so the handoff stays seamless. */
+@media (max-aspect-ratio: 4/3) {
+  .s-hero__slide,
+  .intro__bg {
+    --pos: var(--focus, 50% 50%);
+    object-position: var(--pos);
+  }
+  .s-hero__slide {
+    transform-origin: var(--pos);
+  }
+}
+@media (max-aspect-ratio: 2/3) {
+  .s-hero__slide,
+  .intro__bg {
+    --pos: var(--focus-phone, var(--focus, 50% 50%));
   }
 }
 .s-hero__overlay {

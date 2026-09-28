@@ -144,7 +144,11 @@ collection once per language (`eleventy.config.js` collection + `it/progetti/det
 `en/projects/detail.njk`); a project's cover (listing thumbnail) is the **first gallery image**
 (`cover` filter in `eleventy.config.js`). The **home hero** is a crossfade slideshow over
 `settings[lang].homeSlides` (array of `{image, alt}`, falls back to `homeHero` when empty) —
-see `src/assets/js/modules/hero.js`.
+see `src/assets/js/modules/hero.js`. Tall screens (phones, iPads; aspect ≤ 4:3) crop each 16:9
+slide to a narrow strip, so a slide can set an optional **`focus`** (CSS `object-position`, e.g.
+`"28% 50%"`) and a phone-only **`focusPhone`** (aspect ≤ 2:3) to keep awkward edges — a dark wall,
+a frame — out of the crop; the Ken Burns zoom and the intro curtain (slide 1) follow the same point.
+Re-check these when swapping slide images.
 
 ### SEO metadata (`<title>` + meta description)
 
