@@ -8,9 +8,9 @@
   "homeHero": "/assets/uploads/home/slide-02.jpg",
   "homeSlides": [
     { "image": "/assets/uploads/home/slide-02.jpg", "alt": "" },
-    { "image": "/assets/uploads/home/slide-03.jpg", "alt": "" },
+    { "image": "/assets/uploads/home/slide-03.png", "alt": "" },
     { "image": "/assets/uploads/home/slide-04.jpg", "alt": "" },
-    { "image": "/assets/uploads/home/slide-05.jpg", "alt": "" }
+    { "image": "/assets/uploads/home/slide-05.png", "alt": "" }
   ],
   "social": [
     {
