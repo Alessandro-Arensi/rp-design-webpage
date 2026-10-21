@@ -2,12 +2,14 @@
 permalink: /_redirects
 eleventyExcludeFromCollections: true
 ---
-# Canonicalise to www.robertopianastudio.it — the one host the sitemap and the
+# Canonicalise to www.robertopianastudio.com — the one host the sitemap and the
 # rel=canonical tag both declare. The aliases 301 across (host-matched), so nothing
 # reads as duplicate content. These must stay above the path-only rules below, or
-# the /* 404 would catch the aliases first.
+# the /* 404 would catch the aliases first. Both .it hosts are listed: once .com is
+# primary, Netlify no longer redirects the .it apex itself. They never loop, since
+# their source domain differs from the target.
 #
-# The apex → www redirect is deliberately NOT here. Netlify issues it natively from
+# The robertopianastudio.com → www redirect is deliberately NOT here. Netlify issues it natively from
 # the primary-domain setting, and a rule here would fight it: while the panel still
 # had the apex as primary (it 301'd www → apex), an apex → www line here would have
 # bounced every request between the two hosts forever. Set the primary domain in the
@@ -20,9 +22,9 @@ eleventyExcludeFromCollections: true
 # To activate it, repoint ONLY that domain's A/CNAME records at Netlify and delete
 # the forwarding rule. Do NOT delegate its nameservers: the client's mailboxes on
 # @rpdesigngroup.com are hosted at Hostinger and the MX records must stay put.
-https://robertopianastudio.com/*      https://www.robertopianastudio.it/:splat  301!
-https://www.robertopianastudio.com/*  https://www.robertopianastudio.it/:splat  301!
-https://rpdesigngroup.com/*           https://www.robertopianastudio.it/:splat  301!
+https://robertopianastudio.it/*       https://www.robertopianastudio.com/:splat  301!
+https://www.robertopianastudio.it/*   https://www.robertopianastudio.com/:splat  301!
+https://rpdesigngroup.com/*           https://www.robertopianastudio.com/:splat  301!
 
 # The CMS lives only at /admin. Send the language-prefixed guess there.
 # Forced (!) so it wins over the physical fallback page + the /en 404 below.

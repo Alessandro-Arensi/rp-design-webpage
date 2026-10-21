@@ -175,12 +175,12 @@ back to the chain above. Aim for **≤60 chars** of title and **140–160** of d
 ## 4. Routing & i18n
 
 - **IT is primary at `/`**, EN under `/en/` (directory-based; permalinks set per page).
-- **`www.robertopianastudio.it` is the canonical host.** `site.json` `url`, the sitemap, the
+- **`www.robertopianastudio.com` is the canonical host.** `site.json` `url`, the sitemap, the
   `rel=canonical` tag and the `_redirects` host rules must all agree on it, **and so must
   Netlify's primary-domain setting** — that setting is what redirects the bare apex to www.
   Never write that apex → www hop into `_redirects`: if the panel is still set the other way
-  the two rules bounce requests between the hosts forever and the site goes down. The `.com`
-  aliases do belong in the file. The `rpdesigngroup.com` rule is **inert**: that domain is
+  the two rules bounce requests between the hosts forever and the site goes down. The `.it`
+  aliases (apex and www) do belong in the file. The `rpdesigngroup.com` rule is **inert**: that domain is
   forwarded upstream (Hostinger) and never reaches Netlify — see the comment in
   `src/redirects.njk`.
 - Each translatable page carries a `translationKey`; the header **IT·EN toggle** links to its
@@ -337,4 +337,4 @@ Launchpad v1, live on a Netlify subdomain. To go to production:
 3. Regenerate `apple-touch`/`favicon.ico`/PWA PNGs from the RP mark.
 4. Final `make audit` (Lighthouse/CWV) + responsive/keyboard pass.
 5. Merge `piana-design-build` → `main`, point Netlify at `main`, attach the
-   `www.robertopianastudio.it` domain (already the canonical `site.url`).
+   `www.robertopianastudio.com` domain (already the canonical `site.url`).
