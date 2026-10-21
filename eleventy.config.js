@@ -146,10 +146,12 @@ export default function (eleventyConfig) {
     );
     return match ? match.url : lang === "it" ? "/" : "/en/";
   });
-  // all language variants of a page (for <link rel="alternate" hreflang>)
+  // all language variants of a page (for <link rel="alternate" hreflang>).
+  // No key (404s) → none: an undefined key would match every untranslated item,
+  // permalink:false ones included, and emit href="…false".
   eleventyConfig.addFilter("localeAlternates", (all, key) =>
-    (all || [])
-      .filter((p) => p.data.translationKey === key)
+    (key ? all || [] : [])
+      .filter((p) => p.data.translationKey === key && p.url)
       .map((p) => ({ lang: p.data.lang, url: p.url })),
   );
   // bare display host for prose and email copy, so site.url stays the single
