@@ -5,7 +5,7 @@
 </head>
 <body id="top" class="{{ bodyClass }}" data-page="{{ pageKey }}">
   <a class="u-skip" href="#main">{{ ui[lang].skip }}</a>
-  {% include "partials/consent.njk" %}
+  {% include "partials/site-prefs.njk" %}
   {% include "partials/header.njk" %}
   <main id="main">
     {{ content | safe }}

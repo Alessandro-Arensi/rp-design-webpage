@@ -1,0 +1,45 @@
+{# Cookie consent (Garante 2021): banner on first visit + preferences dialog.
+   Shown while html.rp-prefs-ask is set (armed in <head>); site-prefs.js records the
+   choice and loads the third-party tags in site.tracking only once consented.
+   The X counts as a rejection. No-JS: never shown, and no tags load either.
+   Class/id/data names are deliberately neutral (rp-prefs, never "consent"/"cookie"):
+   ad blockers ship generic hide rules for those (EasyList Cookie has
+   ##.consent__banner), which hid the banner in Brave. Keep it that way. #}
+{%- set c = ui[lang].consent -%}
+{%- set t = site.tracking -%}
+<div class="rp-prefs" data-rp-prefs data-version="{{ t.consentVersion }}" data-max-days="{{ t.consentMaxDays }}" data-google="{{ t.googleTagIds | join(',') }}" data-meta="{{ t.metaPixelId }}">
+  <section class="rp-prefs__bar" aria-labelledby="rp-prefs-label">
+    <button class="rp-prefs__close" type="button" data-rp-prefs-action="reject" aria-label="{{ c.closeLabel }}"><span aria-hidden="true">×</span></button>
+    <p class="rp-prefs__label" id="rp-prefs-label">{{ c.label }}</p>
+    <p class="rp-prefs__text">{{ c.text }} <a href="/cookie-policy/">{{ c.policyLink }}</a></p>
+    <div class="rp-prefs__actions">
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="customize">{{ c.customize }}</button>
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="reject">{{ c.reject }}</button>
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="accept">{{ c.accept }}</button>
+    </div>
+  </section>
+
+  <dialog class="rp-prefs__panel" aria-labelledby="rp-prefs-title" data-rp-prefs-panel data-lenis-prevent>
+    <button class="rp-prefs__close" type="button" data-rp-prefs-action="dismiss" aria-label="{{ c.dialogClose }}"><span aria-hidden="true">×</span></button>
+    {# h1: a <dialog> is its own sectioning root #}
+    <h1 id="rp-prefs-title">{{ c.dialogTitle }}</h1>
+    <p>{{ c.dialogIntro }} <a href="/cookie-policy/">{{ c.policyLink }}</a></p>
+    <div class="rp-prefs__row">
+      <p><span class="rp-prefs__row-title">{{ c.necessary }}</span><span class="rp-prefs__row-desc">{{ c.necessaryDesc }}</span></p>
+      <span class="rp-prefs__always">{{ c.alwaysOn }}</span>
+    </div>
+    <div class="rp-prefs__row">
+      <label for="rp-prefs-analytics"><span class="rp-prefs__row-title">{{ c.analytics }}</span><span class="rp-prefs__row-desc">{{ c.analyticsDesc }}</span></label>
+      <input class="rp-prefs__switch" type="checkbox" role="switch" id="rp-prefs-analytics" data-rp-prefs-cat="analytics">
+    </div>
+    <div class="rp-prefs__row">
+      <label for="rp-prefs-marketing"><span class="rp-prefs__row-title">{{ c.marketing }}</span><span class="rp-prefs__row-desc">{{ c.marketingDesc }}</span></label>
+      <input class="rp-prefs__switch" type="checkbox" role="switch" id="rp-prefs-marketing" data-rp-prefs-cat="marketing">
+    </div>
+    <div class="rp-prefs__actions">
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="reject">{{ c.rejectAll }}</button>
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="save">{{ c.save }}</button>
+      <button class="btn btn--stroke" type="button" data-rp-prefs-action="accept">{{ c.accept }}</button>
+    </div>
+  </dialog>
+</div>

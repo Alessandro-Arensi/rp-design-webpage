@@ -1,22 +1,23 @@
-// Cookie consent (Garante 2021). The banner shows while html.consent-ask is set
+// Cookie consent (Garante 2021). The banner shows while html.rp-prefs-ask is set
 // (armed in <head> from the same stored record). The choice lives in localStorage
 // and expires after consentMaxDays, or when consentVersion is bumped (e.g. after a
 // policy change). Third-party tags from site.tracking load only once consented:
 // Google tag (with Consent Mode v2 signals) for analytics or marketing, Meta Pixel
 // for marketing. A loaded tag can't be unloaded, so revoking drops its cookies and
-// reloads the page clean.
+// reloads the page clean. Names are neutral (rp-prefs, site-prefs.js) on purpose:
+// ad-blocker lists hide "consent"/"cookie" class names and block such script paths.
 
 const KEY = "piana_consent";
 const DAY = 864e5;
 const TRACKER_COOKIES = /^(_ga|_gid|_gat|_gcl|_fbp|_fbc)/;
 
-export function initConsent() {
-  const root = document.querySelector("[data-consent]");
+export function initSitePrefs() {
+  const root = document.querySelector("[data-rp-prefs]");
   if (!root) return;
 
   const html = document.documentElement;
-  const dialog = root.querySelector("[data-consent-dialog]");
-  const switches = root.querySelectorAll("[data-consent-cat]");
+  const dialog = root.querySelector("[data-rp-prefs-panel]");
+  const switches = root.querySelectorAll("[data-rp-prefs-cat]");
   const version = Number(root.dataset.version);
   const maxAge = Number(root.dataset.maxDays) * DAY;
   const googleIds = root.dataset.google ? root.dataset.google.split(",") : [];
@@ -109,7 +110,7 @@ export function initConsent() {
     } catch {
       /* not persisted: the banner returns next visit */
     }
-    html.classList.remove("consent-ask");
+    html.classList.remove("rp-prefs-ask");
     if (dialog.open) dialog.close();
     const revoked =
       prev &&
@@ -124,23 +125,23 @@ export function initConsent() {
 
   const openDialog = () => {
     switches.forEach((s) => {
-      s.checked = Boolean(current && current[s.dataset.consentCat]);
+      s.checked = Boolean(current && current[s.dataset.rpPrefsCat]);
     });
     dialog.showModal();
   };
 
   // Delegated: the footer's "Cookie preferences" button sits outside the root.
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-consent-action]");
+    const btn = e.target.closest("[data-rp-prefs-action]");
     if (!btn) return;
-    const action = btn.dataset.consentAction;
+    const action = btn.dataset.rpPrefsAction;
     if (action === "accept") save(true, true);
     else if (action === "reject") save(false, false);
     else if (action === "customize") openDialog();
     else if (action === "dismiss") dialog.close();
     else if (action === "save") {
       const on = (cat) =>
-        root.querySelector(`[data-consent-cat="${cat}"]`).checked;
+        root.querySelector(`[data-rp-prefs-cat="${cat}"]`).checked;
       save(on("analytics"), on("marketing"));
     }
   });

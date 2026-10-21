@@ -68,7 +68,7 @@
   ); /* inner-page top clearance */
   --z-intro: 50; /* below the header: nav stays usable during the curtain */
   --z-header: 100;
-  --z-consent: 150; /* over header + intro, under the open mobile menu */
+  --z-prefs: 150; /* over header + intro, under the open mobile menu */
   --z-nav: 200;
   --hero-overscan: 2px; /* see .s-hero__slide */
 }
@@ -285,7 +285,7 @@ a {
 .project-card__title,
 .contact-band address a,
 .form-note a,
-.consent a,
+.rp-prefs a,
 .thanks-back a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -298,7 +298,7 @@ a {
 .project-card:hover .project-card__title,
 .contact-band address a:hover,
 .form-note a:hover,
-.consent a:hover,
+.rp-prefs a:hover,
 .thanks-back a:hover {
   color: var(--c-accent);
 }
@@ -485,14 +485,14 @@ a {
   }
 }
 /* ----- cookie consent (banner + preferences dialog) ---------------- */
-/* Banner shows only while html.consent-ask is set (no stored choice). Accept,
+/* Banner shows only while html.rp-prefs-ask is set (no stored choice). Accept,
    reject and customise share one style: rejecting must be as easy as accepting. */
-.consent__banner {
+.rp-prefs__bar {
   display: none;
   position: fixed;
   left: var(--sp-3);
   bottom: var(--sp-3);
-  z-index: var(--z-consent);
+  z-index: var(--z-prefs);
   width: min(56rem, calc(100% - 2 * var(--sp-3)));
   padding: var(--sp-3) var(--sp-4) var(--sp-4);
   background: var(--c-bg);
@@ -503,29 +503,29 @@ a {
   font-size: var(--fs-small);
   line-height: var(--lh-body);
 }
-html.consent-ask .consent__banner {
+html.rp-prefs-ask .rp-prefs__bar {
   display: block;
 }
-.consent__label {
+.rp-prefs__label {
   margin: 0 0 var(--sp-1);
   font-size: var(--fs-label);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
 }
-.consent__text {
+.rp-prefs__text {
   margin: 0 0 var(--sp-3);
 }
-.consent__actions {
+.rp-prefs__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-1);
 }
-.consent__actions .btn {
+.rp-prefs__actions .btn {
   flex: 1 1 auto;
   padding: 1.1rem 1.6rem;
 }
 /* 44px target (WCAG 2.5.5 / 2.5.8) in the top-right corner */
-.consent__close {
+.rp-prefs__close {
   position: absolute;
   top: var(--sp-1);
   right: var(--sp-1);
@@ -539,7 +539,7 @@ html.consent-ask .consent__banner {
   line-height: 1;
   cursor: pointer;
 }
-.consent__dialog {
+.rp-prefs__panel {
   width: min(64rem, calc(100% - 2 * var(--sp-3)));
   max-height: calc(100dvh - 2 * var(--sp-3));
   padding: var(--sp-5) var(--sp-4) var(--sp-4);
@@ -551,18 +551,18 @@ html.consent-ask .consent__banner {
   font-size: var(--fs-small);
   line-height: var(--lh-body);
 }
-.consent__dialog::backdrop {
+.rp-prefs__panel::backdrop {
   background: rgba(22, 17, 10, 0.55);
 }
-.consent__dialog h1 {
+.rp-prefs__panel h1 {
   margin: 0 0 var(--sp-2);
   font-size: var(--fs-h3);
   font-weight: 400;
 }
-.consent__dialog > p {
+.rp-prefs__panel > p {
   margin: 0 0 var(--sp-3);
 }
-.consent__row {
+.rp-prefs__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -570,32 +570,32 @@ html.consent-ask .consent__banner {
   padding-block: var(--sp-2);
   border-top: 1px solid var(--c-line);
 }
-.consent__dialog .consent__actions {
+.rp-prefs__panel .rp-prefs__actions {
   padding-top: var(--sp-3);
   border-top: 1px solid var(--c-line);
 }
-.consent__row p,
-.consent__row label {
+.rp-prefs__row p,
+.rp-prefs__row label {
   margin: 0;
   cursor: default;
 }
-.consent__row label {
+.rp-prefs__row label {
   cursor: pointer;
 }
-.consent__row-title {
+.rp-prefs__row-title {
   display: block;
   font-size: var(--fs-body);
 }
-.consent__row-desc {
+.rp-prefs__row-desc {
   display: block;
   color: var(--c-ink-soft);
 }
-.consent__always {
+.rp-prefs__always {
   flex: 0 0 auto;
   color: var(--c-ink-soft);
 }
 /* on/off switch built from the native checkbox (keyboard + state for free) */
-.consent__switch {
+.rp-prefs__switch {
   appearance: none;
   position: relative;
   flex: 0 0 auto;
@@ -608,7 +608,7 @@ html.consent-ask .consent__banner {
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-out);
 }
-.consent__switch::before {
+.rp-prefs__switch::before {
   content: "";
   position: absolute;
   top: 0.3rem;
@@ -621,19 +621,19 @@ html.consent-ask .consent__banner {
     transform var(--dur-fast) var(--ease-out),
     background var(--dur-fast) var(--ease-out);
 }
-.consent__switch:checked {
+.rp-prefs__switch:checked {
   background: var(--c-ink);
 }
-.consent__switch:checked::before {
+.rp-prefs__switch:checked::before {
   transform: translateX(2rem);
   background: var(--c-bg);
 }
-.consent__switch:focus-visible {
+.rp-prefs__switch:focus-visible {
   outline: 2px solid var(--c-accent);
   outline-offset: 2px;
 }
 @media screen and (max-width: 600px) {
-  .consent__banner {
+  .rp-prefs__bar {
     left: var(--sp-2);
     bottom: var(--sp-2);
     width: calc(100% - 2 * var(--sp-2));

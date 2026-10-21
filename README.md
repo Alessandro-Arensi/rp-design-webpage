@@ -243,7 +243,7 @@ intro (so repeat visits never fetch its ~670 KB of player + JSON).
 | `reveal.js`       | Scroll reveals via IntersectionObserver                                                                                           |
 | `gallery.js`      | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
 | `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line)          |
-| `consent.js`      | Cookie banner + preferences dialog; loads Google tag / Meta Pixel only after consent                                              |
+| `site-prefs.js`   | Cookie banner + preferences dialog; loads Google tag / Meta Pixel only after consent                                              |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`, which is set as soon as
 the intro starts); the curtain shows the hero's first carousel image + overlay while a **Lottie logo
@@ -263,8 +263,8 @@ Lottie's **final frame** rendered to a lightweight still (~21 KB, 1953×747). Sa
 logo settles seamlessly onto the static hero logo when the curtain lifts. The still is regenerated
 from `logo.json` if the animation changes (headless Lottie render → screenshot → pngquant).
 
-**Cookie consent (Garante 2021):** `partials/consent.njk` on every page, armed in `<head>`
-(`html.consent-ask`) when no valid choice is stored. Valid means `localStorage piana_consent`
+**Cookie consent (Garante 2021):** `partials/site-prefs.njk` on every page, armed in `<head>`
+(`html.rp-prefs-ask`) when no valid choice is stored. Valid means `localStorage piana_consent`
 exists, has the current `site.tracking.consentVersion`, and is younger than `consentMaxDays`
 (180). The banner has X (= reject), Rifiuta, Personalizza and Accetta tutti, all styled the same.
 The dialog has Analisi / Marketing switches and is reopened from the footer's "Preferenze cookie".
@@ -275,6 +275,10 @@ ever loads. gtag.js loads on analytics **or** marketing consent with Consent Mod
 marketing only. Revoking a loaded tag clears `_ga*/_gid/_gcl*/_fbp/_fbc` and reloads the page.
 **Before adding IDs:** restore the Meta/Google sections of the cookie + privacy policies (both
 say today that no such tools are used) and bump `consentVersion` to re-ask everyone.
+**Ad-blocker-proof naming:** classes, ids, `data-*`, the `<html>` flag and file names are neutral
+(`rp-prefs*`, `site-prefs.js`). Never use "consent"/"cookie"/"gdpr" in them: EasyList Cookie ships
+generic hide rules such as `##.consent__banner`, which hid the banner in Brave. Re-check against the
+filter lists (EasyList, EasyList Cookie, Fanboy, uBO cookies) after renaming anything.
 
 **Gallery:** `gallery.js` builds a PhotoSwipe `dataSource` from the `.g-trigger` buttons, using
 build-time `data-pswp-*` dims from the `{% pswp %}` shortcode; PhotoSwipe supplies all touch
