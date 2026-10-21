@@ -66,9 +66,9 @@
   --content-top: calc(
     var(--header-h) + var(--sp-6)
   ); /* inner-page top clearance */
+  --z-intro: 50; /* below the header: nav stays usable during the curtain */
   --z-header: 100;
   --z-nav: 200;
-  --z-intro: 1000;
   --hero-overscan: 2px; /* see .s-hero__slide */
 }
 @media (prefers-reduced-motion: reduce) {

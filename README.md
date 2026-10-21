@@ -237,22 +237,22 @@ intro (so repeat visits never fetch its ~670 KB of player + JSON).
 | Module            | Role                                                                                                                              |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `lenis.js`        | Smooth scroll (disabled under reduced-motion)                                                                                     |
-| `intro.js`        | Home curtain: plays the intro video, then lifts (GSAP crossfade) into the hero                                                    |
+| `intro.js`        | Home curtain: plays the Lottie logo, then lifts (GSAP crossfade) into the hero                                                    |
 | `nav.js`          | Mobile full-screen overlay menu                                                                                                   |
 | `header.js`       | Header colour state (transparent over hero → solid on scroll)                                                                     |
 | `reveal.js`       | Scroll reveals via IntersectionObserver                                                                                           |
 | `gallery.js`      | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
 | `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line)          |
 
-**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`); the curtain shows the
-hero's first carousel image + overlay while a **Lottie logo animation** (`assets/lottie/logo.json`,
-vendored `lottie.min.js`, lazy-loaded) signs itself over it, then a GSAP timeline crossfades the
-curtain into the identical hero (+ header slide-in) when the Lottie completes (**6s backstop**), and
-**clears its inline transforms on completion** (a leftover transform on the header would make it a
-containing block and trap the fixed mobile overlay). **Scroll is never locked:** the curtain is
-`position: absolute`, sized like the hero, so visitors can scroll the page while the logo is still
-signing (the header slide-in is skipped if they have already scrolled past the curtain). Repeat
-visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn signature
+**Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`, which is set as soon as
+the intro starts); the curtain shows the hero's first carousel image + overlay while a **Lottie logo
+animation** (`assets/lottie/logo.json`, vendored `lottie.min.js`, lazy-loaded) signs itself over it,
+then a GSAP timeline crossfades the curtain into the identical hero when the Lottie completes (**6s
+backstop**). **The header is never hidden:** `--z-intro` sits below `--z-header`, so the nav, language
+toggle and mobile menu are usable during the curtain. Never animate a transform on the header: it
+would become a containing block and trap the fixed mobile overlay. **Scroll is never locked:** the
+curtain is `position: absolute`, sized like the hero, so visitors can scroll the page while the logo
+is still signing. Repeat visits / reduced-motion / no-JS skip the curtain entirely. The hand-drawn signature
 (`firma-payoff-anim.svg` + its CSS/tween) is retained but **disabled** — see the restore note in
 `intro.njk`.
 

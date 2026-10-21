@@ -3,6 +3,8 @@
 // (identical) hero. First visit is armed in <head> (html.intro-play). Repeat visits,
 // reduced-motion and no-JS all skip it and show the page immediately. Scroll is
 // never locked: the curtain is absolute over the hero and scrolls away with it.
+// The header sits above the curtain (--z-intro < --z-header), so the nav is
+// usable throughout.
 
 export function initIntro() {
   const intro = document.querySelector("[data-intro]");
@@ -18,25 +20,21 @@ export function initIntro() {
   }
 
   const html = document.documentElement;
-  const header = document.querySelector(".s-header");
   const lottieBox = intro.querySelector("[data-intro-lottie]");
   let lottieAnim = null;
 
+  // Mark as seen up front, not on completion: the nav is live during the curtain,
+  // so a visitor may leave mid-intro (e.g. IT → EN) and shouldn't see it again.
+  try {
+    sessionStorage.setItem("piana_intro", "1");
+  } catch {
+    /* private mode */
+  }
+
   const cleanup = () => {
     if (lottieAnim) lottieAnim.destroy();
-    // Clear GSAP's lingering inline styles. A leftover transform on the header
-    // makes it a containing block for the fixed mobile overlay (which would trap
-    // the hamburger menu on first visit, while the intro has run).
-    if (header) {
-      gsap.set(header, { clearProps: "transform,opacity,visibility" });
-    }
     intro.remove();
     html.classList.remove("intro-play");
-    try {
-      sessionStorage.setItem("piana_intro", "1");
-    } catch {
-      /* private mode */
-    }
   };
 
   // Fade the curtain out over the hero. The curtain's background IS the hero's
@@ -53,16 +51,6 @@ export function initIntro() {
       onComplete: cleanup,
     });
     tl.to(intro, { autoAlpha: 0, duration: 1.1 }, 0);
-    // Slide the header in only while the curtain still covers the top of the
-    // viewport; once the visitor has scrolled past it the header is already in
-    // view, and re-hiding it would make it jump.
-    if (header && window.scrollY < intro.offsetHeight) {
-      tl.from(
-        header,
-        { yPercent: -100, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
-        0.3,
-      );
-    }
   };
 
   // Logo animation (Lottie), signing itself over the curtain image. Lazy-load the
