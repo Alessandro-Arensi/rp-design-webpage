@@ -29,5 +29,27 @@
   "notFound": "Page not found",
   "archiveHeadline": "From intuition to execution.",
   "archiveStatement": "Translating a feeling, a desire, a sensation into space.",
-  "archiveCta": "We give shape to your ideas"
+  "archiveCta": "We give shape to your ideas",
+  "consent": {
+    "label": "Cookies",
+    "text": "We use technical cookies needed for the site to work and, only with your consent, third-party analytics and marketing cookies. You can accept them all, reject them, or choose which to enable. Closing this banner with the X continues with technical cookies only.",
+    "policyLink": "Cookie Policy",
+    "closeLabel": "Close and continue without accepting",
+    "accept": "Accept all",
+    "reject": "Reject",
+    "customize": "Customise",
+    "dialogTitle": "Cookie preferences",
+    "dialogIntro": "Choose which cookie categories to enable. You can change your mind at any time from the “Cookie preferences” link at the bottom of every page.",
+    "dialogClose": "Close without saving",
+    "necessary": "Technical",
+    "necessaryDesc": "Needed for the site to work. They cannot be switched off.",
+    "alwaysOn": "Always on",
+    "analytics": "Analytics",
+    "analyticsDesc": "Aggregate visit statistics, to understand how the site is used.",
+    "marketing": "Marketing",
+    "marketingDesc": "Ad-campaign measurement and personalised ads on other platforms.",
+    "rejectAll": "Reject all",
+    "save": "Save preferences",
+    "footerLink": "Cookie preferences"
+  }
 }

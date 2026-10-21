@@ -29,5 +29,27 @@
   "notFound": "Pagina non trovata",
   "archiveHeadline": "Dall'interpretazione all'esecuzione.",
   "archiveStatement": "Tradurre in spazio ciò che è ancora un'intuizione, una sensazione, un desiderio difficile da nominare.",
-  "archiveCta": "Diamo forma alle tue idee"
+  "archiveCta": "Diamo forma alle tue idee",
+  "consent": {
+    "label": "Cookie",
+    "text": "Utilizziamo cookie tecnici necessari al funzionamento del sito e, solo con il tuo consenso, cookie di analisi e di marketing di terze parti. Puoi accettarli tutti, rifiutarli o scegliere quali attivare. Chiudendo il banner con la X continui con i soli cookie tecnici.",
+    "policyLink": "Cookie Policy",
+    "closeLabel": "Chiudi e continua senza accettare",
+    "accept": "Accetta tutti",
+    "reject": "Rifiuta",
+    "customize": "Personalizza",
+    "dialogTitle": "Preferenze cookie",
+    "dialogIntro": "Scegli quali categorie di cookie attivare. Puoi cambiare idea in qualsiasi momento dal link “Preferenze cookie” in fondo a ogni pagina.",
+    "dialogClose": "Chiudi senza salvare",
+    "necessary": "Tecnici",
+    "necessaryDesc": "Necessari al funzionamento del sito. Non possono essere disattivati.",
+    "alwaysOn": "Sempre attivi",
+    "analytics": "Analisi",
+    "analyticsDesc": "Statistiche aggregate sulle visite, per capire come viene usato il sito.",
+    "marketing": "Marketing",
+    "marketingDesc": "Misurazione delle campagne pubblicitarie e annunci personalizzati su altre piattaforme.",
+    "rejectAll": "Rifiuta tutti",
+    "save": "Salva preferenze",
+    "footerLink": "Preferenze cookie"
+  }
 }

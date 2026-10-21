@@ -68,6 +68,7 @@
   ); /* inner-page top clearance */
   --z-intro: 50; /* below the header: nav stays usable during the curtain */
   --z-header: 100;
+  --z-consent: 150; /* over header + intro, under the open mobile menu */
   --z-nav: 200;
   --hero-overscan: 2px; /* see .s-hero__slide */
 }
@@ -284,6 +285,7 @@ a {
 .project-card__title,
 .contact-band address a,
 .form-note a,
+.consent a,
 .thanks-back a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -296,6 +298,7 @@ a {
 .project-card:hover .project-card__title,
 .contact-band address a:hover,
 .form-note a:hover,
+.consent a:hover,
 .thanks-back a:hover {
   color: var(--c-accent);
 }
@@ -447,7 +450,17 @@ a {
 .s-footer__legal a {
   color: inherit;
 }
-.s-footer__legal a:hover {
+/* "Cookie preferences" opens the consent dialog: a button dressed as a link */
+.s-footer__legal button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.s-footer__legal a:hover,
+.s-footer__legal button:hover {
   color: var(--c-accent);
   opacity: 1;
 }
@@ -471,6 +484,163 @@ a {
     margin-top: var(--sp-5);
   }
 }
+/* ----- cookie consent (banner + preferences dialog) ---------------- */
+/* Banner shows only while html.consent-ask is set (no stored choice). Accept,
+   reject and customise share one style: rejecting must be as easy as accepting. */
+.consent__banner {
+  display: none;
+  position: fixed;
+  left: var(--sp-3);
+  bottom: var(--sp-3);
+  z-index: var(--z-consent);
+  width: min(56rem, calc(100% - 2 * var(--sp-3)));
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  background: var(--c-bg);
+  color: var(--c-ink);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 1.2rem 4rem rgba(22, 17, 10, 0.18);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+}
+html.consent-ask .consent__banner {
+  display: block;
+}
+.consent__label {
+  margin: 0 0 var(--sp-1);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+}
+.consent__text {
+  margin: 0 0 var(--sp-3);
+}
+.consent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+.consent__actions .btn {
+  flex: 1 1 auto;
+  padding: 1.1rem 1.6rem;
+}
+/* 44px target (WCAG 2.5.5 / 2.5.8) in the top-right corner */
+.consent__close {
+  position: absolute;
+  top: var(--sp-1);
+  right: var(--sp-1);
+  width: 4.4rem;
+  height: 4.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 2.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.consent__dialog {
+  width: min(64rem, calc(100% - 2 * var(--sp-3)));
+  max-height: calc(100dvh - 2 * var(--sp-3));
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  overflow: auto;
+  background: var(--c-bg);
+  color: var(--c-ink);
+  border: 1px solid var(--c-line);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+}
+.consent__dialog::backdrop {
+  background: rgba(22, 17, 10, 0.55);
+}
+.consent__dialog h1 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+}
+.consent__dialog > p {
+  margin: 0 0 var(--sp-3);
+}
+.consent__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-block: var(--sp-2);
+  border-top: 1px solid var(--c-line);
+}
+.consent__dialog .consent__actions {
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--c-line);
+}
+.consent__row p,
+.consent__row label {
+  margin: 0;
+  cursor: default;
+}
+.consent__row label {
+  cursor: pointer;
+}
+.consent__row-title {
+  display: block;
+  font-size: var(--fs-body);
+}
+.consent__row-desc {
+  display: block;
+  color: var(--c-ink-soft);
+}
+.consent__always {
+  flex: 0 0 auto;
+  color: var(--c-ink-soft);
+}
+/* on/off switch built from the native checkbox (keyboard + state for free) */
+.consent__switch {
+  appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: 4.4rem;
+  height: 2.4rem;
+  margin: 0;
+  border: 1px solid var(--c-ink);
+  border-radius: 1.2rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.consent__switch::before {
+  content: "";
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--c-ink);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+.consent__switch:checked {
+  background: var(--c-ink);
+}
+.consent__switch:checked::before {
+  transform: translateX(2rem);
+  background: var(--c-bg);
+}
+.consent__switch:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+@media screen and (max-width: 600px) {
+  .consent__banner {
+    left: var(--sp-2);
+    bottom: var(--sp-2);
+    width: calc(100% - 2 * var(--sp-2));
+    padding-inline: var(--sp-3);
+  }
+}
+
 /* ----- intro (curtain) — only on first visit (html.intro-play) ---- */
 /* Absolute (not fixed), sized like .s-hero: the curtain sits on the hero at the
    top of the document, so the page stays scrollable and the curtain scrolls away

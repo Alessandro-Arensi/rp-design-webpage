@@ -59,6 +59,9 @@
 <link rel="stylesheet" href="/assets/css/base.css">
 <link rel="stylesheet" href="/assets/css/app.css">
 {% if pageKey == 'projects' %}<link rel="stylesheet" href="/assets/css/photoswipe.css">{% endif %}
+{# Arm the cookie banner before first paint: no valid stored choice (missing,
+   older consentVersion, or past consentMaxDays) → html.consent-ask. Mirrors consent.js. #}
+<script>(function(){var d=document.documentElement;try{var c=JSON.parse(localStorage.getItem("piana_consent"));if(c&&c.v==={{ site.tracking.consentVersion }}&&Date.now()-c.ts<{{ site.tracking.consentMaxDays }}*864e5)return;}catch(e){}d.classList.add("consent-ask");})();</script>
 {% if pageKey == 'home' %}
 {# Arm the intro curtain before first paint, first visit only (no flash on repeat/reduced-motion). #}
 <script>(function(){var d=document.documentElement;try{var r=matchMedia("(prefers-reduced-motion: reduce)").matches;var s=sessionStorage.getItem("piana_intro");if(!r&&!s){d.classList.add("intro-play");}}catch(e){}})();</script>

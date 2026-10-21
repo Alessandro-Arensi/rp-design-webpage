@@ -1,0 +1,42 @@
+{# Cookie consent (Garante 2021): banner on first visit + preferences dialog.
+   Shown while html.consent-ask is set (armed in <head>); consent.js records the
+   choice and loads the third-party tags in site.tracking only once consented.
+   The X counts as a rejection. No-JS: never shown, and no tags load either. #}
+{%- set c = ui[lang].consent -%}
+{%- set t = site.tracking -%}
+<div class="consent" data-consent data-version="{{ t.consentVersion }}" data-max-days="{{ t.consentMaxDays }}" data-google="{{ t.googleTagIds | join(',') }}" data-meta="{{ t.metaPixelId }}">
+  <section class="consent__banner" aria-labelledby="consent-label">
+    <button class="consent__close" type="button" data-consent-action="reject" aria-label="{{ c.closeLabel }}"><span aria-hidden="true">×</span></button>
+    <p class="consent__label" id="consent-label">{{ c.label }}</p>
+    <p class="consent__text">{{ c.text }} <a href="/cookie-policy/">{{ c.policyLink }}</a></p>
+    <div class="consent__actions">
+      <button class="btn btn--stroke" type="button" data-consent-action="customize">{{ c.customize }}</button>
+      <button class="btn btn--stroke" type="button" data-consent-action="reject">{{ c.reject }}</button>
+      <button class="btn btn--stroke" type="button" data-consent-action="accept">{{ c.accept }}</button>
+    </div>
+  </section>
+
+  <dialog class="consent__dialog" aria-labelledby="consent-dialog-title" data-consent-dialog data-lenis-prevent>
+    <button class="consent__close" type="button" data-consent-action="dismiss" aria-label="{{ c.dialogClose }}"><span aria-hidden="true">×</span></button>
+    {# h1: a <dialog> is its own sectioning root #}
+    <h1 id="consent-dialog-title">{{ c.dialogTitle }}</h1>
+    <p>{{ c.dialogIntro }} <a href="/cookie-policy/">{{ c.policyLink }}</a></p>
+    <div class="consent__row">
+      <p><span class="consent__row-title">{{ c.necessary }}</span><span class="consent__row-desc">{{ c.necessaryDesc }}</span></p>
+      <span class="consent__always">{{ c.alwaysOn }}</span>
+    </div>
+    <div class="consent__row">
+      <label for="consent-analytics"><span class="consent__row-title">{{ c.analytics }}</span><span class="consent__row-desc">{{ c.analyticsDesc }}</span></label>
+      <input class="consent__switch" type="checkbox" role="switch" id="consent-analytics" data-consent-cat="analytics">
+    </div>
+    <div class="consent__row">
+      <label for="consent-marketing"><span class="consent__row-title">{{ c.marketing }}</span><span class="consent__row-desc">{{ c.marketingDesc }}</span></label>
+      <input class="consent__switch" type="checkbox" role="switch" id="consent-marketing" data-consent-cat="marketing">
+    </div>
+    <div class="consent__actions">
+      <button class="btn btn--stroke" type="button" data-consent-action="reject">{{ c.rejectAll }}</button>
+      <button class="btn btn--stroke" type="button" data-consent-action="save">{{ c.save }}</button>
+      <button class="btn btn--stroke" type="button" data-consent-action="accept">{{ c.accept }}</button>
+    </div>
+  </dialog>
+</div>

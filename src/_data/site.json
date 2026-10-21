@@ -1,5 +1,11 @@
 {
   "url": "https://www.robertopianastudio.com",
+  "tracking": {
+    "googleTagIds": [],
+    "metaPixelId": "",
+    "consentVersion": 1,
+    "consentMaxDays": 180
+  },
   "defaultLang": "it",
   "langs": ["it", "en"],
   "formSubject": "Nuovo messaggio dal sito {domain}",
