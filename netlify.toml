@@ -1,4 +1,6 @@
-# Netlify build + hosting for the Eleventy site.
+# Netlify build, kept so a push still publishes dist until DNS moves.
+# The live host is Cloudflare: wrangler.toml. The contact form and CMS
+# login in this repo talk to /api/*, which only exists on Cloudflare.
 [build]
   command = "npm run build"
   publish = "dist"

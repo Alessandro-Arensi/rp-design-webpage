@@ -10,13 +10,12 @@
   <div class="contact-band__inner">
     <div class="contact-form" data-reveal>
       <h2 class="contact-band__title">{{ contact[lang].formTitle }}</h2>
-      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="{{ collections.all | localeHref('thanks', lang) }}">
-        <input type="hidden" name="form-name" value="contact">
-        {# Netlify uses a submitted field named `subject` as the notification
-           email's subject line. `value` is the static fallback a no-JS submit
-           sends; contact-form.js substitutes {name} into data-subject-template
-           when JS runs. Both strings are deliberately Italian in EN too — they
-           land in the studio's own inbox, not in front of the visitor. #}
+      <form name="contact" method="POST" action="/api/contact">
+        <input type="hidden" name="next" value="{{ collections.all | localeHref('thanks', lang) }}">
+        {# `subject` is the studio inbox subject. `value` is the no-JS fallback;
+           contact-form.js substitutes {name} into data-subject-template when JS
+           runs. Both strings stay Italian on the English page too: they land in
+           the studio inbox, not in front of the visitor. #}
         {% set domain = site.url | host %}
         <input type="hidden" name="subject" value="{{ site.formSubject | replace('{domain}', domain) }}" data-subject-template="{{ site.formSubjectNamed | replace('{domain}', domain) }}">
         <p hidden><label>{{ ui[lang].botField }} <input type="text" name="bot-field"></label></p>

@@ -4,11 +4,11 @@ import globals from "globals";
 export default [
   { ignores: ["node_modules/", "dist/", "reports/", "src/assets/js/vendor/"] },
   {
-    files: ["src/assets/js/**/*.js"],
+    files: ["src/assets/js/**/*.js", "workers/**/*.js"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
-      globals: { ...globals.browser },
+      globals: { ...globals.browser, ...globals.serviceworker },
     },
     rules: {
       "no-undef": "error",

@@ -1,10 +1,16 @@
-# Decap CMS — git-based, commits to the repo, Netlify builds on push.
-# Auth: Netlify Identity + Git Gateway (email invite; no GitHub account needed).
+# Decap CMS — git-based, commits to the repo, Cloudflare rebuilds on push.
+# The editor signs in with an email code (Cloudflare Access). The publishing
+# key stays on the server; Decap talks to /api/cms, which attaches it.
+# `base_url` must be the canonical origin: the login popup checks that origin.
 backend:
-  name: git-gateway
+  name: github
+  repo: Alessandro-Arensi/rp-design-webpage
   branch: main
+  api_root: /api/cms
+  base_url: https://www.robertopianastudio.com
+  auth_endpoint: api/auth
 
-# Local editing without Netlify: run the proxy (`make cms`) + `make dev`,
+# Local editing: run the proxy (`make cms`) + `make dev`,
 # open http://localhost:8000/admin/ — only active on localhost.
 local_backend: true
 

@@ -57,7 +57,7 @@ lint-css: node_modules ## Lint the authored design-system CSS (base.css is vendo
 	$(BIN)/stylelint "src/assets/css/app.css"
 
 lint-js: node_modules ## Lint the authored JS modules
-	$(BIN)/eslint "src/assets/js/**/*.js"
+	$(BIN)/eslint "src/assets/js/**/*.js" "workers/**/*.js"
 
 format: node_modules ## Format with Prettier (writes)
 	$(BIN)/prettier --write .

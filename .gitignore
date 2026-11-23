@@ -1,5 +1,6 @@
 docs
 node_modules
+.dev.vars
 dist/
 reports/
 .DS_Store

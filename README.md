@@ -4,22 +4,22 @@
 
 A **bilingual (IT-primary / EN) static site** for the architecture studio of **Roberto
 Piana**, built with **Eleventy**, edited by a non-technical client through **Decap CMS**
-(git-based), hosted on **Netlify**. Minimalist, photography-led, with a **full-screen video
+(git-based), hosted on **Cloudflare Workers**. Minimalist, photography-led, with a **full-screen video
 intro curtain** (GSAP lift into the hero) and smooth scroll (Lenis).
 
 | Attribute       | Value                                                                                     |
 | --------------- | ----------------------------------------------------------------------------------------- |
 | Generator       | Eleventy v3 (`src/` → `dist/`)                                                            |
 | Languages       | Italian at `/`, English under `/en/`                                                      |
-| CMS             | Decap CMS — git-gateway + Netlify Identity (email invite, no GitHub account)              |
-| Hosting         | Netlify (primary); `gh-pages` is a fallback target                                        |
+| CMS             | Decap CMS — email code (Cloudflare Access); publishing key stays on the server            |
+| Hosting         | Cloudflare Workers static assets; `gh-pages` is a fallback target                         |
 | Fonts           | ABC Arizona Flare Light (display + body) · DM Sans (labels/nav/tags) — self-hosted woff2  |
 | Animation       | GSAP (intro curtain lift) + Lenis (smooth scroll), self-hosted/vendored                   |
 | Gallery         | PhotoSwipe v5 (vendored, lazy-loaded) — swipe / pinch-zoom / double-tap on project images |
 | Images          | `@11ty/eleventy-img` → responsive `<picture>` (AVIF/WebP/JPEG, + original-width source)   |
 | Accessibility   | EN 301 549 / WCAG 2.1 AA — `make a11y` (pa11y-ci) 16/16                                   |
 | Rendered routes | 16 page routes (IT+EN) + `/admin/`, `sitemap.xml`, `robots.txt`, `_redirects`             |
-| Status          | Launchpad v1; deployed to a Netlify subdomain; not yet on the custom domain               |
+| Status          | Launchpad v1; moving from Netlify to Cloudflare — cutover steps in §8                    |
 
 **I want to… →**
 
@@ -57,7 +57,7 @@ make build     # optimized production build into dist/
 ## 1. Mental model — how a page is built
 
 Content lives as **data/markdown in git**; Eleventy renders it into static HTML; the
-client edits the same files through Decap CMS, which commits and triggers a Netlify build.
+client edits the same files through Decap CMS, which commits and triggers a Cloudflare build.
 
 ```mermaid
 flowchart LR
@@ -65,13 +65,13 @@ flowchart LR
     D["src/_data/*<br/>(settings, nav, ui, contact, studio, home — per lang)"]
     P["src/_projects/*.md<br/>(one file per project, IT+EN fields)"]
   end
-  CMS["Decap CMS /admin/<br/>git-gateway + Netlify Identity"] -->|commit| Content
+  CMS["Decap CMS /admin/<br/>email code + server key"] -->|commit| Content
   D & P --> ELE["Eleventy<br/>src → dist"]
   T["src/_includes (layouts + partials)<br/>src/it · src/en (routes)"] --> ELE
   ELE -->|eleventy-img| IMG["responsive <picture>"]
   ELE --> DIST["dist/ (static HTML+assets)"]
-  DIST --> NET["Netlify build on push"]
-  NET --> SITE["live site"]
+  DIST --> CF["Cloudflare build on push"]
+  CF --> SITE["live site"]
 ```
 
 **Per-language data is folder-based:** `src/_data/settings/it.json` is exposed to templates
@@ -95,7 +95,7 @@ src/
 ├── _includes/
 │   ├── layouts/base.njk         # <html>, head, header, {{content}}, footer, scripts
 │   └── partials/                # head, header, nav, lang-toggle, footer, intro, firma-payoff-anim(svg),
-│                                #   home-body, studio-body, projects-index-body, contact-body, error-body, netlify-identity
+│                                #   home-body, studio-body, projects-index-body, contact-body, error-body
 ├── it/  (→ /)                   # index, studio, contatti(+grazie), progetti(index+detail), 404
 ├── en/ (→ /en/)                 # mirror: index, studio, contact(+thanks), projects(index+detail), 404
 ├── assets/
@@ -124,9 +124,10 @@ source fonts/logos) is **tracked but never shipped**: nothing outside `src/` rea
 
 The **Decap CMS at `/admin/`** (`admin/config.yml`) edits **projects only** — the client adds
 and manages portfolio projects. Everything else (brand, home, studio, contact, nav, UI strings)
-is **developer-managed** in the repo and intentionally not exposed in the CMS. Backend
-`git-gateway` + Netlify Identity → email-invite login, edits commit to the repo, Netlify
-rebuilds. Local editing without Netlify: `make cms` (decap-server) + `make dev`
+is **developer-managed** in the repo and intentionally not exposed in the CMS. The
+editor opens `/admin/`, types his email, and enters a code. Cloudflare Access checks
+the address; Decap then saves through `/api/cms`, which holds the GitHub key. A push
+rebuilds the site. Local editing: `make cms` (decap-server) + `make dev`
 (`local_backend: true`, localhost only).
 
 | Content          | File(s)                           | CMS collection               | Notes                                                                                                                                                           |
@@ -175,19 +176,19 @@ back to the chain above. Aim for **≤60 chars** of title and **140–160** of d
 ## 4. Routing & i18n
 
 - **IT is primary at `/`**, EN under `/en/` (directory-based; permalinks set per page).
-- **`www.robertopianastudio.com` is the canonical host.** `site.json` `url`, the sitemap, the
-  `rel=canonical` tag and the `_redirects` host rules must all agree on it, **and so must
-  Netlify's primary-domain setting** — that setting is what redirects the bare apex to www.
-  Never write that apex → www hop into `_redirects`: if the panel is still set the other way
-  the two rules bounce requests between the hosts forever and the site goes down. The `.it`
-  aliases (apex and www) do belong in the file. The `rpdesigngroup.com` rule is **inert**: that domain is
-  forwarded upstream (Hostinger) and never reaches Netlify — see the comment in
-  `src/redirects.njk`.
+- **`www.robertopianastudio.com` is the canonical host.** `site.json` `url`, the sitemap, and
+  the `rel=canonical` tag must agree with the Cloudflare Redirect Rules in §8. Do not
+  put those host hops in `_redirects`: Cloudflare rejects absolute URLs and the
+  deploy fails. Never point
+  the bare `.com` at www from two places at once (a Redirect Rule and a Netlify primary
+  domain): the two bounce and the site goes down. The `rpdesigngroup.com` rule is
+  **inert**: Hostinger forwards that domain — see `src/redirects.njk`.
 - Each translatable page carries a `translationKey`; the header **IT·EN toggle** links to its
   counterpart via the `localeHref` filter; `head.njk` emits `hreflang` alternates (it/en/x-default).
-- **Language-aware 404** is done with `_redirects` (generated by `src/redirects.njk`):
-  `/en/* → /en/404.html [404]`, `/* → /404.html [404]`. Resolved by Netlify at the edge —
-  **not** by the dev server (locally `/en/*` shows the IT 404; verify on a deploy).
+- **Language-aware 404** is Cloudflare `not_found_handling = 404-page`: a missing `/en/…`
+  URL is served `/en/404.html`, anything else `/404.html`, both with status 404. There is
+  no catch-all 404 line in `_redirects` (Cloudflare would apply it to real pages). The dev
+  server does not do this; check it on a Cloudflare deploy.
 - Filters (`eleventy.config.js`): `localeHref`, `localeAlternates`, `field(obj,name,lang)`
   (picks `title_it`/`title_en` etc.), `cover` (first gallery image with an image),
   `host` (strips the scheme off `site.url` for prose/email copy).
@@ -242,7 +243,7 @@ intro (so repeat visits never fetch its ~670 KB of player + JSON).
 | `header.js`       | Header colour state (transparent over hero → solid on scroll)                                                                     |
 | `reveal.js`       | Scroll reveals via IntersectionObserver                                                                                           |
 | `gallery.js`      | Project-image gallery via **PhotoSwipe v5** (lazy-loaded): swipe, pinch-zoom + pan, double-tap, swipe-close, keyboard, focus trap |
-| `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (Netlify notification subject line)          |
+| `contact-form.js` | Substitutes the sender's name into the hidden `subject` field before the native POST (studio inbox subject line)                 |
 | `site-prefs.js`   | Cookie banner + preferences dialog; loads Google tag / Meta Pixel only after consent                                              |
 
 **Intro:** first visit only (armed in `<head>`, gated by `sessionStorage`, which is set as soon as
@@ -301,19 +302,60 @@ stylelint (vendored) and `vendor/` from eslint/terser.
 
 ## 8. Hosting & CMS auth
 
-- **Netlify** builds on push: `netlify.toml` → `command = "npm run build"`, `publish = "dist"`,
-  `NODE_VERSION = 20`, long-cache headers for `/assets/*`, plus the language-404 redirects are
-  served from `dist/_redirects`.
-- **CMS auth** = Netlify **Identity** (invite-only) + **Git Gateway** (enable both in the Netlify
-  UI; invite the client by email). Decap supports git-gateway; Sveltia does not — that's why
-  Decap was chosen.
-- **Contact form** posts via Netlify Forms (`data-netlify`, honeypot, hidden `form-name`,
-  success → thank-you page). A hidden `subject` field drives the notification email's
-  subject line: `site.formSubject` is the no-JS fallback, and `contact-form.js` substitutes
-  `{name}` into `site.formSubjectNamed` (both deliberately Italian — studio inbox, not
-  visitor-facing) when JS runs.
-- Deployed from the `piana-design-build` branch to a Netlify subdomain; `make deploy` (gh-pages)
-  exists only as a fallback.
+Cloudflare Workers serves `dist/` as static assets. Those requests are free and unlimited.
+`wrangler.toml` runs `workers/site.js` only for `/api/*`, so a busy month cannot switch the
+site off. `npm run deploy:cf` builds and deploys. `netlify.toml` remains until DNS has moved;
+after this change the form and the editor do not work on Netlify. `make deploy` (gh-pages)
+is only a fallback.
+
+- **Pages and images** — static assets. Long-cache headers for `/assets/img/*` and
+  `/assets/fonts/*` come from `src/headers.njk` → `dist/_headers`.
+- **404** — `not_found_handling = 404-page` (nearest `404.html`).
+- **Path redirects** — `src/redirects.njk` → `dist/_redirects` (legacy paths, `/en/admin`).
+- **Host redirects** — Cloudflare Redirect Rules, not `_redirects`. One rule, status 301,
+  preserve query string, for hosts `robertopianastudio.com`, `robertopianastudio.it`, and
+  `www.robertopianastudio.it`, target `https://www.robertopianastudio.com` plus the path.
+  Leave `www.robertopianastudio.com` out of that rule.
+- **Contact form** — `POST /api/contact`. Honeypot `bot-field`, hidden `next` (only the two
+  thank-you paths), hidden `subject`. `contact-form.js` fills the subject with the sender's
+  name. The worker sends the mail through Resend to `CONTACT_TO`
+  (`info@robertopianastudio.com`). Secrets: `RESEND_API_KEY`. `CONTACT_FROM` is in
+  `wrangler.toml`.
+- **CMS** — Decap at `/admin/`, still projects only, still the editorial workflow. Cloudflare
+  Access (One-time PIN) guards `/admin`, `/api/auth`, and `/api/cms` on
+  `www.robertopianastudio.com` and on the `*.workers.dev` hostname. The editor's email is an
+  Access policy. `GITHUB_TOKEN` is a Cloudflare secret. The browser receives a placeholder
+  token; `workers/cms.js` swaps in the real one and will only forward
+  `/user` and `/repos/Alessandro-Arensi/rp-design-webpage/*`. Log in on the www host. The
+  name in the editor corner is the GitHub account that owns the key.
+
+### Cutover (do this once, in order)
+
+Studio mail for `@robertopianastudio.com` is at Aruba (`MX` → `mx.robertopianastudio.com`,
+SPF `v=spf1 include:_spf.aruba.it ~all`). Copy every existing DNS record before changing
+nameservers, or the inbox breaks.
+
+1. Create a Cloudflare account and a Worker, connected to this GitHub repo, branch `main`.
+   Build command `npm run build`. Deploy command `npx wrangler deploy`.
+2. Create a GitHub fine-grained token on `Alessandro-Arensi/rp-design-webpage` with
+   Contents read/write and Pull requests read/write. Store it as the Worker secret
+   `GITHUB_TOKEN`.
+3. Create a free Resend account, verify `robertopianastudio.com`, and store `RESEND_API_KEY`.
+   Add Resend's SPF include **beside** `include:_spf.aruba.it`. Do not remove the Aruba include.
+4. Zero Trust → free plan → Identity providers → One-time PIN. Create a self-hosted Access
+   application for `www.robertopianastudio.com` paths `/admin`, `/api/auth`, `/api/cms`, and
+   the same paths on the workers.dev hostname. Allow only the editor's email (and yours).
+   Copy the team domain (`something.cloudflareaccess.com`) into secret `ACCESS_TEAM_DOMAIN`
+   and the application audience tag into secret `ACCESS_AUD`.
+5. Add the custom domains to the Worker. Move the `.com` and `.it` nameservers to Cloudflare
+   only after the Aruba `MX`, SPF, and any DKIM/DMARC records exist in the new zone.
+6. Add the Redirect Rule from the list above. Open `https://www.robertopianastudio.com/` and
+   `https://robertopianastudio.it/` (the second must land on www.com). Send a test from the
+   contact form. Open `/admin/`, enter the editor's email, and save a draft.
+7. Remove the domains from Netlify so traffic cannot keep spending credits there.
+
+Until step 6, the public site is still whatever DNS points at. Pushing this repo makes the
+next Netlify build serve a form that posts to `/api/contact`, which Netlify does not have.
 
 ---
 
@@ -343,16 +385,16 @@ assess text over images) — a scrim gradient guarantees legibility; verify visu
   `src/assets/favicons/apple-touch-icon.png`, `favicon.ico`, and the `android-chrome` PWA icons
   need regenerating from the RP monogram. (`favicon-16x16.png` / `favicon-32x32.png` ship but
   nothing links them — `head.njk` uses the SVG favicon only; drop them or add the links.)
-- Local dev (and `netlify dev`) do **not** apply the 404 `_redirects` — language-404 only works on
-  a real Netlify deploy.
+- Local dev does **not** apply Cloudflare's nearest-404. Language-404 only shows on a
+  Cloudflare deploy.
 
 ## 11. Status & launch checklist
 
-Launchpad v1, live on a Netlify subdomain. To go to production:
+Launchpad v1. Hosting moves to Cloudflare with the cutover in §8. Still open:
 
 1. Replace placeholder photos (home blocks, project galleries, studio/portrait).
 2. Add real **projects** + **Contact** copy; review the EN translation.
 3. Regenerate `apple-touch`/`favicon.ico`/PWA PNGs from the RP mark.
 4. Final `make audit` (Lighthouse/CWV) + responsive/keyboard pass.
-5. Merge `piana-design-build` → `main`, point Netlify at `main`, attach the
-   `www.robertopianastudio.com` domain (already the canonical `site.url`).
+5. Follow the Cloudflare cutover in §8. `www.robertopianastudio.com` is already the
+   canonical `site.url`.

@@ -1,0 +1,24 @@
+# Cloudflare Workers + static assets. Page views and images are served as
+# assets and are not billed. The script runs only for /api/* (the contact
+# form and the CMS). See README §8 for the one-time dashboard setup.
+name = "rp-design"
+compatibility_date = "2026-11-23"
+main = "workers/site.js"
+routes = [
+  { pattern = "www.robertopianastudio.com", custom_domain = true },
+  { pattern = "robertopianastudio.com", custom_domain = true },
+]
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+[vars]
+CMS_REPO = "Alessandro-Arensi/rp-design-webpage"
+CONTACT_TO = "info@robertopianastudio.com"
+# Replace CONTACT_FROM after Resend verifies the domain. The local part must
+# be an address on robertopianastudio.com, or Resend will reject the mail.
+CONTACT_FROM = "Roberto Piana Studio <website@robertopianastudio.com>"

@@ -2,46 +2,27 @@
 permalink: /_redirects
 eleventyExcludeFromCollections: true
 ---
-# Canonicalise to www.robertopianastudio.com — the one host the sitemap and the
-# rel=canonical tag both declare. The aliases 301 across (host-matched), so nothing
-# reads as duplicate content. These must stay above the path-only rules below, or
-# the /* 404 would catch the aliases first. Both .it hosts are listed: once .com is
-# primary, Netlify no longer redirects the .it apex itself. They never loop, since
-# their source domain differs from the target.
+# Canonical host is www.robertopianastudio.com (site.json, sitemap, rel=canonical).
 #
-# The robertopianastudio.com → www redirect is deliberately NOT here. Netlify issues it natively from
-# the primary-domain setting, and a rule here would fight it: while the panel still
-# had the apex as primary (it 301'd www → apex), an apex → www line here would have
-# bounced every request between the two hosts forever. Set the primary domain in the
-# Netlify panel instead, and leave this file out of it.
+# Host redirects are NOT in this file. Cloudflare rejects absolute URLs here and
+# fails the whole deploy. Those hops are Cloudflare Redirect Rules — README §8.
+# rpdesigngroup.com stays at Hostinger; do not move its nameservers, because
+# @rpdesigngroup.com mail is hosted there.
 #
-# NOTE: the rpdesigngroup.com rule is currently INERT. That domain does not resolve
-# to this Netlify site — a forwarding rule upstream (Hostinger) 301s every path to
-# the root before Netlify ever sees it, so old deep links lose their target page.
-#
-# To activate it, repoint ONLY that domain's A/CNAME records at Netlify and delete
-# the forwarding rule. Do NOT delegate its nameservers: the client's mailboxes on
-# @rpdesigngroup.com are hosted at Hostinger and the MX records must stay put.
-https://robertopianastudio.it/*       https://www.robertopianastudio.com/:splat  301!
-https://www.robertopianastudio.it/*   https://www.robertopianastudio.com/:splat  301!
-https://rpdesigngroup.com/*           https://www.robertopianastudio.com/:splat  301!
-
-# The CMS lives only at /admin. Send the language-prefixed guess there.
-# Forced (!) so it wins over the physical fallback page + the /en 404 below.
-/en/admin/*  /admin/  301!
-/en/admin    /admin/  301!
+# The CMS lives only at /admin. Plain 301 so Cloudflare accepts the line.
+# Cloudflare follows it even when the /en/admin HTML fallback also exists.
+/en/admin/*  /admin/  301
+/en/admin    /admin/  301
 
 # Legacy rpdesigngroup.com paths. These still rank in Google (la-storia, contattaci,
-# commerciale/showroom, chi-siamo/il-team) and the .com blanket-301s to this domain's ROOT,
-# so the old deep links lose their target. Map each to its nearest surviving page instead of
-# letting the /* rule below serve a 404 — that is what carries the ranking across.
+# commerciale/showroom, chi-siamo/il-team). Map each to its nearest surviving page.
 /la-storia            /studio/    301
 /chi-siamo/il-team    /studio/    301
 /chi-siamo/*          /studio/    301
 /contattaci           /contatti/  301
 /commerciale/showroom /contatti/  301
 
-# Language-aware 404. Existing files take precedence, so these only fire for
-# unmatched paths. Specific rule first.
-/en/*  /en/404.html  404
-/*     /404.html      404
+# No catch-all 404 lines. Cloudflare would treat a 404 status here as invalid
+# or, worse, as a redirect of every page. Missing URLs are answered by
+# Cloudflare not_found_handling = 404-page, which serves the nearest 404.html:
+# /en/404.html under /en/, /404.html everywhere else.

@@ -12,9 +12,54 @@
   </head>
   <body>
     <!-- Decap CMS — reads /admin/config.yml.
-         Production auth: Netlify Identity + Git Gateway (enable both in Netlify UI).
+         Production: Cloudflare Access email code, then this script opens the
+         login popup, which completes without a GitHub screen.
          Local editing: `make cms` (decap-server) + `make dev`, then open /admin/. -->
+    <script>
+      // config.yml names the public site as base_url. While that name still
+      // points at Netlify, the login popup would open the paused site. Use
+      // whatever host this page was opened on.
+      (function () {
+        var origin = window.location.origin;
+        function patch(text) {
+          return text.replace(/^([ \t]*)base_url:.*$/m, "$1base_url: " + origin);
+        }
+        var origFetch = window.fetch;
+        window.fetch = function (input, init) {
+          var url = typeof input === "string" ? input : (input && input.url) || "";
+          if (url.indexOf("config.yml") === -1) return origFetch.apply(this, arguments);
+          return origFetch.apply(this, arguments).then(function (res) {
+            return res.text().then(function (text) {
+              return new Response(patch(text), {
+                status: res.status,
+                headers: { "Content-Type": "text/yaml" },
+              });
+            });
+          });
+        };
+      })();
+    </script>
     <script src="https://unpkg.com/decap-cms@^3.6.3/dist/decap-cms.js"></script>
+    <script>
+      (function () {
+        var host = location.hostname;
+        if (host === "localhost" || host === "127.0.0.1") return;
+        var clicked = false;
+        var obs = new MutationObserver(function () {
+          if (clicked) return;
+          var buttons = document.querySelectorAll("button");
+          for (var i = 0; i < buttons.length; i++) {
+            if (/github/i.test(buttons[i].textContent || "")) {
+              clicked = true;
+              obs.disconnect();
+              buttons[i].click();
+              return;
+            }
+          }
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
 
     <!-- Custom preview for Projects: renders the SAME DOM + classes as the site
          detail page and loads the real site CSS into the preview iframe, so the

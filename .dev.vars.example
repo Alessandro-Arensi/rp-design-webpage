@@ -1,0 +1,5 @@
+# Copy to .dev.vars for `wrangler dev`. Never commit .dev.vars.
+GITHUB_TOKEN=
+RESEND_API_KEY=
+ACCESS_TEAM_DOMAIN=
+ACCESS_AUD=
